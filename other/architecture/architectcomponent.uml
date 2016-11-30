@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:LocalProfile="http:///schemas/LocalProfile/_1lcW0LcFEeaTCubaCbeFcg/0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xsi:schemaLocation="http:///schemas/LocalProfile/_1lcW0LcFEeaTCubaCbeFcg/0 LocalProfile.profile.uml#_1mk_R7cFEeaTCubaCbeFcg">
+  <uml:Model xmi:id="_1lTM4LcFEeaTCubaCbeFcg" name="architectcomponent">
+    <eAnnotations xmi:id="_1lTM4bcFEeaTCubaCbeFcg" source="Objing">
+      <contents xmi:type="uml:Property" xmi:id="_1lTM4rcFEeaTCubaCbeFcg" name="exporterVersion">
+        <defaultValue xmi:type="uml:LiteralString" xmi:id="_1lTM47cFEeaTCubaCbeFcg" value="3.0.0"/>
+      </contents>
+    </eAnnotations>
+    <packagedElement xmi:type="uml:Package" xmi:id="_1lTM5LcFEeaTCubaCbeFcg" name="Firebase">
+      <packagedElement xmi:type="uml:Component" xmi:id="_1lTM5bcFEeaTCubaCbeFcg" name="Database"/>
+      <packagedElement xmi:type="uml:Component" xmi:id="_1lTM5rcFEeaTCubaCbeFcg" name="Authentication"/>
+      <packagedElement xmi:type="uml:Component" xmi:id="_1lTM57cFEeaTCubaCbeFcg" name="Storage"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_1lTM6LcFEeaTCubaCbeFcg" name="Mobile client">
+      <ownedComment xmi:id="_1lTM6bcFEeaTCubaCbeFcg">
+        <body></body>
+      </ownedComment>
+      <packagedElement xmi:type="uml:Component" xmi:id="_1lTM6rcFEeaTCubaCbeFcg" name="Controller" clientDependency="_1lTM67cFEeaTCubaCbeFcg _1lTM7LcFEeaTCubaCbeFcg _1lTM7bcFEeaTCubaCbeFcg _1lTM7rcFEeaTCubaCbeFcg _1lTM77cFEeaTCubaCbeFcg"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_1lTM67cFEeaTCubaCbeFcg" name="" supplier="_1lTM8bcFEeaTCubaCbeFcg" client="_1lTM6rcFEeaTCubaCbeFcg"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_1lTM7LcFEeaTCubaCbeFcg" name="" supplier="_1lTM8LcFEeaTCubaCbeFcg" client="_1lTM6rcFEeaTCubaCbeFcg"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_1lTM7bcFEeaTCubaCbeFcg" name="" supplier="_1lTM5rcFEeaTCubaCbeFcg" client="_1lTM6rcFEeaTCubaCbeFcg"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_1lTM7rcFEeaTCubaCbeFcg" name="" supplier="_1lTM57cFEeaTCubaCbeFcg" client="_1lTM6rcFEeaTCubaCbeFcg"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_1lTM77cFEeaTCubaCbeFcg" name="" supplier="_1lTM5bcFEeaTCubaCbeFcg" client="_1lTM6rcFEeaTCubaCbeFcg"/>
+      <packagedElement xmi:type="uml:Component" xmi:id="_1lTM8LcFEeaTCubaCbeFcg" name="ViewModel"/>
+      <packagedElement xmi:type="uml:Component" xmi:id="_1lTM8bcFEeaTCubaCbeFcg" name="View"/>
+    </packagedElement>
+    <profileApplication xmi:id="_1m36MLcFEeaTCubaCbeFcg">
+      <eAnnotations xmi:id="_1nBrMLcFEeaTCubaCbeFcg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="LocalProfile.profile.uml#_1mk_R7cFEeaTCubaCbeFcg"/>
+      </eAnnotations>
+      <appliedProfile href="LocalProfile.profile.uml#_1mk_QLcFEeaTCubaCbeFcg"/>
+    </profileApplication>
+  </uml:Model>
+  <LocalProfile:manages xmi:id="_1nBrMbcFEeaTCubaCbeFcg" base_Package="_1lTM4LcFEeaTCubaCbeFcg"/>
+  <LocalProfile:Communicates xmi:id="_1nBrMrcFEeaTCubaCbeFcg" base_Package="_1lTM4LcFEeaTCubaCbeFcg"/>
+  <LocalProfile:Communicates xmi:id="_1nBrM7cFEeaTCubaCbeFcg" base_Package="_1lTM5LcFEeaTCubaCbeFcg"/>
+  <LocalProfile:Communicates xmi:id="_1nBrNLcFEeaTCubaCbeFcg" base_Component="_1lTM5rcFEeaTCubaCbeFcg"/>
+  <LocalProfile:Communicates xmi:id="_1nBrNbcFEeaTCubaCbeFcg" base_Component="_1lTM6rcFEeaTCubaCbeFcg"/>
+  <LocalProfile:Manages xmi:id="_1nBrNrcFEeaTCubaCbeFcg" base_Dependency="_1lTM67cFEeaTCubaCbeFcg"/>
+  <LocalProfile:Manages xmi:id="_1nBrN7cFEeaTCubaCbeFcg" base_Dependency="_1lTM7LcFEeaTCubaCbeFcg"/>
+  <LocalProfile:Communicates xmi:id="_1nBrOLcFEeaTCubaCbeFcg" base_Dependency="_1lTM7bcFEeaTCubaCbeFcg"/>
+  <LocalProfile:Communicates xmi:id="_1nBrObcFEeaTCubaCbeFcg" base_Dependency="_1lTM7rcFEeaTCubaCbeFcg"/>
+  <LocalProfile:Communicates xmi:id="_1nBrOrcFEeaTCubaCbeFcg" base_Dependency="_1lTM77cFEeaTCubaCbeFcg"/>
+</xmi:XMI>
