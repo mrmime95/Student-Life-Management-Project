@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorControlNormal">@color/white</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorDisabled">#FFaaaaaa</color>
+    <color name="colorControlActivated">#FFaaaaaa</color>
+    <color name="defaultToolbarColor">#339999</color>
+    <color name="supportBarColor">#2b8282</color>
+    <color name="cardBackcolor">#EEEEEE</color>
+    <color name="attachmentColor">#339999</color>
+</resources>

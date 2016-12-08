@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">StudentLifeManager</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string-array name="course_titles">
+        <item>"C++ / C and programming"</item>
+        <item>"Java platform and programming"</item>
+        <item>"Linux systems and programming"</item>
+        <item>"Databases and programming"</item>
+        <item>"Developers and programming"</item>
+        <item>"Electronics and programming"</item>
+        <item>"Python and etc and programming"</item>
+        <item>"Assambly and programming"</item>
+    </string-array>
+    <string-array name="course_description">
+        <item>
+                "C++ description With so many different ways today to find information online, it can sometimes be hard to know where to go to first.
+                I want to look at the major and most effective ways to find information online.   The biggest and most commonly used method is to use a search engine such as : Google, Yahoo, or Msn.
+                All three of these search engines offer similar features. C++ description With so many different ways today to find information online, it can sometimes be hard to know where to go to first.
+                I want to look at the major and most effective ways to find information online.   The biggest and most commonly used method is to use a search engine such as : Google, Yahoo, or Msn.
+                All three of these search engines offer similar features. Text search, Image search, Local search, Product search, are a few of the services they offer."
+        </item>
+        <item>
+            "With so many different ways today to find information online, it can sometimes be hard to know where to go to first.
+            I want to look at the major and most effective ways to find information online.   The biggest and most commonly used method is to use a search engine such as : Google, Yahoo, or Msn.
+            All three of these search engines offer similar features. Text search, Image search, Local search, Product search, are a few of the services they offer."
+        </item>
+        <item>"Linux systems description blablabla"</item>
+        <item>"Databases description blablabla"</item>
+        <item>"Developers description blablabla"</item>
+        <item>"Electronics description blablabla"</item>
+        <item>"Python and etc description blablabla"</item>
+        <item>"Assambly programming description blablabla"</item>
+    </string-array>
+</resources>
