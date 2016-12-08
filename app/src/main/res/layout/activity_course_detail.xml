@@ -17,7 +17,7 @@
         android:background="@color/defaultToolbarColor"
         app:titleTextColor="@color/white"
         />
-    
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -68,6 +68,7 @@
                         android:layout_marginTop="24dp"
                         android:clickable="true"
                         android:layout_below="@id/courseDescription"
+                        android:layout_marginBottom="16dp"
                         />
                     <TextView
                         android:layout_width="match_parent"
@@ -80,6 +81,7 @@
                         android:layout_marginTop="24dp"
                         android:textColor="@color/attachmentColor"
                         android:letterSpacing="0.2"
+                        android:layout_marginBottom="16dp"
                         />
 
             </RelativeLayout>
