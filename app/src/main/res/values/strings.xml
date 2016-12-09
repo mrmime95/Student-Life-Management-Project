@@ -34,4 +34,38 @@
         <item>"Python and etc description blablabla"</item>
         <item>"Assambly programming description blablabla"</item>
     </string-array>
+
+    <string-array name="reminders_time">
+        <item>"10:00"</item>
+        <item>"11:00"</item>
+        <item>"12:00"</item>
+        <item>"13:00"</item>
+        <item>"14:00"</item>
+        <item>"15:00"</item>
+        <item>"16:00"</item>
+        <item>"17:00"</item>
+    </string-array>
+
+    <string-array name="reminders_name">
+        <item>"Figyelem"</item>
+        <item>"Figyelem"</item>
+        <item>"Figyelem"</item>
+        <item>"Figyelem"</item>
+        <item>"Figyelem ember"</item>
+        <item>"Figyelem ember"</item>
+        <item>"Figyelem ember"</item>
+        <item>"Figyelem ember"</item>
+    </string-array>
+
+    <string-array name="reminders_date">
+        <item>"09/12/2016"</item>
+        <item>"10/12/2016"</item>
+        <item>"11/12/2016"</item>
+        <item>"12/12/2016"</item>
+        <item>"13/12/2016"</item>
+        <item>"14/12/2016"</item>
+        <item>"15/12/2016"</item>
+        <item>"16/12/2016"</item>
+    </string-array>
+
 </resources>
