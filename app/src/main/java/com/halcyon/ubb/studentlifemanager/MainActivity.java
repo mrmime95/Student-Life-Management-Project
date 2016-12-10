@@ -85,10 +85,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private RecyclerView.LayoutManager reminderLayoutManager;
     private ArrayList<ReminderContact> reminderContacts;
 
+    private MyDBHandler dbHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //database
+            dbHandler = new MyDBHandler(this);
         //resolve references
         mSpinner = (Spinner) findViewById(R.id.main_spinner);
         mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
@@ -149,28 +152,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         // reminder's list
 
-        reminderRecyclerView = (RecyclerView)findViewById(R.id.reminders_recycler);
-        if (reminderRecyclerView == null)
-            Log.d("CREATIONS", "Ez mar kezd idegesiteni!....");
+
+        reminderRecyclerView = (RecyclerView)mReminders.findViewById(R.id.reminders_recycler);
         reminderContacts = new ArrayList<ReminderContact>();
-        reminder_names = getResources().getStringArray(R.array.reminders_name);
-        reminder_dates = getResources().getStringArray(R.array.reminders_date);
-        reminder_times = getResources().getStringArray(R.array.reminders_time);
-        count = 0;
-        for (String str:reminder_names)
-        {
-            ReminderContact reminderContact = new ReminderContact(str, reminder_dates[count], reminder_times[count]);
-            reminderContacts.add(reminderContact);
-            Log.d("",str + "---" + reminder_times[count] + "---" + reminder_dates[count]);
-            count++;
+        try {
+            reminderAdapter = new ReminderContactAdapter(dbHandler.getAllReminderCotacts());
+        } catch (Exception e){
+            reminderAdapter = new ReminderContactAdapter(new ArrayList<ReminderContact>());
         }
-        /*
-        reminderAdapter = new ReminderContactAdapter(reminderContacts);
         reminderRecyclerView.setHasFixedSize(true);
         reminderLayoutManager = new LinearLayoutManager(this);
         reminderRecyclerView.setLayoutManager(reminderLayoutManager);
         reminderRecyclerView.setAdapter(reminderAdapter);
-        */
+
         //supportBar options
 
         Window window = this.getWindow();
@@ -237,7 +231,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         new DatePickerDialog(this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-        //reminderDate.setText(String.format("%1$tA %1$tb %1$td %1$tY at %1$tI:%1$tM %1$Tp", calendar));
     }
     public void updateReminderDate(){
         String myFormat = "MM/dd/yy"; //In which you need put here
@@ -294,14 +287,26 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             viewDate.setVisibility(View.GONE);
             viewTime.setVisibility(View.GONE);
             reminderName = (EditText)((Activity)this).findViewById(R.id.reminderName);
+            TextView txtViewDate = (TextView) ((Activity)this).findViewById(R.id.date);
+            TextView txtViewTime = (TextView) ((Activity)this).findViewById(R.id.time);
+            String str1 = reminderName.getText().toString().replace("\n","").replace(" ", "");
+            String str2 = txtViewDate.getText().toString().replace("\n","").replace(" ", "");
+            String str3 = txtViewTime.getText().toString().replace("\n","").replace(" ", "");
+            ReminderContact temp = new ReminderContact(1, str1, str2, str3);
+            dbHandler.insertContact(temp);
+            reminderAdapter = new ReminderContactAdapter(dbHandler.getAllReminderCotacts());
+            //reminderAdapter = new ReminderContactAdapter(reminderContacts);
+            reminderRecyclerView.setHasFixedSize(true);
+            reminderLayoutManager = new LinearLayoutManager(this);
+            reminderRecyclerView.setLayoutManager(reminderLayoutManager);
+            reminderRecyclerView.setAdapter(reminderAdapter);
+
             reminderName.setEnabled(false);
             reminderName.setText("Enter reminder title");
             ImageView img= (ImageView) findViewById(R.id.pipeBtn);
             img.setImageResource(R.drawable.ic_check);
-            TextView txtView = (TextView) ((Activity)this).findViewById(R.id.date);
-            txtView.setText("01/01/1970");
-            txtView = (TextView) ((Activity)this).findViewById(R.id.time);
-            txtView.setText("00:00");
+            txtViewDate.setText("01/01/1970");
+            txtViewTime.setText("00:00");
         }
 
     }

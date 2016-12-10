@@ -5,12 +5,28 @@ package com.halcyon.ubb.studentlifemanager;
  */
 
 public class ReminderContact {
+    private int id;
     private String name, date, time;
 
     public ReminderContact(String name, String date, String time) {
         this.name = name;
         this.date = date;
         this.time = time;
+    }
+
+    public ReminderContact(int id, String name, String date, String time) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.time = time;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
