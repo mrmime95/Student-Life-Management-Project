@@ -29,15 +29,16 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         db.execSQL(
-                "create table reminders " +
-                        "(id integer primary key, name text,date text,time text)"
+                "create table " + CONTACTS_TABLE_NAME +
+                        "( " + CONTACTS_COLUMN_ID  + " integer primary key, " + CONTACTS_COLUMN_NAME
+                        + " text, " + CONTACTS_COLUMN_DATE + " text, " + CONTACTS_COLUMN_TIME + " text)"
         );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
-        db.execSQL("DROP TABLE IF EXISTS reminders");
+        db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
         onCreate(db);
     }
 
@@ -47,24 +48,26 @@ public class MyDBHandler extends SQLiteOpenHelper {
         String time = contact.getTime();
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("date", date);
-        contentValues.put("time", time);
+        contentValues.put(CONTACTS_COLUMN_NAME, name);
+        contentValues.put(CONTACTS_COLUMN_DATE, date);
+        contentValues.put(CONTACTS_COLUMN_TIME, time);
 
-        db.insert("reminders", null, contentValues);
+        db.insert(CONTACTS_TABLE_NAME, null, contentValues);
         return true;
     }
-    public void deleteContact(ReminderContact contact)
+
+    public boolean deleteContact(ReminderContact contact)
     {
         SQLiteDatabase database = getWritableDatabase();
-        database.execSQL("DELETE FROM " + CONTACTS_TABLE_NAME + " WHERE " + CONTACTS_COLUMN_NAME  + "=\""
-                +  contact.getName() + "\"" + " AND "+ CONTACTS_COLUMN_DATE + "=\"" + contact.getDate()
-                + "\"" + " AND " + CONTACTS_COLUMN_TIME + "=\"" + contact.getTime() + "\"");
+        return  database.delete(CONTACTS_TABLE_NAME, CONTACTS_COLUMN_NAME + "= \"" + contact.getName() + "\"" +
+                " and " + CONTACTS_COLUMN_DATE + "=\"" + contact.getDate() + "\"" + " and " +
+                CONTACTS_COLUMN_TIME + "=\"" + contact.getTime() + "\"", null) > 0;
     }
+
     public ArrayList<ReminderContact> getAllReminderCotacts() {
         ArrayList<ReminderContact> array_list = new ArrayList<ReminderContact>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from reminders", null );
+        Cursor res =  db.rawQuery( "select * from " + CONTACTS_TABLE_NAME, null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
@@ -74,7 +77,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_TIME))
             );
             array_list.add(temp);
-            Log.d("Szar:", res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
             res.moveToNext();
         }
         return array_list;

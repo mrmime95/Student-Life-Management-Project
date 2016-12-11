@@ -156,9 +156,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         reminderRecyclerView = (RecyclerView)mReminders.findViewById(R.id.reminders_recycler);
         reminderContacts = new ArrayList<ReminderContact>();
         try {
-            reminderAdapter = new ReminderContactAdapter(dbHandler.getAllReminderCotacts());
+            reminderAdapter = new ReminderContactAdapter(dbHandler.getAllReminderCotacts(), this, reminderRecyclerView);
         } catch (Exception e){
-            reminderAdapter = new ReminderContactAdapter(new ArrayList<ReminderContact>());
+            reminderAdapter = new ReminderContactAdapter(new ArrayList<ReminderContact>(), this, reminderRecyclerView);
         }
         reminderRecyclerView.setHasFixedSize(true);
         reminderLayoutManager = new LinearLayoutManager(this);
@@ -233,17 +233,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
     public void updateReminderDate(){
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String str = sdf.format(myCalendar.getTime());
-        //Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
         TextView txtView = (TextView) ((Activity)this).findViewById(R.id.date);
         txtView.setText(str);
         dateChoosed = true;
         if ((timeChoosed && dateChoosed)){
             ImageView img= (ImageView)findViewById(R.id.pipeBtn);
             img.setImageResource(R.drawable.ic_check_ok);
-            //Toast.makeText(getApplicationContext(),"Mindketto kivalasztva", Toast.LENGTH_SHORT).show();
         }
     }
     public  void  timeChooserOnClick(View view){
@@ -294,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             String str3 = txtViewTime.getText().toString().replace("\n","").replace(" ", "");
             ReminderContact temp = new ReminderContact(1, str1, str2, str3);
             dbHandler.insertContact(temp);
-            reminderAdapter = new ReminderContactAdapter(dbHandler.getAllReminderCotacts());
+            reminderAdapter = new ReminderContactAdapter(dbHandler.getAllReminderCotacts(), this, reminderRecyclerView);
             //reminderAdapter = new ReminderContactAdapter(reminderContacts);
             reminderRecyclerView.setHasFixedSize(true);
             reminderLayoutManager = new LinearLayoutManager(this);
