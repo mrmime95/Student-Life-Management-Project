@@ -27,7 +27,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO Auto-generated method stub
         db.execSQL(
                 "create table " + CONTACTS_TABLE_NAME +
                         "( " + CONTACTS_COLUMN_ID  + " integer primary key, " + CONTACTS_COLUMN_NAME
@@ -37,7 +36,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO Auto-generated method stub
         db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
         onCreate(db);
     }
@@ -76,6 +74,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_DATE)),
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_TIME))
             );
+            Log.d("INFO ------- ID = ", res.getString(res.getColumnIndex(CONTACTS_COLUMN_ID)));
             array_list.add(temp);
             res.moveToNext();
         }

@@ -22,16 +22,18 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
     private ArrayList<ReminderContact> contacts = new ArrayList<ReminderContact>();
     private Context ctx;
     private RecyclerView recyclerView;
-    public ReminderContactAdapter(ArrayList<ReminderContact> contacts, Context ctx, RecyclerView recyclerView){
+    private ReminderControl reminderControl;
+    public ReminderContactAdapter(ArrayList<ReminderContact> contacts, Context ctx, RecyclerView recyclerView, ReminderControl reminderControl){
         this.contacts = contacts;
         this.ctx = ctx;
         this.recyclerView = recyclerView;
+        this.reminderControl = reminderControl;
     }
 
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reminders_card_view, parent, false);
-        ContactViewHolder recyclerViewHolder = new ContactViewHolder(view, contacts, ctx, recyclerView);
+        ContactViewHolder recyclerViewHolder = new ContactViewHolder(view, contacts, ctx, recyclerView, reminderControl);
         return recyclerViewHolder;
     }
 
@@ -50,19 +52,18 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder
     {
-        ArrayList<ReminderContact> contacts = new ArrayList<ReminderContact>();
-        Context ctx;
-        TextView rem_name, rem_date, rem_time;
-        MyDBHandler db;
-        RecyclerView recyclerView;
-        private  RecyclerView.Adapter reminderAdapter;
-        private RecyclerView.LayoutManager reminderLayoutManager;
-
-        public ContactViewHolder(View view, ArrayList<ReminderContact> arrayList, final Context ctx, final RecyclerView recyclerView) {
+        private ArrayList<ReminderContact> contacts = new ArrayList<ReminderContact>();
+        private Context ctx;
+        private TextView rem_name, rem_date, rem_time;
+        private MyDBHandler db;
+        private RecyclerView recyclerView;
+        private ReminderControl reminderControl;
+        public ContactViewHolder(View view, ArrayList<ReminderContact> arrayList, final Context ctx, final RecyclerView recyclerView, final ReminderControl reminderControl) {
             super(view);
             this.contacts = arrayList;
             this.ctx = ctx;
             this.recyclerView = recyclerView;
+            this.reminderControl = reminderControl;
             db = new MyDBHandler(this.ctx);
             view.findViewById(R.id.dropBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -80,15 +81,7 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
                                             boolean ok = false;
                                             ok = db.deleteContact(deleteReminder);
 
-                                            try {
-                                                reminderAdapter = new ReminderContactAdapter(db.getAllReminderCotacts(), ctx, recyclerView);
-                                            } catch (Exception e){
-                                                reminderAdapter = new ReminderContactAdapter(new ArrayList<ReminderContact>(), ctx, recyclerView);
-                                            }
-                                            recyclerView.setHasFixedSize(true);
-                                            reminderLayoutManager = new LinearLayoutManager(ctx);
-                                            recyclerView.setLayoutManager(reminderLayoutManager);
-                                            recyclerView.setAdapter(reminderAdapter);
+                                            reminderControl.updateReminders(recyclerView, db);
                                         }catch (Exception e){
                                             Log.d("INFO","Deleting was not succesfull!" + contact.getName() + contact.getTime() + contact.getDate());
                                             Log.d("INFO", e.toString());
@@ -107,6 +100,14 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
                         builder.setMessage("Deleting your reminder will permanently remove it.").setPositiveButton("Yes", dialogClickListener)
                                 .setNegativeButton("No", dialogClickListener).setTitle("Delete reminder?").show();
 
+                    }
+                }
+            });
+            view.findViewById(R.id.remCardData).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (view.getId() == R.id.remCardData) {
+                        Log.d("INFO", "Szopos vagy!");
                     }
                 }
             });

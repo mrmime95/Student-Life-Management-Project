@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.transition.Scene;
 import android.transition.TransitionManager;
+import android.transition.Visibility;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private ArrayList<CourseContact> courseContacts = new ArrayList<CourseContact>();
 
     //Reminders
-    private String[] reminder_names, reminder_times, reminder_dates;
     private ImageView reminderPipe, reminderClose;
     private TextView reminderDate, reminderTime;
     private Calendar myCalendar = Calendar.getInstance();
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private RecyclerView reminderRecyclerView;
     private  RecyclerView.Adapter reminderAdapter;
     private RecyclerView.LayoutManager reminderLayoutManager;
-    private ArrayList<ReminderContact> reminderContacts;
 
     private MyDBHandler dbHandler;
+    private ReminderControl reminderControl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,19 +152,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         // reminder's list
 
-
+        reminderControl = new ReminderControl(this);
         reminderRecyclerView = (RecyclerView)mReminders.findViewById(R.id.reminders_recycler);
-        reminderContacts = new ArrayList<ReminderContact>();
-        try {
-            reminderAdapter = new ReminderContactAdapter(dbHandler.getAllReminderCotacts(), this, reminderRecyclerView);
-        } catch (Exception e){
-            reminderAdapter = new ReminderContactAdapter(new ArrayList<ReminderContact>(), this, reminderRecyclerView);
-        }
-        reminderRecyclerView.setHasFixedSize(true);
-        reminderLayoutManager = new LinearLayoutManager(this);
-        reminderRecyclerView.setLayoutManager(reminderLayoutManager);
-        reminderRecyclerView.setAdapter(reminderAdapter);
-
+        reminderControl.updateReminders(reminderRecyclerView,dbHandler);
         //supportBar options
 
         Window window = this.getWindow();
@@ -195,38 +185,51 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     public void addNewReminderOnClick(View view){
-        View viewClose = findViewById(R.id.closeBtn);
-        View viewPipe = findViewById(R.id.pipeBtn);
-        View viewDate = findViewById(R.id.date);
-        View viewTime = findViewById(R.id.time);
-        viewClose.setVisibility(View.VISIBLE);
-        viewPipe.setVisibility(View.VISIBLE);
-        viewDate.setVisibility(View.VISIBLE);
-        viewTime.setVisibility(View.VISIBLE);
-        reminderName = (EditText)((Activity)this).findViewById(R.id.reminderName);
-        reminderName.setEnabled(true);
-        reminderName.setText("");
+        setNewReminderIcons(true, false);
+        setNewRemindersData(view, "", "01/01/1970", "00:00");
     }
-    public void  closeAddingNewReminderOnClick(View view){
+
+    public void setNewRemindersData(View view, String name, String date, String time){
+        EditText reminderName = (EditText)((Activity)this).findViewById(R.id.reminderName);
+        reminderName.setText(name);
+        TextView textDate = (TextView) ((Activity)this).findViewById(R.id.date);
+        textDate.setText(date);
+        TextView textTime = (TextView) ((Activity)this).findViewById(R.id.time);
+        textTime.setText(time);
+    }
+
+    public void setNewReminderIcons(boolean visability, boolean pipe)
+    {
         View viewClose = findViewById(R.id.closeBtn);
         View viewPipe = findViewById(R.id.pipeBtn);
         View viewDate = findViewById(R.id.date);
         View viewTime = findViewById(R.id.time);
-        viewClose.setVisibility(View.GONE);
-        viewPipe.setVisibility(View.GONE);
-        viewDate.setVisibility(View.GONE);
-        viewTime.setVisibility(View.GONE);
-        reminderName = (EditText)((Activity)this).findViewById(R.id.reminderName);
-        reminderName.setEnabled(false);
-        reminderName.setText("Enter reminder title");
         ImageView img = (ImageView) findViewById(R.id.pipeBtn);
-        img.setImageResource(R.drawable.ic_check);
-        TextView txtView = (TextView) ((Activity)this).findViewById(R.id.date);
-        txtView.setText("01/01/1970");
-        txtView = (TextView) ((Activity)this).findViewById(R.id.time);
-        txtView.setText("00:00");
+        reminderName = (EditText)((Activity)this).findViewById(R.id.reminderName);
+        if (visability){
+            viewClose.setVisibility(View.VISIBLE);
+            viewPipe.setVisibility(View.VISIBLE);
+            viewDate.setVisibility(View.VISIBLE);
+            viewTime.setVisibility(View.VISIBLE);
+            reminderName.setEnabled(visability);
+        }else{
+            viewClose.setVisibility(View.GONE);
+            viewPipe.setVisibility(View.GONE);
+            viewDate.setVisibility(View.GONE);
+            viewTime.setVisibility(View.GONE);
+            reminderName.setEnabled(visability);
+        }
+        if (pipe) img.setImageResource(R.drawable.ic_check_ok);
+        else img.setImageResource(R.drawable.ic_check);
+    }
+
+    public void  closeAddingNewReminderOnClick(View view){
+        setNewReminderIcons(false, false);
+        //reminderControl.setNewReminderIcons(false, false, view);
+        setNewRemindersData(view, "Enter reminder title", "01/01/1970", "00:00");
         timeChoosed = dateChoosed = false;
     }
+
     public void dateChooserOnClick(View view){
         new DatePickerDialog(this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
@@ -256,7 +259,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        updateTimeInReminder(hourOfDay + ":" + minute);
+                        if (minute<10)updateTimeInReminder(hourOfDay + ":0" + minute);
+                        else updateTimeInReminder(hourOfDay + ":" + minute);
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -268,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if ((timeChoosed && dateChoosed)){
             ImageView img= (ImageView) findViewById(R.id.pipeBtn);
             img.setImageResource(R.drawable.ic_check_ok);
-            //Toast.makeText(getApplicationContext(), "Mindketto kivalasztva", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -276,37 +279,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if (timeChoosed && dateChoosed){
             timeChoosed =  false;
             dateChoosed = false;
-            View viewClose = findViewById(R.id.closeBtn);
-            View viewPipe = findViewById(R.id.pipeBtn);
-            View viewDate = findViewById(R.id.date);
-            View viewTime = findViewById(R.id.time);
-            viewClose.setVisibility(View.GONE);
-            viewPipe.setVisibility(View.GONE);
-            viewDate.setVisibility(View.GONE);
-            viewTime.setVisibility(View.GONE);
-            reminderName = (EditText)((Activity)this).findViewById(R.id.reminderName);
             TextView txtViewDate = (TextView) ((Activity)this).findViewById(R.id.date);
             TextView txtViewTime = (TextView) ((Activity)this).findViewById(R.id.time);
-            String str1 = reminderName.getText().toString().replace("\n","").replace(" ", "");
-            String str2 = txtViewDate.getText().toString().replace("\n","").replace(" ", "");
-            String str3 = txtViewTime.getText().toString().replace("\n","").replace(" ", "");
-            ReminderContact temp = new ReminderContact(1, str1, str2, str3);
+            ReminderContact temp = new ReminderContact(1, reminderName.getText().toString().replace("\n","")
+                    , txtViewDate.getText().toString().replace("\n","").replace(" ", "")
+                    , txtViewTime.getText().toString().replace("\n","").replace(" ", ""));
+            setNewReminderIcons(false, false);
+            setNewRemindersData(view, "Enter reminder title", "01/01/1970", "00:00");
             dbHandler.insertContact(temp);
-            reminderAdapter = new ReminderContactAdapter(dbHandler.getAllReminderCotacts(), this, reminderRecyclerView);
-            //reminderAdapter = new ReminderContactAdapter(reminderContacts);
-            reminderRecyclerView.setHasFixedSize(true);
-            reminderLayoutManager = new LinearLayoutManager(this);
-            reminderRecyclerView.setLayoutManager(reminderLayoutManager);
-            reminderRecyclerView.setAdapter(reminderAdapter);
-
-            reminderName.setEnabled(false);
-            reminderName.setText("Enter reminder title");
-            ImageView img= (ImageView) findViewById(R.id.pipeBtn);
-            img.setImageResource(R.drawable.ic_check);
-            txtViewDate.setText("01/01/1970");
-            txtViewTime.setText("00:00");
+            reminderControl.updateReminders(reminderRecyclerView, dbHandler);
         }
-
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
