@@ -5,4 +5,12 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="nav_heigth">50dp</dimen>
+
+    <dimen name="stepper_cardview_margin_horizontal">16dp</dimen>
+    <dimen name="stepper_cardview_height">70dp</dimen>
+    <dimen name="stepper_cardview_title_height">14dp</dimen>
+    <dimen name="stepper_cardview_margin_vertical">4dp</dimen>
+    <dimen name="stepper_cardview_padding">16dp</dimen>
+    <dimen name="stepper_cardview_event_separation">4dp</dimen>
+    <dimen name="stepper_event_height">78dp</dimen>
 </resources>

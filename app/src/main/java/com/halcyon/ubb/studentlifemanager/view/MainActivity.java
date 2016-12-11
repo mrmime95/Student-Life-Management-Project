@@ -1,4 +1,4 @@
-package com.halcyon.ubb.studentlifemanager;
+package com.halcyon.ubb.studentlifemanager.view;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.transition.Scene;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,17 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.halcyon.ubb.studentlifemanager.R;
+import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
+import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
+import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
+import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableDayFragment;
+
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView mNav;
@@ -41,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private View mSpinnerTextView;
 
     private int mCurrentlySelected;
+    private Object testTimeTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,38 +63,39 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //resolve references
         mSpinner = (Spinner) findViewById(R.id.main_spinner);
         mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
-        mToolbar= (Toolbar) findViewById(R.id.toolbars);
-        mTabs= (TabLayout) findViewById(R.id.main_tabs);
+        mToolbar = (Toolbar) findViewById(R.id.toolbars);
+        mTabs = (TabLayout) findViewById(R.id.main_tabs);
         mFrame = (FrameLayout) findViewById(R.id.main_frame);
-        mTabsLayout=findViewById(R.id.main_tabs_layout);
-        mSpinnerLayout=findViewById(R.id.main_spinner_layout);
-        mFab= (FloatingActionButton) findViewById(R.id.main_fab);
+        //mTabsLayout = findViewById(R.id.main_tabs_layout);
+        mSpinnerLayout = findViewById(R.id.main_spinner_layout);
+        mFab = (FloatingActionButton) findViewById(R.id.main_fab);
 
         //nav
         mNav.setOnNavigationItemSelectedListener(this);
 
 
         //spinner
-        mItems=new String[]{ "First","Second" };
-        mSpinnerAdapter= new ArrayAdapter<>(this, R.layout.main_spinner_textview, mItems);
+        mItems = new String[]{"First", "Second"};
+        mSpinnerAdapter = new ArrayAdapter<>(this, R.layout.main_spinner_textview, mItems);
         mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(mSpinnerAdapter);
 
         //fist tab
-        mCourses=getLayoutInflater().inflate(R.layout.main_tab_courses,mFrame,false);
+        mCourses = getLayoutInflater().inflate(R.layout.main_tab_courses, mFrame, false);
         //second tab
-        mReminders=getLayoutInflater().inflate(R.layout.main_tab_reminders,mFrame,false);
+        mReminders = getLayoutInflater().inflate(R.layout.main_tab_reminders, mFrame, false);
         //third tab
-        mTimeTable=getLayoutInflater().inflate(R.layout.main_tab_timetable,mFrame,false);
+        mTimeTable = getLayoutInflater().inflate(R.layout.main_tab_timetable, mFrame, false);
 
-        ViewPager pager=(ViewPager) mTimeTable.findViewById(R.id.tab_timetable_viewpager);
+        ViewPager pager = (ViewPager) mTimeTable.findViewById(R.id.tab_timetable_viewpager);
         mTabs.setupWithViewPager(pager);
-        pager.setAdapter(new DayPagerAdapter(getSupportFragmentManager()));
+        pager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), getTestTimeTable()));
 
 
         //select first tab
         mSpinnerLayout.setVisibility(View.GONE);
-        mTabsLayout.setVisibility(View.GONE);
+       // mTabsLayout.setVisibility(View.GONE);
+        mTabs.setVisibility(View.GONE);
 
         mToolbar.setVisibility(View.GONE);
 
@@ -89,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         mFab.hide();
 
-        mItems[0]="First";
-        mItems[1]="Second";
+        mItems[0] = "First";
+        mItems[1] = "Second";
         mSpinnerAdapter.notifyDataSetChanged();
 
         mFrame.addView(mCourses);
@@ -123,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mToolbar.setVisibility(View.GONE);
 
         mToolbar.setVisibility(View.GONE);
-        mTabsLayout.setVisibility(View.GONE);
+        mTabs.setVisibility(View.GONE);
 
         if (id!=R.id.tab_courses && id!=R.id.tab_timetable) mSpinnerLayout.setVisibility(View.GONE);
 
@@ -143,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
             case R.id.tab_reminders:
 
-                mTabsLayout.setVisibility(View.GONE);
+                mTabs.setVisibility(View.GONE);
 
                 mToolbar.setVisibility(View.VISIBLE);
                 mToolbar.setTitle(item.getTitle());
@@ -153,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 mFab.show();
                 break;
             case R.id.tab_timetable:
-                mTabsLayout.setVisibility(View.VISIBLE);
+                mTabs.setVisibility(View.VISIBLE);
                 mSpinnerTextView.setVisibility(View.VISIBLE);
                 mSpinnerLayout.setVisibility(View.VISIBLE);
 
@@ -170,52 +184,53 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return true;
     }
 
-    public static class PlaceholderFragment extends Fragment {
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public PlaceholderFragment() {
-        }
-
-        public static MainActivity.PlaceholderFragment newInstance(int sectionNumber) {
-            MainActivity.PlaceholderFragment fragment = new MainActivity.PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main2, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
 
     public class DayPagerAdapter extends FragmentPagerAdapter {
         private String[] mDays;
+        private Timetable mTimetable;
 
-
-        public DayPagerAdapter(FragmentManager fm) {
+        public DayPagerAdapter(FragmentManager fm, Timetable timetable) {
             super(fm);
             mDays=getBaseContext().getResources().getStringArray(R.array.days);
+            mTimetable=timetable;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return MainActivity.PlaceholderFragment.newInstance(position + 1);
+            return TimetableDayFragment.newInstance(position,mTimetable.getTimetableOnDay(position));
         }
 
         @Override
         public int getCount() {
-            return mDays.length;
+            return mTimetable.getDayCount();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             return mDays[position];
         }
+    }
+
+    public Timetable getTestTimeTable() {
+        ArrayList<TimetableDay> days=new ArrayList<>();
+
+        for (int i=0;i<6;++i) {
+            ArrayList<Event> events=new ArrayList<>();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.set(Calendar.HOUR_OF_DAY,8);
+            events.add(new Event("Course • Matemathicum","Algebra of analytics",cal.getTime(),cal.getTime()));
+            events.add(new Event("Laboratory • Central","C++ coding standards",cal.getTime(),cal.getTime()));
+            cal.set(Calendar.HOUR_OF_DAY,14);
+            events.add(new Event("Laboratory • FSEGA","Linux basics",cal.getTime(),cal.getTime()));
+            cal.set(Calendar.HOUR_OF_DAY,19);
+            events.add(new Event("Laboratory • FSEGA","C++ advanced",cal.getTime(),cal.getTime()));
+            days.add(new TimetableDay(events));
+        }
+
+        Log.d("hi","hi");
+
+        return new Timetable(days);
     }
 }

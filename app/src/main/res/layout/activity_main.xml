@@ -5,7 +5,8 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.halcyon.ubb.studentlifemanager.MainActivity">
+    tools:context="com.halcyon.ubb.studentlifemanager.view.MainActivity"
+    android:background="@color/white">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -49,27 +50,14 @@
                     android:layout_height="match_parent" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/main_tabs_layout"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
 
                 <android.support.design.widget.TabLayout
                     android:id="@+id/main_tabs"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:tabGravity="fill"
-                    android:layout_weight="4"
                     app:tabTextColor="@android:color/white"
                     app:tabSelectedTextColor="@android:color/white"/>
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
 
         </android.support.design.widget.AppBarLayout>
 
