@@ -42,6 +42,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,7 +53,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView mNav;
-    private Spinner mSpinner;
+    private MySpinner mSpinner;
     private Toolbar mToolbar;
     private TabLayout mTabs;
     private ArrayAdapter<String> mSpinnerAdapter;
@@ -89,11 +93,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
         //database
             dbHandler = new MyDBHandler(this);
         //resolve references
-        mSpinner = (Spinner) findViewById(R.id.main_spinner);
+        mSpinner = (MySpinner) findViewById(R.id.main_spinner);
         mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
         mToolbar= (Toolbar) findViewById(R.id.toolbars);
         mTabs= (TabLayout) findViewById(R.id.main_tabs);
@@ -106,10 +111,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
         //spinner
-        mItems=new String[]{ "First","Second" };
-        mSpinnerAdapter= new ArrayAdapter<>(this, R.layout.main_spinner_textview, mItems);
-        mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(mSpinnerAdapter);
+        Query query = FirebaseDatabase.getInstance().getReference().child("Courses").orderByValue();
+        mSpinner.courseSpinnerUpdate(query);
+
+
 
         //fist tab
         mCourses=getLayoutInflater().inflate(R.layout.main_tab_courses,mFrame,false);
@@ -128,9 +133,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mTabsLayout.setVisibility(View.GONE);
         mToolbar.setVisibility(View.GONE);
         mSpinnerLayout.setVisibility(View.VISIBLE);
-        mItems[0]="First";
+        /*mItems[0]="First";
         mItems[1]="Second";
-        mSpinnerAdapter.notifyDataSetChanged();
+        mSpinnerAdapter.notifyDataSetChanged();*/
+        mSpinner.courseSpinnerUpdate(query);
         mFrame.addView(mCourses);
 
         //course items
@@ -147,9 +153,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         courseLayoutManager  = new LinearLayoutManager(this);
         courseRecyclerView.setLayoutManager(courseLayoutManager);
         courseRecyclerView.setHasFixedSize(true);
-        courseAdapter = new ContactAdapter(courseContacts, this);
-        courseRecyclerView.setAdapter(courseAdapter);
+        //courseAdapter = new ContactAdapter(courseContacts, this);
+        //courseRecyclerView.setAdapter(courseAdapter);
 
+
+        mSpinner.setMyItemSelectedListener(courseRecyclerView, this);
         // reminder's list
 
         reminderControl = new ReminderControl(this);
@@ -299,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         mFrame.removeAllViews();
         mSpinnerTextView=mSpinner.findViewById(R.id.spinner_textView);
-        mSpinnerTextView.setVisibility(View.GONE);
+       // mSpinnerTextView.setVisibility(View.GONE);
 
         mToolbar.setVisibility(View.GONE);
 
@@ -315,11 +323,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (id) {
             case R.id.tab_courses:
                 mSpinnerLayout.setVisibility(View.VISIBLE);
-                mSpinnerTextView.setVisibility(View.VISIBLE);
-                mItems[0]="First";
+//                mSpinnerTextView.setVisibility(View.VISIBLE);
+                /*mItems[0]="First";
                 mItems[1]="Second";
-                mSpinnerAdapter.notifyDataSetChanged();
-
+                mSpinnerAdapter.notifyDataSetChanged();*/
+                Query query = FirebaseDatabase.getInstance().getReference().child("Courses").orderByValue();
+                mSpinner.courseSpinnerUpdate(query);
                 mFrame.addView(mCourses);
                 break;
             case R.id.tab_reminders:
@@ -334,12 +343,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
             case R.id.tab_timetable:
                 mTabsLayout.setVisibility(View.VISIBLE);
-                mSpinnerTextView.setVisibility(View.VISIBLE);
+//                mSpinnerTextView.setVisibility(View.VISIBLE);
                 mSpinnerLayout.setVisibility(View.VISIBLE);
 
-                mItems[0]="Third";
+             /*    mItems[0]="Third";
                 mItems[1]="Fourth";
                 mSpinnerAdapter.notifyDataSetChanged();
+                */
 
                 mFrame.addView(mTimeTable);
                 break;

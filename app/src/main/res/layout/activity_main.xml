@@ -38,7 +38,7 @@
                     android:layout_weight="2"
                     android:layout_height="match_parent" />
 
-                <android.support.v7.widget.AppCompatSpinner
+                <com.halcyon.ubb.studentlifemanager.MySpinner
                     android:layout_width="0dp"
                     android:layout_height="?attr/actionBarSize"
                     android:id="@+id/main_spinner"
