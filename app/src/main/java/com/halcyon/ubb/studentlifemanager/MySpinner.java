@@ -1,4 +1,4 @@
-package com.example.matyas.eddd;
+package com.halcyon.ubb.studentlifemanager;
 
 import android.content.Context;
 import android.content.res.Resources;

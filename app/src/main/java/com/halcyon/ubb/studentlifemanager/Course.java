@@ -1,4 +1,4 @@
-package com.example.matyas.eddd;
+package com.halcyon.ubb.studentlifemanager;
 
 /**
  * Created by matyas on 2016.12.09..
