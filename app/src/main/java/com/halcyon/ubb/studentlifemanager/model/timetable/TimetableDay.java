@@ -25,7 +25,10 @@ public class TimetableDay implements Serializable {
     public static final int FRI=4;
     public static final int SAT=5;
 
-    private ArrayList<Event> mEvents;
+    public  ArrayList<Event> events;
+
+    public TimetableDay() {
+    }
 
     public static Comparator<Event> mStartingTimeComparator =new Comparator<Event>() {
         @Override
@@ -35,11 +38,11 @@ public class TimetableDay implements Serializable {
     };
 
     public TimetableDay(ArrayList<Event> events) {
-        mEvents=events;
+        this.events =events;
     }
 
     public ArrayList<Event> sortEventsInStartingTime() {
-        Collections.sort(mEvents, mStartingTimeComparator);
-        return mEvents;
+        Collections.sort(events, mStartingTimeComparator);
+        return events;
     }
 }

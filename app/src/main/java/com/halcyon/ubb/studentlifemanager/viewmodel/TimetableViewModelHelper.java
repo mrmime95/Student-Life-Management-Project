@@ -28,6 +28,8 @@ public class TimetableViewModelHelper {
      * @return a ViewModel representation of {@link TimetableDay}
      */
     public static ArrayList<ICEventViewModel> createEventViewModels(TimetableDay table) {
+        if (table==null) return new ArrayList<>();
+
         ArrayList<ICEventViewModel> vm=new ArrayList<>();
         ArrayList<Event> events=table.sortEventsInStartingTime();
 

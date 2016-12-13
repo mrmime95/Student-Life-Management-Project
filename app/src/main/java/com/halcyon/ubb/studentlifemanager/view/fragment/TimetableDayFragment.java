@@ -1,43 +1,58 @@
 package com.halcyon.ubb.studentlifemanager.view.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.nitrico.lastadapter.LastAdapter;
 import com.halcyon.ubb.studentlifemanager.BR;
 import com.halcyon.ubb.studentlifemanager.R;
+import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
-import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay.Days;
+import com.halcyon.ubb.studentlifemanager.viewmodel.TimetableDayValueListener;
 import com.halcyon.ubb.studentlifemanager.viewmodel.EventEndPoint;
 import com.halcyon.ubb.studentlifemanager.viewmodel.EventStartViewModel;
 import com.halcyon.ubb.studentlifemanager.viewmodel.EventViewModel;
 import com.halcyon.ubb.studentlifemanager.viewmodel.ICEventViewModel;
 import com.halcyon.ubb.studentlifemanager.viewmodel.TimetableViewModelHelper;
 
+import org.antlr.v4.automata.ATNFactory;
+
 import java.util.ArrayList;
 
 public class TimetableDayFragment extends Fragment {
     public static String PARAMS_DAY="timetableday_params_day";
-    public static String PARAMS_TIMETABLE="timetableday_params_timetable";
+    private static String PARAMS_COURSE="timetableday_params_course";
 
     private TimetableDay mTimeTableDay;
 
     private RecyclerView mRecyclerView;
 
+    ArrayList<ICEventViewModel> mList;
+    private LastAdapter mAdapter;
+
+    private TimetableDayValueListener mListener;
+    private int mDay;
+    private String mCourse;
+
     public TimetableDayFragment() {
         // Required empty public constructor
     }
 
-    public static TimetableDayFragment newInstance(@Days int day, TimetableDay table) {
+    public static TimetableDayFragment newInstance(String course,@TimetableDay.Days int day) {
         TimetableDayFragment fragment = new TimetableDayFragment();
         Bundle args = new Bundle();
-        args.putSerializable(PARAMS_TIMETABLE, table);
+        args.putInt(PARAMS_DAY, day);
+        args.putString(PARAMS_COURSE,course);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +62,27 @@ public class TimetableDayFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             //noinspection WrongConstant
-            mTimeTableDay = (TimetableDay) getArguments().getSerializable(PARAMS_TIMETABLE);
+            mDay =getArguments().getInt(PARAMS_DAY);
+            mCourse=getArguments().getString(PARAMS_COURSE);
+            mListener=new TimetableDayValueListener() {
+                @Override
+                public void onDayChange(TimetableDay day) {
+                    int size=mList.size();
+                    mList.clear();
+                    mAdapter.notifyItemRangeRemoved(0,size);
+                    ArrayList<ICEventViewModel> list = TimetableViewModelHelper.createEventViewModels(day);
+                    for (ICEventViewModel i : list)
+                        mList.add(i);
+                    mAdapter.notifyItemRangeInserted(0,mList.size());
+                    if (size!=0)
+                        Snackbar.make(getActivity().findViewById(R.id.main_coord),"Timetable day "+String.valueOf(mDay+1)+" has been updated.",Snackbar.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onCancelled(Exception e) {
+                    Toast.makeText(getContext(),"There was a problem loading your timetable on day "+mDay+".",Toast.LENGTH_SHORT).show();
+                }
+            };
         }
     }
 
@@ -57,16 +92,46 @@ public class TimetableDayFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_timetable_day, container, false);
         mRecyclerView= (RecyclerView) view.findViewById(R.id.recycler_timetable_day);
 
-        ArrayList<ICEventViewModel> vm = TimetableViewModelHelper.createEventViewModels(mTimeTableDay);
-
-        LastAdapter.with(vm, BR.item)
+        mList = TimetableViewModelHelper.createEventViewModels(mTimeTableDay);
+        mAdapter=LastAdapter.with(mList, BR.item)
                 .map(EventStartViewModel.class,R.layout.timetableday_time)
                 .map(EventViewModel.class,R.layout.timetableday_event)
                 .map(EventEndPoint.class,R.layout.timetableday_endpoint)
                 .into(mRecyclerView);
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        FirebaseDB.getInstance().addTimetableDayValueListener(mCourse,mDay,mListener);
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //FirebaseDB.getInstance().addTimetableDayValueListener(mCourse,mDay,mListener);
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        //FirebaseDB.getInstance().removeTimetableDayValueListener(mCourse,mDay,mListener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //FirebaseDB.getInstance().removeTimetableDayValueListener(mCourse,mDay,mListener);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        FirebaseDB.getInstance().removeTimetableDayValueListener(mCourse,mDay,mListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //FirebaseDB.getInstance().addTimetableDayValueListener(mCourse,mDay,mListener);
+    }
 }

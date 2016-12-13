@@ -28,6 +28,7 @@ public class EventStartViewModel implements ICEventViewModel{
         return DateFormat.format("HH:mm",mEvent.getStartingTime()).toString();
     }
 
+    @Override
     public void setEvent(Event event) {
         mEvent=event;
         startingTime.set(formatStartingTime());

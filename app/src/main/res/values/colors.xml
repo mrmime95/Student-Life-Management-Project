@@ -5,7 +5,7 @@
     <color name="colorPrimaryDark">#006666</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorControlNormal">@color/white</color>
-    <color name="colorDisabled">#aaaaaa</color>
+    <color name="colorDisabled">#55ffffff</color>
     <color name="colorControlActivated">#aaaaaa</color>
 
     <color name="white">#FFFFFF</color>

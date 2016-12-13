@@ -4,19 +4,19 @@
     <item
         android:id="@+id/tab_courses"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_agenda"
+        android:icon="@drawable/ic_assignment_turned_in"
         app:showAsAction="ifRoom"
         android:title="Courses"/>
     <item
         android:id="@+id/tab_reminders"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_recent_history"
+        android:icon="@drawable/ic_today"
         app:showAsAction="ifRoom"
         android:title="Reminders"/>
     <item
         android:id="@+id/tab_timetable"
         android:enabled="true"
         android:title="Timetable"
-        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:icon="@drawable/ic_account_box"
         app:showAsAction="ifRoom" />
 </menu>

@@ -4,6 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
 import android.text.format.DateFormat;
 
+import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 
 /**
@@ -25,6 +26,7 @@ public class EventViewModel implements ICEventViewModel {
         setEvent(event);
     }
 
+    @Override
     public void setEvent(Event event) {
         mEvent=event;
         title.set(mEvent.getName());

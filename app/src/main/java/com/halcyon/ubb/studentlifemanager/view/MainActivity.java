@@ -1,5 +1,6 @@
 package com.halcyon.ubb.studentlifemanager.view;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -8,29 +9,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.transition.Scene;
 import android.transition.TransitionManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.halcyon.ubb.studentlifemanager.R;
+import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableDayFragment;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private View mSpinnerTextView;
 
     private int mCurrentlySelected;
-    private Object testTimeTable;
+    private Timetable mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //nav
         mNav.setOnNavigationItemSelectedListener(this);
 
-
         //spinner
         mItems = new String[]{"First", "Second"};
         mSpinnerAdapter = new ArrayAdapter<>(this, R.layout.main_spinner_textview, mItems);
@@ -89,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         ViewPager pager = (ViewPager) mTimeTable.findViewById(R.id.tab_timetable_viewpager);
         mTabs.setupWithViewPager(pager);
-        pager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), getTestTimeTable()));
 
+        pager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), "testCourse"));
 
         //select first tab
         mSpinnerLayout.setVisibility(View.GONE);
@@ -108,6 +105,37 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mSpinnerAdapter.notifyDataSetChanged();
 
         mFrame.addView(mCourses);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Do you want to upload test data?");
+        alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                FirebaseDB.getInstance().createTestData();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                alertDialogBuilder.setMessage("Do you want to delete test data?");
+                alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseDB.getInstance().deleteTestData();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                alertDialogBuilder.show();
+            }
+        });
+        alertDialogBuilder.show();
+
     }
 
     @Override
@@ -187,23 +215,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
     public class DayPagerAdapter extends FragmentPagerAdapter {
+        private final String mCourse;
         private String[] mDays;
-        private Timetable mTimetable;
 
-        public DayPagerAdapter(FragmentManager fm, Timetable timetable) {
+        public DayPagerAdapter(FragmentManager fm,String courseID) {
             super(fm);
             mDays=getBaseContext().getResources().getStringArray(R.array.days);
-            mTimetable=timetable;
+            mCourse=courseID;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return TimetableDayFragment.newInstance(position,mTimetable.getTimetableOnDay(position));
+            return TimetableDayFragment.newInstance(mCourse,position);
         }
 
         @Override
         public int getCount() {
-            return mTimetable.getDayCount();
+            return 6;
         }
 
         @Override

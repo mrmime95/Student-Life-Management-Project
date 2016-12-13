@@ -8,61 +8,64 @@ import java.util.Date;
  */
 
 public class Event implements Serializable{
-    private String mName;
-    private String mLocation;
-    private String mDescription;
+    public String name;
+    public String location;
+    public String description;
 
-    private Date mStartingTime;
-    private Date mEndingTime;
+    public Date startingTime;
+    public Date endingTime;
+
+    public Event() {
+    }
 
     public Event(String name,String description) {
-        mName=name;
-        mDescription=description;
+        this.name =name;
+        this.description =description;
     }
 
     public Event(String name,String description,Date startingTime,Date endingTime) {
         this(name,description);
-        mStartingTime=startingTime;
-        mEndingTime=endingTime;
+        this.startingTime =startingTime;
+        this.endingTime =endingTime;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        this.mName = name;
+        this.name = name;
     }
 
     public String getLocation() {
-        return mLocation;
+        return location;
     }
 
     public void setLocation(String location) {
-        this.mLocation = location;
+        this.location = location;
     }
 
     public String getDescription() {
-        return mDescription;
+        return description;
     }
 
     public void setDescription(String description) {
-        this.mDescription = description;
+        this.description = description;
     }
 
     public Date getStartingTime() {
-        return mStartingTime;
+        return startingTime;
     }
 
     public void setStartingTime(Date startingTime) {
-        this.mStartingTime = startingTime;
+        this.startingTime = startingTime;
     }
 
     public Date getEndingTime() {
-        return mEndingTime;
+        return endingTime;
     }
 
     public void setEndingTime(Date endingTime) {
-        this.mEndingTime = endingTime;
+        this.endingTime = endingTime;
     }
 }

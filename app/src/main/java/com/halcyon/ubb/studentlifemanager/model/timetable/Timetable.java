@@ -11,14 +11,14 @@ import java.util.List;
  */
 
 public class Timetable implements Serializable {
-    private List<TimetableDay> mDays;
+    public  List<TimetableDay> mDays;
+
+    public Timetable() {
+        this(new ArrayList<TimetableDay>());
+    }
 
     public Timetable(ArrayList<TimetableDay> days) {
         mDays=days;
-    }
-
-    public TimetableDay getTimetableOnDay(int daypos) {
-        return mDays.get(daypos);
     }
 
     public int getDayCount() {
@@ -33,7 +33,7 @@ public class Timetable implements Serializable {
         ArrayList<Timetable> list=new ArrayList<>();
 
         for (Scheduleable scheduleable:scheduleables)
-            list.add(scheduleable.getTimetable());
+            list.add(scheduleable.addTimetableDayValueListener());
 
         return Timetable.union(list);
     }*/

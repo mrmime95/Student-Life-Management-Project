@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "621990020888",
+    "firebase_url": "https://student-life-manager.firebaseio.com",
+    "project_id": "student-life-manager",
+    "storage_bucket": "student-life-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621990020888:android:01ce84ded276e6e9",
+        "android_client_info": {
+          "package_name": "com.halcyon.ubb.studentlifemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621990020888-ijks2ktuj3269ep1ms44bptee9r2qft3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKfzpU8Zcgg-8b71W4eiSSoKzHEUMw1IE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
