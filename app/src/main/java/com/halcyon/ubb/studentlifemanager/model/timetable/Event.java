@@ -7,6 +7,7 @@ import java.util.Date;
  * Created by Baroti Csaba on 12/11/2016.
  */
 
+//TODO CR: Don't implement Serializable, use Parcelable instead (much better performance on Android). [Peter]
 public class Event implements Serializable{
     private String mName;
     private String mLocation;
@@ -34,6 +35,7 @@ public class Event implements Serializable{
         this.mName = name;
     }
 
+    //TODO CR: Remove unused methods. [Peter]
     public String getLocation() {
         return mLocation;
     }

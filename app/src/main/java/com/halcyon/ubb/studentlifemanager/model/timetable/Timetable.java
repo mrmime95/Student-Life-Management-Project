@@ -25,6 +25,7 @@ public class Timetable implements Serializable {
         return mDays.size();
     }
 
+    //TODO CR: Static methods should not be part of a model class (consider moving it into a separate helper class). [Peter]
     public static Timetable union(Collection<Timetable> timetables) {
         return null;
     }

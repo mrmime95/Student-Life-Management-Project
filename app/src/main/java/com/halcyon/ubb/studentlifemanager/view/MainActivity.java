@@ -53,6 +53,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+    //TODO CR: This class need some serious refactoring. First of all, there are lots of unused fields or fields that can be made public. Secondly, all inner
+    // classes (Fragments) should be defined in separate files and communicate with the Activity through interfaces. [Peter]
     private BottomNavigationView mNav;
     private MySpinner mSpinner;
     private Toolbar mToolbar;
@@ -72,14 +74,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private RecyclerView courseRecyclerView;
     private RecyclerView.Adapter courseAdapter;
     private RecyclerView.LayoutManager courseLayoutManager;
+    //TODO CR: Separate mock data from the final implementation. [Peter]
     int[] images = {R.drawable.pic1, R.drawable.pic2,R.drawable.pic3,R.drawable.pic4,R.drawable.pic5,R.drawable.pic6, R.drawable.pic7,R.drawable.pic8};
     private String[] descriptions, titles;
     private ArrayList<CourseContact> courseContacts = new ArrayList<CourseContact>();
 
     //Reminders
+    //TODO CR: Don't initialize the values here. Also, the code would be nicer if you defined everything in a new line. [Peter]
+    private Calendar myCalendar = Calendar.getInstance();
     private ImageView reminderPipe, reminderClose;
     private TextView reminderDate, reminderTime;
-    private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
     private TimePickerDialog.OnTimeSetListener time;
     private EditText reminderName;
@@ -94,19 +98,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TODO CR: Initializing Firebase should be done in the Application class, not within an Activity. [Peter]
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
         //database
             dbHandler = new MyDBHandler(this);
         //resolve references
+        //TODO CR: Don't initialize variables until you need them, it makes your code more difficult to follow. [Peter]
         mSpinner = (MySpinner) findViewById(R.id.main_spinner);
         mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
         mToolbar= (Toolbar) findViewById(R.id.toolbars);
+        //TODO CR: It's like you don't even care. Why are there two references to the same View? Don't ignore Lint warnings. [Peter]
         mTabs= (TabLayout) findViewById(R.id.main_tabs);
         mFrame = (FrameLayout) findViewById(R.id.main_frame);
         mTabsLayout=findViewById(R.id.main_tabs);
         mSpinnerLayout=findViewById(R.id.main_spinner_layout);
 
+        //TODO CR: Very poor quality comments throughout the file. [Peter]
         //nav
         mNav.setOnNavigationItemSelectedListener(this);
 
@@ -114,9 +122,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //spinner
         Query query = FirebaseDatabase.getInstance().getReference().child("Courses").orderByValue();
         mSpinner.courseSpinnerUpdate(query);
+        //TODO CR: Format your code. Remove multiple empty lines. Think about others. [Peter]
 
 
 
+        //TODO CR: Don't inflate all three Fragments if you're only going to display one. The FragmentTransaction's replace() method would be much more optimal. [Peter]
         //fist tab
         mCourses=getLayoutInflater().inflate(R.layout.main_tab_courses,mFrame,false);
         //second tab
@@ -129,6 +139,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         pager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), getTestTimeTable()));
 
 
+        //TODO CR: You're doing way too much Visibility toggling for this to be considered a nice implementation. When you look at a design and see three different pages
+        // with completely different action bars, consider making them part of each Fragment: right now there is too much hidden content in your View hierarchy that consumes
+        // resources and reduces performance. [Peter]
         //select first tab
         mSpinnerLayout.setVisibility(View.GONE);
         mTabsLayout.setVisibility(View.GONE);
@@ -166,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         reminderControl.updateReminders(reminderRecyclerView,dbHandler);
         //supportBar options
 
+        //TODO CR: The status bar color can be set from the theme. Don't try to do everything in Java unless you have to. [Peter]
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -183,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                // TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -195,10 +208,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     public void addNewReminderOnClick(View view){
         setNewReminderIcons(true, false);
+        //TODO CR: Why do you hardcode these values? Think about the users, do they really want to see the default date at 1970? [Peter]
         setNewRemindersData(view, "", "01/01/1970", "00:00");
     }
 
     public void setNewRemindersData(View view, String name, String date, String time){
+        //TODO CR: Remove useless parameter, and useless casts. Don't use findViewById calls multiple times if it can be avoided. I'm sure the
+        // high-level flow could be optimized as well but I won't bother looking at it until the code is readable. [Peter]
         EditText reminderName = (EditText)((Activity)this).findViewById(R.id.reminderName);
         reminderName.setText(name);
         TextView textDate = (TextView) ((Activity)this).findViewById(R.id.date);
@@ -210,16 +226,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public void setNewReminderIcons(boolean visability, boolean pipe)
     {
         View viewClose = findViewById(R.id.closeBtn);
+        //TODO CR: Views can be down-casted any time but still, if you really want to keep separate variables for the different types (why...?),
+        // re-use and cast the reference that was already saved. The findViewById() method is a relatively heavy one as it goes through all of
+        // the layout hierarchy, be careful not to use it too often.. [Peter]
         View viewPipe = findViewById(R.id.pipeBtn);
         View viewDate = findViewById(R.id.date);
         View viewTime = findViewById(R.id.time);
         ImageView img = (ImageView) findViewById(R.id.pipeBtn);
         reminderName = (EditText)((Activity)this).findViewById(R.id.reminderName);
+        //TODO CR: Watch out for typos. [Peter]
         if (visability){
             viewClose.setVisibility(View.VISIBLE);
             viewPipe.setVisibility(View.VISIBLE);
             viewDate.setVisibility(View.VISIBLE);
             viewTime.setVisibility(View.VISIBLE);
+            //TODO CR: Watch out for Lint warnings. [Peter]
             reminderName.setEnabled(visability);
         }else{
             viewClose.setVisibility(View.GONE);
@@ -228,6 +249,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             viewTime.setVisibility(View.GONE);
             reminderName.setEnabled(visability);
         }
+        //TODO CR: You can use the ternary operator here: img.setImageResource(pipe ? R.drawable.ic_check_ok : R.drawable.ic_check); [Peter]
+        //TODO CR: If you import PNG-s, make sure all 5 densities are in the project. However, you can use vector assets which are MUCH better for icons. [Peter]
+        //TODO CR: Pipe...? [Peter]
         if (pipe) img.setImageResource(R.drawable.ic_check_ok);
         else img.setImageResource(R.drawable.ic_check);
     }
@@ -235,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public void  closeAddingNewReminderOnClick(View view){
         setNewReminderIcons(false, false);
         //reminderControl.setNewReminderIcons(false, false, view);
+        //TODO CR: Don't hardcode values. Use constants for Strings that appear multiple times. Also, as mentioned before, come up with better default values. [Peter]
         setNewRemindersData(view, "Enter reminder title", "01/01/1970", "00:00");
         timeChoosed = dateChoosed = false;
     }
@@ -251,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         TextView txtView = (TextView) ((Activity)this).findViewById(R.id.date);
         txtView.setText(str);
         dateChoosed = true;
+        //TODO CR: Pay attention to Lint warnings. Don't write logic that doesn't make sense. [Peter]
         if ((timeChoosed && dateChoosed)){
             ImageView img= (ImageView)findViewById(R.id.pipeBtn);
             img.setImageResource(R.drawable.ic_check_ok);
@@ -278,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         TextView txtView = (TextView) ((Activity)this).findViewById(R.id.time);
         txtView.setText(str);
         timeChoosed = true;
+        //TODO CR: As a general note, you should move duplicated code to a common method. In this case, however, delete it (bad UX). [Peter]
         if ((timeChoosed && dateChoosed)){
             ImageView img= (ImageView) findViewById(R.id.pipeBtn);
             img.setImageResource(R.drawable.ic_check_ok);
@@ -317,6 +344,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         if (id!=R.id.tab_courses && id!=R.id.tab_timetable) mSpinnerLayout.setVisibility(View.GONE);
 
+        //TODO CR: As mentioned before, you shouldn't just add already inflated Views: use replace() instead. [Peter]
         TransitionManager.beginDelayedTransition((ViewGroup) findViewById(android.R.id.content));
 
         if (id==R.id.tab_courses || id==R.id.tab_timetable) mSpinnerLayout.setVisibility(View.GONE);
@@ -361,6 +389,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return true;
     }
 
+    //TODO CR: Move the Fragment class to a separate file (or remove unused class). [Peter]
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -385,6 +414,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
     }
 
+    //TODO CR: Move the adapter class to a separate file. [Peter]
     public class DayPagerAdapter extends FragmentPagerAdapter {
         private String[] mDays;
         private Timetable mTimetable;

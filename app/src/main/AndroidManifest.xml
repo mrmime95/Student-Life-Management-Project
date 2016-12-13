@@ -15,6 +15,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- TODO CR: Close XML tags if there isn't any content between them. [Peter] -->
         <activity android:name=".CourseDetail"></activity>
     </application>
 

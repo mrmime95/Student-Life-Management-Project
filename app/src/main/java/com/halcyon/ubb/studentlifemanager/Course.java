@@ -5,6 +5,7 @@ package com.halcyon.ubb.studentlifemanager;
  */
 
 public class Course {
+    //TODO CR: Model classes belong to the model package. [Peter]
     private String title;
     private String description;
     private String fileName;

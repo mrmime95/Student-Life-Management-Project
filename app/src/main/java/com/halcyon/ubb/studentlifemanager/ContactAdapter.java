@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by Szilard on 01.12.2016.
  */
-
+//TODO CR: Unused class. [Peter]
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
     private ArrayList<CourseContact> contacts = new ArrayList<>();
     private Context ctx;
