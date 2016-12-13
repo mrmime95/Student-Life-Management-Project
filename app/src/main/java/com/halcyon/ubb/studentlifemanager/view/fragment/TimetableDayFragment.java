@@ -4,6 +4,7 @@ package com.halcyon.ubb.studentlifemanager.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,10 +34,7 @@ public class TimetableDayFragment extends Fragment {
     public static String PARAMS_DAY="timetableday_params_day";
     private static String PARAMS_COURSE="timetableday_params_course";
 
-    private TimetableDay mTimeTableDay;
-
-    //TODO CR: Pay attention to Lint warnings, there is no need to keep a global reference to this field. [Peter]
-    private RecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
 
     ArrayList<ICEventViewModel> mList;
     private LastAdapter mAdapter;
@@ -61,10 +59,11 @@ public class TimetableDayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if (getArguments() == null) throw new IllegalStateException("Should instantiate with static method (no args found).");
             //noinspection WrongConstant
             mDay =getArguments().getInt(PARAMS_DAY);
             mCourse=getArguments().getString(PARAMS_COURSE);
+
             mListener=new TimetableDayValueListener() {
                 @Override
                 public void onDayChange(TimetableDay day) {
@@ -84,14 +83,17 @@ public class TimetableDayFragment extends Fragment {
                     Toast.makeText(getContext(),"There was a problem loading your timetable on day "+mDay+".",Toast.LENGTH_SHORT).show();
                 }
             };
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_timetable_day, container, false);
-        //TODO CR: The onCreateView() method should only be responsible for inflating the View, move the rest of the logic to onViewCreated(). [Peter]
+        return inflater.inflate(R.layout.fragment_timetable_day, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mRecyclerView= (RecyclerView) view.findViewById(R.id.recycler_timetable_day);
 
         //TODO CR: Why do you need a third party library to set up the RecyclerView? Initializing the adapter and handling the ViewHolder pattern
@@ -99,7 +101,7 @@ public class TimetableDayFragment extends Fragment {
         // but I really don't think using libraries for such simple tasks is a good idea. Furthermore this particular library uses some advanced solutions
         // (data binding, Kotlin) that significantly increase the complexity of your project and while it's a good thing you're interested in newer technologies,
         // there are still some basic stuff you need to be comfortable with before moving on. Consider rewriting this, it doesn't help you to learn anything. [Peter]
-        mList = TimetableViewModelHelper.createEventViewModels(mTimeTableDay);
+        mList = TimetableViewModelHelper.createEventViewModels(new TimetableDay());
         mAdapter=LastAdapter.with(mList, BR.item)
                 .map(EventStartViewModel.class,R.layout.timetableday_time)
                 .map(EventViewModel.class,R.layout.timetableday_event)
@@ -109,36 +111,12 @@ public class TimetableDayFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         FirebaseDB.getInstance().addTimetableDayValueListener(mCourse,mDay,mListener);
-        return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        //FirebaseDB.getInstance().addTimetableDayValueListener(mCourse,mDay,mListener);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        //FirebaseDB.getInstance().removeTimetableDayValueListener(mCourse,mDay,mListener);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        //FirebaseDB.getInstance().removeTimetableDayValueListener(mCourse,mDay,mListener);
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         FirebaseDB.getInstance().removeTimetableDayValueListener(mCourse,mDay,mListener);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //FirebaseDB.getInstance().addTimetableDayValueListener(mCourse,mDay,mListener);
     }
 }

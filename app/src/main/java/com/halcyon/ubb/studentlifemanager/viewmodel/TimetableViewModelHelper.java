@@ -1,22 +1,19 @@
 package com.halcyon.ubb.studentlifemanager.viewmodel;
 
-import android.provider.CalendarContract;
-
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
-import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
+import com.halcyon.ubb.studentlifemanager.model.timetable.EventComparators;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by Baroti Csaba on 12/11/2016.
  */
 
-//TODO CR: Helper classes must not be instantiated: consider making it abstract or adding a private constructor. [Peter]
-public class TimetableViewModelHelper {
+public abstract class TimetableViewModelHelper {
 
     /**
      *  Converts TimeTableDay to ICEventViewModels so it can be put into recycler
@@ -32,14 +29,13 @@ public class TimetableViewModelHelper {
         if (table==null) return new ArrayList<>();
 
         ArrayList<ICEventViewModel> vm=new ArrayList<>();
-        ArrayList<Event> events=table.sortEventsInStartingTime();
+        ArrayList<Event> events=table.events;
+        Collections.sort(events, EventComparators.mStartingTimeComparator);
 
         Calendar calendar=Calendar.getInstance();
         int hour=0;
 
-        //TODO CR: Consider using for (Event event : events). [Peter]
-        for (int i=0;i<events.size();++i) {
-            Event event=events.get(i);
+        for (Event event:events) {
             if (event.getStartingTime()!=null) {
                 calendar.setTime(event.getStartingTime());
                 int ihour = calendar.get(Calendar.HOUR_OF_DAY);

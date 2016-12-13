@@ -1,6 +1,5 @@
 package com.halcyon.ubb.studentlifemanager.viewmodel;
 
-import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 
 import java.util.List;

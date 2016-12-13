@@ -16,7 +16,6 @@ public class EventStartViewModel implements ICEventViewModel{
     //TODO CR: The MVVM pattern is a bit more complex than naming three packages respectively. I strongly suggest you master MVC first.
     // Using mixed architecture (what you're doing right now) is probably the least maintainable thing you can do. [Peter]
     public ObservableField<String> startingTime;
-    private Event mEvent;
 
     public EventStartViewModel() {
         startingTime=new ObservableField<>();
@@ -27,14 +26,8 @@ public class EventStartViewModel implements ICEventViewModel{
         setEvent(event);
     }
 
-    private String formatStartingTime() {
-        //TODO CR: Don't write methods that only contain a single line. [Peter]
-        return DateFormat.format("HH:mm",mEvent.getStartingTime()).toString();
-    }
-
     @Override
     public void setEvent(Event event) {
-        mEvent=event;
-        startingTime.set(formatStartingTime());
+        startingTime.set(DateFormat.format("HH:mm",event.getStartingTime()).toString());
     }
 }

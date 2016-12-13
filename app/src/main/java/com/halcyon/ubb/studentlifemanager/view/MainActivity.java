@@ -8,8 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -32,7 +30,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Spinner;
 
 import com.firebase.client.Firebase;
 import com.google.firebase.database.FirebaseDatabase;
@@ -45,7 +42,6 @@ import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
 import com.halcyon.ubb.studentlifemanager.ReminderContact;
 import com.halcyon.ubb.studentlifemanager.ReminderControl;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
-import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableDayFragment;
 
@@ -61,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private BottomNavigationView mNav;
     private MySpinner mSpinner;
     private Toolbar mToolbar;
-    private TabLayout mTabs;
     private ArrayAdapter<String> mSpinnerAdapter;
     private String[] mItems;
     private FrameLayout mFrame;
@@ -69,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private View mReminders;
     private View mTimeTable;
 
-    private View mTabsLayout;
+    private TabLayout mTabsLayout;
     private View mSpinnerLayout;
     private View mSpinnerTextView;
     private int mCurrentlySelected;
@@ -98,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private MyDBHandler dbHandler;
     private ReminderControl reminderControl;
+    private ViewPager mPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,39 +108,40 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mSpinner = (MySpinner) findViewById(R.id.main_spinner);
         mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
         mToolbar= (Toolbar) findViewById(R.id.toolbars);
-        //TODO CR: It's like you don't even care. Why are there two references to the same View? Don't ignore Lint warnings. [Peter]
-        mTabs= (TabLayout) findViewById(R.id.main_tabs);
         mFrame = (FrameLayout) findViewById(R.id.main_frame);
-        mTabsLayout=findViewById(R.id.main_tabs);
+        mTabsLayout=(TabLayout)  findViewById(R.id.main_tabs);
         mSpinnerLayout=findViewById(R.id.main_spinner_layout);
 
-        //TODO CR: Very poor quality comments throughout the file. [Peter]
         //nav
         mNav.setOnNavigationItemSelectedListener(this);
 
         //spinner
         Query query = FirebaseDatabase.getInstance().getReference().child("Courses").orderByValue();
         mSpinner.courseSpinnerUpdate(query);
-        //TODO CR: Format your code. Remove multiple empty lines. Think about others. [Peter]
 
-
-
-        //TODO CR: Don't inflate all three Fragments if you're only going to display one. The FragmentTransaction's replace() method would be much more optimal. [Peter]
+        /*//TODO CR: Don't inflate all three Fragments if you're only going to display one. The FragmentTransaction's replace() method would be much more optimal. [Peter]
+        // Answer : these are not fragments ( but i will try to inflate them when selected ) [Csaba] */
         //fist tab
         mCourses=getLayoutInflater().inflate(R.layout.main_tab_courses,mFrame,false);
         //second tab
-        mReminders=getLayoutInflater().inflate(R.layout.main_tab_reminders,mFrame,false);
+        /*mReminders=getLayoutInflater().inflate(R.layout.main_tab_reminders,mFrame,false);
         //third tab
-        mTimeTable=getLayoutInflater().inflate(R.layout.main_tab_timetable,mFrame,false);
+        mTimeTable=getLayoutInflater().inflate(R.layout.main_tab_timetable,mFrame,false);*/
 
-        ViewPager pager=(ViewPager) mTimeTable.findViewById(R.id.tab_timetable_viewpager);
-        mTabs.setupWithViewPager(pager);
+        courseRecyclerView = (RecyclerView) mCourses.findViewById(R.id.recyclerCourse);
+        courseLayoutManager  = new LinearLayoutManager(this);
+        courseRecyclerView.setLayoutManager(courseLayoutManager);
+        courseRecyclerView.setHasFixedSize(true);
 
-        pager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), "testCourse"));
+        /*ViewPager pager=(ViewPager) mTimeTable.findViewById(R.id.tab_timetable_viewpager);
+        mTabsLayout.setupWithViewPager(pager);
+
+        pager.setAdapter(new DayPagerAdapter(this,getSupportFragmentManager(), "testCourse"));*/
 
         //TODO CR: You're doing way too much Visibility toggling for this to be considered a nice implementation. When you look at a design and see three different pages
         // with completely different action bars, consider making them part of each Fragment: right now there is too much hidden content in your View hierarchy that consumes
         // resources and reduces performance. [Peter]
+        // Answer: i think toolbar etc cannot be part of fragment. These elements are in toolbar and they similar between pages [Csaba]
         //select first tab
         mSpinnerLayout.setVisibility(View.GONE);
         mTabsLayout.setVisibility(View.GONE);
@@ -164,49 +162,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             CourseContact courseContact = new CourseContact(images[count],titles[count], str);
             count++;
             courseContacts.add(courseContact);
-        }*/
+        }
         courseRecyclerView = (RecyclerView) findViewById(R.id.recyclerCourse);
         courseLayoutManager  = new LinearLayoutManager(this);
         courseRecyclerView.setLayoutManager(courseLayoutManager);
-        courseRecyclerView.setHasFixedSize(true);
+        courseRecyclerView.setHasFixedSize(true);*/
         //courseAdapter = new ContactAdapter(courseContacts, this);
         //courseRecyclerView.setAdapter(courseAdapter);
 
 
         mSpinner.setMyItemSelectedListener(courseRecyclerView, this);
         // reminder's list
-
-        reminderControl = new ReminderControl(this);
-        reminderRecyclerView = (RecyclerView)mReminders.findViewById(R.id.reminders_recycler);
-        reminderControl.updateReminders(reminderRecyclerView,dbHandler);
-        //supportBar options
-
-        //TODO CR: The status bar color can be set from the theme. Don't try to do everything in Java unless you have to. [Peter]
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.supportBarColor));
-
-        //Reminders
-        reminderClose = (ImageView) findViewById(R.id.closeBtn);
-        reminderPipe = (ImageView) findViewById(R.id.pipeBtn);
-        reminderDate = (TextView) findViewById(R.id.date);
-        reminderTime = (TextView) findViewById(R.id.time);
-        reminderName = (EditText) findViewById(R.id.reminderName);
-        timeChoosed = dateChoosed = false;
-        date = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateReminderDate();
-            }
-
-        };
-        mFrame.addView(mCourses);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Do you want to upload test data?");
@@ -367,6 +333,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if (mCurrentlySelected==id)
             return false;
 
+        mCourses=null;
+        mTimeTable=null;
+        mReminders=null;
+
         mFrame.removeAllViews();
         mSpinnerTextView=mSpinner.findViewById(R.id.spinner_textView);
        // mSpinnerTextView.setVisibility(View.GONE);
@@ -392,6 +362,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 mSpinnerAdapter.notifyDataSetChanged();*/
                 Query query = FirebaseDatabase.getInstance().getReference().child("Courses").orderByValue();
                 mSpinner.courseSpinnerUpdate(query);
+
+                mCourses=getLayoutInflater().inflate(R.layout.main_tab_courses,mFrame,false);
+
+                courseRecyclerView = (RecyclerView) mCourses.findViewById(R.id.recyclerCourse);
+                courseLayoutManager  = new LinearLayoutManager(this);
+                courseRecyclerView.setLayoutManager(courseLayoutManager);
+                courseRecyclerView.setHasFixedSize(true);
+
                 mFrame.addView(mCourses);
                 break;
             case R.id.tab_reminders:
@@ -400,6 +378,39 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
                 mToolbar.setVisibility(View.VISIBLE);
                 mToolbar.setTitle(item.getTitle());
+
+                mReminders=getLayoutInflater().inflate(R.layout.main_tab_reminders,mFrame,false);
+
+                reminderControl = new ReminderControl(this);
+                reminderRecyclerView = (RecyclerView)mReminders.findViewById(R.id.reminders_recycler);
+                reminderControl.updateReminders(reminderRecyclerView,dbHandler);
+                //supportBar options
+
+                //TODO CR: The status bar color can be set from the theme. Don't try to do everything in Java unless you have to. [Peter]
+                Window window = this.getWindow();
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.setStatusBarColor(ContextCompat.getColor(this, R.color.supportBarColor));
+
+                //Reminders
+                reminderClose = (ImageView) findViewById(R.id.closeBtn);
+                reminderPipe = (ImageView) findViewById(R.id.pipeBtn);
+                reminderDate = (TextView) findViewById(R.id.date);
+                reminderTime = (TextView) findViewById(R.id.time);
+                reminderName = (EditText) findViewById(R.id.reminderName);
+                timeChoosed = dateChoosed = false;
+                date = new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        updateReminderDate();
+                    }
+
+                };
 
                 mFrame.addView(mReminders);
 
@@ -414,86 +425,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 mSpinnerAdapter.notifyDataSetChanged();
                 */
 
+                mTimeTable=getLayoutInflater().inflate(R.layout.main_tab_timetable,mFrame,false);
+
+                mPager=(ViewPager) mTimeTable.findViewById(R.id.tab_timetable_viewpager);
+                mTabsLayout.setupWithViewPager(mPager);
+                mPager.setOffscreenPageLimit(6);
+
+                mPager.setAdapter(new DayPagerAdapter(this,getSupportFragmentManager(), "testCourse"));
                 mFrame.addView(mTimeTable);
                 break;
         }
-
         mCurrentlySelected=id;
 
         return true;
-    }
-
-    //TODO CR: Move the Fragment class to a separate file (or remove unused class). [Peter]
-    public static class PlaceholderFragment extends Fragment {
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        public static MainActivity.PlaceholderFragment newInstance(int sectionNumber) {
-            MainActivity.PlaceholderFragment fragment = new MainActivity.PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main2, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
-
-    //TODO CR: Move the adapter class to a separate file. [Peter]
-    public class DayPagerAdapter extends FragmentPagerAdapter {
-        private final String mCourse;
-        private String[] mDays;
-
-        public DayPagerAdapter(FragmentManager fm,String courseID) {
-            super(fm);
-            mDays=getBaseContext().getResources().getStringArray(R.array.days);
-            mCourse=courseID;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return TimetableDayFragment.newInstance(mCourse,position);
-        }
-
-        @Override
-        public int getCount() {
-            return 6;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mDays[position];
-        }
-    }
-
-    public Timetable getTestTimeTable() {
-        ArrayList<TimetableDay> days=new ArrayList<>();
-
-        for (int i=0;i<6;++i) {
-            ArrayList<Event> events=new ArrayList<>();
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-            cal.set(Calendar.HOUR_OF_DAY,8);
-            events.add(new Event("Course • Matemathicum","Algebra of analytics",cal.getTime(),cal.getTime()));
-            events.add(new Event("Laboratory • Central","C++ coding standards",cal.getTime(),cal.getTime()));
-            cal.set(Calendar.HOUR_OF_DAY,14);
-            events.add(new Event("Laboratory • FSEGA","Linux basics",cal.getTime(),cal.getTime()));
-            cal.set(Calendar.HOUR_OF_DAY,19);
-            events.add(new Event("Laboratory • FSEGA","C++ advanced",cal.getTime(),cal.getTime()));
-            days.add(new TimetableDay(events));
-        }
-
-        Log.d("hi","hi");
-
-        return new Timetable(days);
     }
 }

@@ -14,7 +14,6 @@ import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 public class EventViewModel implements ICEventViewModel {
     public ObservableField<String> title;
     public ObservableField<String> desc;
-    private Event mEvent;
 
     public EventViewModel() {
         title=new ObservableField<>();
@@ -28,9 +27,8 @@ public class EventViewModel implements ICEventViewModel {
 
     @Override
     public void setEvent(Event event) {
-        mEvent=event;
-        title.set(mEvent.getName());
-        desc.set(mEvent.getDescription());
+        title.set(event.getName());
+        desc.set(event.getDescription());
     }
 
 }

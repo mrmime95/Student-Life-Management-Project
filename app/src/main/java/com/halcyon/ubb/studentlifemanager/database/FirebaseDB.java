@@ -7,7 +7,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
-import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 import com.halcyon.ubb.studentlifemanager.viewmodel.TimetableDayValueListener;
 
