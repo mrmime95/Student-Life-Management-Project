@@ -15,6 +15,7 @@ import java.util.Date;
  * Created by Baroti Csaba on 12/11/2016.
  */
 
+//TODO CR: Helper classes must not be instantiated: consider making it abstract or adding a private constructor. [Peter]
 public class TimetableViewModelHelper {
 
     /**
@@ -36,6 +37,7 @@ public class TimetableViewModelHelper {
         Calendar calendar=Calendar.getInstance();
         int hour=0;
 
+        //TODO CR: Consider using for (Event event : events). [Peter]
         for (int i=0;i<events.size();++i) {
             Event event=events.get(i);
             if (event.getStartingTime()!=null) {

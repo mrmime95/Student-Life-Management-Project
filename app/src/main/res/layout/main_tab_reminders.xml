@@ -1,7 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/cardBackcolor">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
 
-</android.support.v7.widget.RecyclerView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:id="@+id/addNewReminderLayout"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <EditText
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:text="Enter reminder title"
+                android:id="@+id/reminderName"
+                android:lines="1"
+                android:enabled="false"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/reminderName"
+                android:id="@+id/addBtn"
+                android:src="@drawable/ic_add_circle_outline"
+                android:paddingLeft="90dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:onClick="addNewReminderOnClick"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/date"
+                android:layout_below="@id/reminderName"
+                android:text="01/01/1970"
+                android:layout_marginLeft="16dp"
+                android:visibility="gone"
+                android:onClick="dateChooserOnClick"
+                android:textSize="16dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/time"
+                android:layout_below="@id/reminderName"
+                android:text="00:00"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@+id/date"
+                android:paddingLeft="40dp"
+                android:visibility="gone"
+                android:onClick="timeChooserOnClick"
+                android:textSize="16dp"/>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="bottom"
+                android:id="@+id/upLinearLayout"
+                android:layout_below="@+id/date">
+                <RelativeLayout
+                    android:id="@+id/relativeLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/closeBtn"
+                        android:id="@+id/pipeBtn"
+                        android:src="@drawable/ic_check"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="16dp"
+                        android:clickable="true"
+                        android:visibility="gone"
+                        android:onClick="pipeBtnOnClick"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="32dp"
+                        android:scaleType="fitEnd"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/closeBtn"
+                        android:src="@drawable/ic_close"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:clickable="true"
+                        android:visibility="gone"
+                        android:onClick="closeAddingNewReminderOnClick"
+                        android:layout_alignParentLeft="true"
+                        />
+                    </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/addNewReminderLayout"
+            android:layout_marginTop="48dp"
+            android:layout_alignParentStart="true">\
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/reminders_recycler"
+                >
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

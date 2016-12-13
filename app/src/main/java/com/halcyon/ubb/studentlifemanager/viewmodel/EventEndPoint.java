@@ -9,8 +9,4 @@ import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
  */
 public class EventEndPoint implements ICEventViewModel {
 
-    @Override
-    public void setEvent(Event event) {
-
-    }
 }
