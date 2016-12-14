@@ -1,72 +1,65 @@
 package com.halcyon.ubb.studentlifemanager.model.timetable;
 
-import java.io.Serializable;
+import com.google.firebase.database.Exclude;
+
 import java.util.Date;
 
 /**
+ *
  * Created by Baroti Csaba on 12/11/2016.
  */
 
-public class Event{
-    public String name;
-    public String location;
-    public String description;
+@SuppressWarnings("WeakerAccess")
+public class Event {
+    private String mName;
+    private String mDescription;
 
-    public Date startingTime;
-    public Date endingTime;
 
+    //public String location;
+
+    //firebase doesn't like date
+    public long startingTime;
+    public long endingTime;
+
+    //Firebase needs empty constructor
     public Event() {
     }
 
     public Event(String name,String description) {
-        this.name =name;
-        this.description =description;
+        this.mName=name;
+        this.mDescription =description;
     }
 
     public Event(String name,String description,Date startingTime,Date endingTime) {
         this(name,description);
-        this.startingTime =startingTime;
-        this.endingTime =endingTime;
+        this.startingTime =startingTime==null?0:startingTime.getTime();
+        this.endingTime =endingTime==null?0:endingTime.getTime();
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    //TODO CR: Remove unused methods. [Peter]
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
+    public void setName(String mName) {
+        this.mName = mName;
     }
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String mDescription) {this.mDescription = mDescription;}
+
+    /*public String getLocation() {
+        return location;
     }
 
-    public Date getStartingTime() {
-        return startingTime;
-    }
+    public void setLocation(String mLocation) {
+        this.location = mLocation;
+    }*/
 
-    public void setStartingTime(Date startingTime) {
-        this.startingTime = startingTime;
-    }
-
-    public Date getEndingTime() {
-        return endingTime;
-    }
-
-    public void setEndingTime(Date endingTime) {
-        this.endingTime = endingTime;
+    @Exclude
+    public Date getStartingDate() {
+        return startingTime==0?null:new Date(startingTime);
     }
 }

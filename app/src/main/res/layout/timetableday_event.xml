@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="item"
             type="com.halcyon.ubb.studentlifemanager.viewmodel.EventViewModel" />
@@ -37,16 +37,16 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/stepper_cardview_padding"
-                android:background="@color/colorPrimaryLight">
+                android:background="@color/colorPrimaryLight"
+                android:padding="@dimen/stepper_cardview_padding">
 
                 <TextView
                     android:id="@+id/event_title"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/stepper_cardview_title_height"
-                    android:text="@{item.title}"
                     android:textSize="10sp"
-                    tools:ignore="SmallSp" />
+                    tools:ignore="SmallSp"
+                    android:text="@{item.title}"/>
 
                 <TextView
                     android:id="@+id/event_desc"
@@ -54,9 +54,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/event_title"
                     android:layout_marginTop="@dimen/stepper_cardview_event_separation"
-                    android:text="@{item.desc}"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
-                    android:textColor="@color/colorPrimary"/>
+                    android:text="@{item.description}"/>
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>

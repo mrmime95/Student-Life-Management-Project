@@ -1,23 +1,21 @@
 package com.halcyon.ubb.studentlifemanager.view;
 
-import android.content.DialogInterface;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,17 +36,13 @@ import com.halcyon.ubb.studentlifemanager.CourseContact;
 import com.halcyon.ubb.studentlifemanager.MyDBHandler;
 import com.halcyon.ubb.studentlifemanager.MySpinner;
 import com.halcyon.ubb.studentlifemanager.R;
-import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
 import com.halcyon.ubb.studentlifemanager.ReminderContact;
 import com.halcyon.ubb.studentlifemanager.ReminderControl;
-import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
-import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
-import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableDayFragment;
+import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -429,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
                 mPager=(ViewPager) mTimeTable.findViewById(R.id.tab_timetable_viewpager);
                 mTabsLayout.setupWithViewPager(mPager);
-                mPager.setOffscreenPageLimit(6);
+                //mPager.setOffscreenPageLimit(4);
 
                 mPager.setAdapter(new DayPagerAdapter(this,getSupportFragmentManager(), "testCourse"));
                 mFrame.addView(mTimeTable);

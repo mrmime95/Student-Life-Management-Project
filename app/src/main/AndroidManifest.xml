@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <!-- TODO CR: Close XML tags if there isn't any content between them. [Peter] -->
-        <activity android:name=".CourseDetail"></activity>
+        <activity android:name=".CourseDetail"/>
     </application>
 
 </manifest>

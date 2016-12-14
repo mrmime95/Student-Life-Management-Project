@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
         <variable
             name="item"
-            type="com.halcyon.ubb.studentlifemanager.viewmodel.EventStartViewModel" />
+            type="com.halcyon.ubb.studentlifemanager.viewmodel.EventViewModel"/>
     </data>
 
     <LinearLayout
@@ -35,6 +33,7 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/event_starting_time"
             android:layout_width="0dp"
             android:layout_height="16dp"
             android:layout_margin="16dp"
@@ -42,6 +41,5 @@
             android:fontFamily="Roboto-Medium"
             android:text="@{item.startingTime}"
             android:textSize="14sp" />
-
     </LinearLayout>
 </layout>

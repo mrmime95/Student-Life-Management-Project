@@ -1,6 +1,5 @@
 package com.halcyon.ubb.studentlifemanager.database;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
+ *
  * Created by Baroti Csaba on 12/12/2016.
  */
 public class FirebaseDB implements Database {

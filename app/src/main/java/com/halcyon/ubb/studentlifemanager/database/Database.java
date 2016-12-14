@@ -4,6 +4,7 @@ import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 import com.halcyon.ubb.studentlifemanager.viewmodel.TimetableDayValueListener;
 
 /**
+ *
  * Created by Baroti Csaba on 12/13/2016.
  */
 public interface Database {

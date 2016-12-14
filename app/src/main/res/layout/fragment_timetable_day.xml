@@ -1,13 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.halcyon.ubb.studentlifemanager.view.fragment.TimetableDayFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="item"
+            type="com.halcyon.ubb.studentlifemanager.viewmodel.TimetableDayViewModel"/>
+    </data>
 
     <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recycler_timetable_day"
-        android:background="@color/white"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycler_timetable_day"
+            android:background="@color/white"
+            app:items="@{item.events}"/>
 
-</FrameLayout>
+</layout>
