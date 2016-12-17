@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Szilard on 09.12.2016.
@@ -23,11 +25,13 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
     private Context ctx;
     private RecyclerView recyclerView;
     private ReminderControl reminderControl;
+    private Calendar mCalendar;
     public ReminderContactAdapter(ArrayList<ReminderContact> contacts, Context ctx, RecyclerView recyclerView, ReminderControl reminderControl){
         this.contacts = contacts;
         this.ctx = ctx;
         this.recyclerView = recyclerView;
         this.reminderControl = reminderControl;
+        this.mCalendar = Calendar.getInstance();
     }
 
     @Override
@@ -39,9 +43,17 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
 
     @Override
     public void onBindViewHolder(ContactViewHolder holder, int position) {
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(mCalendar.getTime());
+        mCalendar.add(Calendar.DAY_OF_YEAR, 1 );
+        String tomorrowDate = df.format(mCalendar.getTime());
+        mCalendar.add(Calendar.DAY_OF_YEAR, -1);
         ReminderContact reminderContact = contacts.get(position);
         holder.rem_time.setText(reminderContact.getTime());
-        holder.rem_date.setText(reminderContact.getDate());
+        Log.d("INFO", formattedDate + " " + reminderContact.getDate());
+        if (reminderContact.getDate().toLowerCase().equals(formattedDate.replace(".",""))) holder.rem_date.setText("Today");
+        else if (reminderContact.getDate().toLowerCase().equals(tomorrowDate.replace(".",""))) holder.rem_date.setText("Tomorrow");
+        else  holder.rem_date.setText(reminderContact.getDate());
         holder.rem_name.setText(reminderContact.getName());
     }
 

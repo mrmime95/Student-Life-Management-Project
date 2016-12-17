@@ -7,10 +7,8 @@
     <color name="colorControlNormal">@color/white</color>
     <color name="colorDisabled">#aaaaaa</color>
     <color name="colorControlActivated">#aaaaaa</color>
-
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-
     <color name="stepper_line">#f9f9f9</color>
     <color name="defaultToolbarColor">#339999</color>
     <color name="supportBarColor">#2b8282</color>

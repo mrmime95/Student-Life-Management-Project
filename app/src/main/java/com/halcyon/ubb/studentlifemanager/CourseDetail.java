@@ -33,7 +33,6 @@ public class CourseDetail extends AppCompatActivity {
         imgView = (ImageView) findViewById(R.id.contact_image);
         courseTitle = (TextView) findViewById(R.id.courseTitle);
         courseDescription = (TextView) findViewById(R.id.courseDescription);
-        //imgView.setImageResource(getIntent().getIntExtra("img_id", 00));
         Picasso.with(this).load(getIntent().getStringExtra("img_id")).into(imgView);
         courseTitle.setText(getIntent().getStringExtra("courseTitle"));
         courseDescription.setText(getIntent().getStringExtra("courseDescription"));
