@@ -108,8 +108,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mNav.setOnNavigationItemSelectedListener(this);
 
         //spinner
-        Query query = FirebaseDatabase.getInstance().getReference().child("courses").
-                child("testCourse").child("CourseNames").orderByValue();
+        Query query = FirebaseDatabase.getInstance().getReference().child("courseNames").orderByValue();
         mSpinner.courseSpinnerUpdate(query);
 
         /*//TODO CR: Don't inflate all three Fragments if you're only going to display one. The FragmentTransaction's replace() method would be much more optimal. [Peter]
