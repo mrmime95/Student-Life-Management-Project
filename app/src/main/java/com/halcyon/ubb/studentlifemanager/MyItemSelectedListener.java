@@ -28,7 +28,9 @@ public class MyItemSelectedListener implements AdapterView.OnItemSelectedListene
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         courseList.getRecycledViewPool().clear();
         if (i!=0) {
-            Query queryAnousments = FirebaseDatabase.getInstance().getReference().child("CoursesAnousments").orderByChild("course").equalTo(adapterView.getSelectedItem().toString());
+            Query queryAnousments = FirebaseDatabase.getInstance().getReference().child("courses").
+                    child("testCourse").child("CoursesAnousments").orderByChild("course").
+                    equalTo(adapterView.getSelectedItem().toString());
             MyFirebaseRecycleAdapter myFirebaseRecycleAdapter = new MyFirebaseRecycleAdapter(queryAnousments, context);
             courseList.setAdapter(myFirebaseRecycleAdapter);
             myFirebaseRecycleAdapter.notifyDataSetChanged();

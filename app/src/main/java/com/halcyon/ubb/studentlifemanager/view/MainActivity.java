@@ -92,8 +92,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO CR: Initializing Firebase should be done in the Application class, not within an Activity. [Peter]
-        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
         //database
             dbHandler = new MyDBHandler(this);
@@ -110,7 +108,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mNav.setOnNavigationItemSelectedListener(this);
 
         //spinner
-        Query query = FirebaseDatabase.getInstance().getReference().child("Courses").orderByValue();
+        Query query = FirebaseDatabase.getInstance().getReference().child("courses").
+                child("testCourse").child("CourseNames").orderByValue();
         mSpinner.courseSpinnerUpdate(query);
 
         /*//TODO CR: Don't inflate all three Fragments if you're only going to display one. The FragmentTransaction's replace() method would be much more optimal. [Peter]
