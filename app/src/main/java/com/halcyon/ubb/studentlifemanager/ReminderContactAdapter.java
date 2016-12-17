@@ -3,16 +3,18 @@ package com.halcyon.ubb.studentlifemanager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.halcyon.ubb.studentlifemanager.database.SQLiteDB;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Szilard on 09.12.2016.
@@ -23,11 +25,13 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
     private Context ctx;
     private RecyclerView recyclerView;
     private ReminderControl reminderControl;
+    private Calendar mCalendar;
     public ReminderContactAdapter(ArrayList<ReminderContact> contacts, Context ctx, RecyclerView recyclerView, ReminderControl reminderControl){
         this.contacts = contacts;
         this.ctx = ctx;
         this.recyclerView = recyclerView;
         this.reminderControl = reminderControl;
+        this.mCalendar = Calendar.getInstance();
     }
 
     @Override
@@ -39,9 +43,17 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
 
     @Override
     public void onBindViewHolder(ContactViewHolder holder, int position) {
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(mCalendar.getTime());
+        mCalendar.add(Calendar.DAY_OF_YEAR, 1 );
+        String tomorrowDate = df.format(mCalendar.getTime());
+        mCalendar.add(Calendar.DAY_OF_YEAR, -1);
         ReminderContact reminderContact = contacts.get(position);
         holder.rem_time.setText(reminderContact.getTime());
-        holder.rem_date.setText(reminderContact.getDate());
+        //Log.d("INFO", formattedDate + " " + reminderContact.getDate());
+        if (reminderContact.getDate().toLowerCase().equals(formattedDate.replace(".",""))) holder.rem_date.setText("Today");
+        else if (reminderContact.getDate().toLowerCase().equals(tomorrowDate.replace(".",""))) holder.rem_date.setText("Tomorrow");
+        else  holder.rem_date.setText(reminderContact.getDate());
         holder.rem_name.setText(reminderContact.getName());
     }
 
@@ -55,7 +67,7 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
         private ArrayList<ReminderContact> contacts = new ArrayList<ReminderContact>();
         private Context ctx;
         private TextView rem_name, rem_date, rem_time;
-        private MyDBHandler db;
+        private SQLiteDB db;
         private RecyclerView recyclerView;
         private ReminderControl reminderControl;
         public ContactViewHolder(View view, ArrayList<ReminderContact> arrayList, final Context ctx, final RecyclerView recyclerView, final ReminderControl reminderControl) {
@@ -64,7 +76,7 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
             this.ctx = ctx;
             this.recyclerView = recyclerView;
             this.reminderControl = reminderControl;
-            db = new MyDBHandler(this.ctx);
+            db = new SQLiteDB(this.ctx);
             view.findViewById(R.id.dropBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -79,7 +91,7 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
                                         ReminderContact deleteReminder = new ReminderContact(1, contact .getName(), contact.getDate(), contact.getTime());
                                         try {
                                             boolean ok = false;
-                                            ok = db.deleteContact(deleteReminder);
+                                            ok = db.delete(deleteReminder);
 
                                             reminderControl.updateReminders(recyclerView, db);
                                         }catch (Exception e){
@@ -107,7 +119,7 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
                 @Override
                 public void onClick(View view) {
                     if (view.getId() == R.id.remCardData) {
-                        Log.d("INFO", "Szopos vagy!");
+
                     }
                 }
             });

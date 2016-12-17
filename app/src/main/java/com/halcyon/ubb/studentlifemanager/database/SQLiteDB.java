@@ -1,4 +1,4 @@
-package com.halcyon.ubb.studentlifemanager;
+package com.halcyon.ubb.studentlifemanager.database;
 
 /**
  * Created by Szilard on 11.12.2016.
@@ -13,7 +13,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class MyDBHandler extends SQLiteOpenHelper {
+import com.halcyon.ubb.studentlifemanager.ReminderContact;
+
+public class SQLiteDB extends SQLiteOpenHelper implements SQLite{
 
     public static final String DATABASE_NAME = "StudLifeManager.db";
     public static final String CONTACTS_TABLE_NAME = "reminders";
@@ -21,7 +23,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String CONTACTS_COLUMN_NAME = "name";
     public static final String CONTACTS_COLUMN_DATE = "date";
     public static final String CONTACTS_COLUMN_TIME = "time";
-    public MyDBHandler(Context context) {
+    public SQLiteDB(Context context) {
         super(context, DATABASE_NAME , null, 1);
     }
 
@@ -40,7 +42,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertContact (ReminderContact contact) {
+    @Override
+    public boolean insert(ReminderContact contact) {
         String name = contact.getName();
         String date = contact.getDate();
         String time = contact.getTime();
@@ -54,15 +57,16 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean deleteContact(ReminderContact contact)
-    {
+    @Override
+    public boolean delete(ReminderContact contact) {
         SQLiteDatabase database = getWritableDatabase();
         return  database.delete(CONTACTS_TABLE_NAME, CONTACTS_COLUMN_NAME + "= \"" + contact.getName() + "\"" +
                 " and " + CONTACTS_COLUMN_DATE + "=\"" + contact.getDate() + "\"" + " and " +
                 CONTACTS_COLUMN_TIME + "=\"" + contact.getTime() + "\"", null) > 0;
     }
 
-    public ArrayList<ReminderContact> getAllReminderCotacts() {
+    @Override
+    public ArrayList<ReminderContact> getAllReminder() {
         ArrayList<ReminderContact> array_list = new ArrayList<ReminderContact>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from " + CONTACTS_TABLE_NAME, null );
