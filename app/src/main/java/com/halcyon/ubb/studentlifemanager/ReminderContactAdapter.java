@@ -92,7 +92,6 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
                                         try {
                                             boolean ok = false;
                                             ok = db.delete(deleteReminder);
-
                                             reminderControl.updateReminders(recyclerView, db);
                                         }catch (Exception e){
                                             Log.d("INFO","Deleting was not succesfull!" + contact.getName() + contact.getTime() + contact.getDate());

@@ -78,7 +78,7 @@ public class SQLiteDB extends SQLiteOpenHelper implements SQLite{
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_DATE)),
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_TIME))
             );
-            Log.d("INFO ------- ID = ", res.getString(res.getColumnIndex(CONTACTS_COLUMN_ID)));
+            //Log.d("INFO ------- ID = ", res.getString(res.getColumnIndex(CONTACTS_COLUMN_ID)));
             array_list.add(temp);
             res.moveToNext();
         }
