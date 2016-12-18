@@ -288,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 courseRecyclerView.setLayoutManager(courseLayoutManager);
                 courseRecyclerView.setHasFixedSize(true);
                 mFrame.addView(mCourses);
+                mSpinner.setMyItemSelectedListener(courseRecyclerView, this);
                 break;
             case R.id.tab_reminders:
                 mTabsLayout.setVisibility(View.GONE);

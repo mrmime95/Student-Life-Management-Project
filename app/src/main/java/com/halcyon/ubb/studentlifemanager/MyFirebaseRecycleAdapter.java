@@ -13,7 +13,7 @@ import com.google.firebase.database.Query;
  * Created by matyas on 2016.12.11..
  */
 
-public class MyFirebaseRecycleAdapter extends  FirebaseRecyclerAdapter<Course,CourseViewHolder>  {
+public class MyFirebaseRecycleAdapter extends  FirebaseRecyclerAdapter<Course,CourseViewHolder> {
 
     private Query query;
     private Context context;
@@ -28,7 +28,6 @@ public class MyFirebaseRecycleAdapter extends  FirebaseRecyclerAdapter<Course,Co
     protected void populateViewHolder(final CourseViewHolder viewHolder, final Course model, int position) {
         viewHolder.setTitle(model.getTitle());
         viewHolder.setPicture(context, model.getPictureName());
-
         viewHolder.getmView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,6 +37,20 @@ public class MyFirebaseRecycleAdapter extends  FirebaseRecyclerAdapter<Course,Co
                 intent.putExtra("img_id", model.getPictureName());
                 intent.putExtra("courseTitle", model.getTitle());
                 intent.putExtra("courseDescription", model.getDescription());
+                intent.putExtra("attachmentName", model.getFileName());
+                context.startActivity(intent);
+            }
+        });
+        viewHolder.getmView().findViewById(R.id.contact_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = viewHolder.getAdapterPosition();
+                Log.w("Info", "You clicked on "+position + " " + MyFirebaseRecycleAdapter.this.getRef(position) + " " + model.getTitle() );
+                Intent intent = new Intent(context, CourseDetail.class);
+                intent.putExtra("img_id", model.getPictureName());
+                intent.putExtra("courseTitle", model.getTitle());
+                intent.putExtra("courseDescription", model.getDescription());
+                intent.putExtra("attachmentName", model.getFileName());
                 context.startActivity(intent);
             }
         });

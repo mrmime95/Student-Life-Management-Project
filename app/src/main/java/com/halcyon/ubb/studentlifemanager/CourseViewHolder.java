@@ -2,6 +2,7 @@ package com.halcyon.ubb.studentlifemanager;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +18,6 @@ public class CourseViewHolder extends  RecyclerView.ViewHolder{
 
     public CourseViewHolder(View itemView) {
         super(itemView);
-
         mView = itemView;
     }
 
@@ -34,4 +34,5 @@ public class CourseViewHolder extends  RecyclerView.ViewHolder{
     public View getmView() {
         return mView;
     }
+
 }

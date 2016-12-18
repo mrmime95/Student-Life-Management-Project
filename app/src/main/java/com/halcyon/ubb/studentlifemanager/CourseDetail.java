@@ -1,6 +1,5 @@
 package com.halcyon.ubb.studentlifemanager;
 
-import android.app.ActionBar;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -9,35 +8,38 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 public class CourseDetail extends AppCompatActivity {
     private ImageView imgView;
-    private TextView courseTitle, courseDescription;
+    private TextView courseTitle, courseDescription, courseAttachment;
     private Toolbar courseToolbar;
-    private int counter;
-    private int imgHeight, imgWidth;
+    private FrameLayout mFrameCourse;
+    private View mCourses;
+    private View mCoursesZoom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
+
+        mFrameCourse = (FrameLayout) findViewById(R.id.course_opened);
+        mCourses=getLayoutInflater().inflate(R.layout.course_article_all_description, mFrameCourse, false);
+        mFrameCourse.addView(mCourses);
+
         imgView = (ImageView) findViewById(R.id.contact_image);
         courseTitle = (TextView) findViewById(R.id.courseTitle);
         courseDescription = (TextView) findViewById(R.id.courseDescription);
-        //imgView.setImageResource(getIntent().getIntExtra("img_id", 00));
+        courseAttachment = (TextView) findViewById(R.id.attachmentName);
         Picasso.with(this).load(getIntent().getStringExtra("img_id")).into(imgView);
         courseTitle.setText(getIntent().getStringExtra("courseTitle"));
         courseDescription.setText(getIntent().getStringExtra("courseDescription"));
-
+        courseAttachment.setText(getIntent().getStringExtra("attachmentName"));
         //toolbar options
         courseToolbar = (Toolbar) findViewById(R.id.toolbarr);
         setSupportActionBar(courseToolbar);
@@ -48,39 +50,23 @@ public class CourseDetail extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.supportBarColor));
-
-        //get imageview's default size
-        ViewTreeObserver vto = imgView.getViewTreeObserver();
-        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            public boolean onPreDraw() {
-                imgView.getViewTreeObserver().removeOnPreDrawListener(this);
-                imgHeight = imgView.getMeasuredHeight();
-                imgWidth = imgView.getMeasuredWidth();
-                return true;
-            }
-        });
-
         // home button
         final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow_back);
         upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
+        findViewById(R.id.contact_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCoursesZoom=getLayoutInflater().inflate(R.layout.course_image_zoom, mFrameCourse, false);
+                mFrameCourse.addView(mCoursesZoom);
+                Picasso.with(getApplication()).load(getIntent().getStringExtra("img_id")).into((ImageView) findViewById(R.id.image_zoom));
+            }
+        });
     }
-
-    // OnClickListener of courseImageView(one click increase, another one reduction)
-    public void imageClickListener(View view){
-        counter++;
-        if (counter % 2 != 0){
-            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) imgView.getLayoutParams();
-            params.width = 900;
-            params.height = 900;
-            imgView.setLayoutParams(params);
-        }else {
-            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) imgView.getLayoutParams();
-            params.width = imgWidth;
-            params.height = imgHeight;
-            imgView.setLayoutParams(params);
-        }
+    public void zoomToThePicture(View view)
+    {
+        mFrameCourse.removeView(mCoursesZoom);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
