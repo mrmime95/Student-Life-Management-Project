@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#339999</color>
+    <color name="colorPrimary">#399999</color>
     <color name="colorPrimaryLight">#eeffff</color>
     <color name="colorPrimaryDark">#006666</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorControlNormal">@color/white</color>
     <color name="colorDisabled">#55ffffff</color>
     <color name="colorControlActivated">#aaaaaa</color>
-
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-
     <color name="stepper_line">#f9f9f9</color>
     <color name="defaultToolbarColor">#339999</color>
     <color name="supportBarColor">#2b8282</color>

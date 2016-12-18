@@ -18,8 +18,6 @@ import android.transition.TransitionManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -74,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myCalendar = Calendar.getInstance();
-        dbHandler = new SQLiteDB(this);
-        //TODO CR: Don't initialize variables until you need them, it makes your code more difficult to follow. [Peter]
         mSpinner = (MySpinner) findViewById(R.id.main_spinner);
         mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
         mToolbar= (Toolbar) findViewById(R.id.toolbars);
@@ -87,8 +83,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //spinner
         Query query = FirebaseDatabase.getInstance().getReference().child("courseNames").orderByValue();
         mSpinner.courseSpinnerUpdate(query);
-        /*//TODO CR: Don't inflate all three Fragments if you're only going to display one. The FragmentTransaction's replace() method would be much more optimal. [Peter]
-        // Answer : these are not fragments ( but i will try to inflate them when selected ) [Csaba] */
         //fist tab
         mCourses=getLayoutInflater().inflate(R.layout.main_tab_courses,mFrame,false);
         courseRecyclerView = (RecyclerView) mCourses.findViewById(R.id.recyclerCourse);
@@ -295,15 +289,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 mToolbar.setVisibility(View.VISIBLE);
                 mToolbar.setTitle(item.getTitle());
                 mReminders=getLayoutInflater().inflate(R.layout.main_tab_reminders,mFrame,false);
+                dbHandler = new SQLiteDB(this);
                 reminderControl = new ReminderControl(this);
                 reminderRecyclerView = (RecyclerView)mReminders.findViewById(R.id.reminders_recycler);
                 reminderControl.updateReminders(reminderRecyclerView,dbHandler);
-                //supportBar options
-                //TODO CR: The status bar color can be set from the theme. Don't try to do everything in Java unless you have to. [Peter]
-                Window window = this.getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                window.setStatusBarColor(ContextCompat.getColor(this, R.color.supportBarColor));
                 //Reminders
                 reminderClose = (ImageView) findViewById(R.id.closeBtn);
                 reminderPipe = (ImageView) findViewById(R.id.pipeBtn);
