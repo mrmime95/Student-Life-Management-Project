@@ -50,7 +50,10 @@ public class TimetableDayFragment extends Fragment {
         mDay =getArguments().getInt(PARAMS_DAY);
         mCourse=getArguments().getString(PARAMS_COURSE);
 
-        //setting variable (data binding) of recyclerview
+        //making a connection between viewmodel - mAdapter :
+        //  ViewModel.events is an ObservableList<Event>
+        //  so RecyclerViewBindingAdapter can listen for changes
+        //  When changes happen the mAdapter updates the recycler with new events in list;
         //noinspection WrongConstant
         mViewModel=new TimetableDayViewModel(getContext(),FirebaseDB.getInstance(),mCourse,mDay);
         mAdapter = new RecyclerViewEventBindingAdapter(BR.item);
@@ -70,12 +73,10 @@ public class TimetableDayFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setHasFixedSize(true);
 
+
+        //setting variable (data binding) of recyclerview
         DataBindingUtil.getBinding(mRecyclerView).setVariable(BR.item,mViewModel);
 
-        //making a connection between viewmodel - mAdapter :
-        //  ViewModel.events is an ObservableList<Event>
-        //  so RecyclerViewBindingAdapter can listen for changes
-        //  When changes happen the mAdapter updates the recycler with new events in list;
         mRecyclerView.setAdapter(mAdapter);
 
         //we tell the viewmodel to make connection with database ==> change mViewModel.events
