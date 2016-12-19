@@ -1,60 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/ALLCARD">
-
-    <android.support.v7.widget.CardView
+<android.support.v7.widget.CardView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:id="@+id/courseCard"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cardBackcolor"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:id="@+id/contact_image"
+            />
         <RelativeLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/cardBackcolor"
-            >
+            android:layout_width="match_parent"
+            android:id="@+id/headerLinearLay"
+            android:layout_below="@+id/contact_image"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginLeft="16dp">
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="190dp"
-                android:id="@+id/contact_image"
-                android:clickable="true"
-                />
-            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:id="@+id/headerLinearLay"
-                android:layout_below="@+id/contact_image"
-                android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="272dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/courseTitle"
-                        android:text="Jordi alba"
-                        android:textSize="24dp"
-                        android:textStyle="bold|italic"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginBottom="24dp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        />
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:id="@+id/backBtn"
-                        android:src="@drawable/ic_attach_file"
-                        android:layout_toRightOf="@+id/courseTitle"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="24dp"
-                        android:clickable="true"
-                        />
-                </RelativeLayout>
-            </RelativeLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+                android:id="@+id/backBtn"
+                android:src="@drawable/ic_attach_file"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                />
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/courseTitle"
+                    tools:text="Kurzuscikk cime"
+                    android:textSize="24dp"
+                    android:textStyle="bold|italic"
+                    android:layout_toLeftOf="@+id/backBtn"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    />
+
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

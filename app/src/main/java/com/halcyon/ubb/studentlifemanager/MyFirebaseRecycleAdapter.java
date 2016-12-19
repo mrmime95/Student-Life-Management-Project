@@ -32,7 +32,6 @@ public class MyFirebaseRecycleAdapter extends  FirebaseRecyclerAdapter<Course,Co
             @Override
             public void onClick(View view) {
                 int position = viewHolder.getAdapterPosition();
-                Log.w("Info", "You clicked on "+position + " " + MyFirebaseRecycleAdapter.this.getRef(position) + " " + model.getTitle() );
                 Intent intent = new Intent(context, CourseDetail.class);
                 intent.putExtra("img_id", model.getPictureName());
                 intent.putExtra("courseTitle", model.getTitle());
@@ -41,18 +40,6 @@ public class MyFirebaseRecycleAdapter extends  FirebaseRecyclerAdapter<Course,Co
                 context.startActivity(intent);
             }
         });
-        viewHolder.getmView().findViewById(R.id.contact_image).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = viewHolder.getAdapterPosition();
-                Log.w("Info", "You clicked on "+position + " " + MyFirebaseRecycleAdapter.this.getRef(position) + " " + model.getTitle() );
-                Intent intent = new Intent(context, CourseDetail.class);
-                intent.putExtra("img_id", model.getPictureName());
-                intent.putExtra("courseTitle", model.getTitle());
-                intent.putExtra("courseDescription", model.getDescription());
-                intent.putExtra("attachmentName", model.getFileName());
-                context.startActivity(intent);
-            }
-        });
+
     }
 }

@@ -1,68 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/remCardData"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/card_view"
-        >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:id="@+id/remCardData"
-                >
-                <TextView
-                    android:layout_width="235dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/remName"
-                    android:textSize="16dp"
-                    android:textStyle="bold|italic"
-                    android:text="Emlekezteto szovege"
-                    android:layout_alignParentLeft="true"
-                    />
-                <LinearLayout
-                    android:layout_width="235dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/upLinearLayout"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="24dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="19dp"
-                        android:textSize="16dp"
-                        android:id="@+id/choosedDate"
-                        android:text="Datum"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="19dp"
-                        android:textSize="16dp"
-                        android:id="@+id/choosedTime"
-                        android:text="Ido"
-                        android:layout_marginLeft="24dp"
-                        />
-                </LinearLayout>
-            </RelativeLayout>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/remCardData"
-                android:id="@+id/dropBtn"
-                android:src="@drawable/ic_delete"
-                android:clickable="true"
-                android:layout_marginLeft="69dp"
-                />
-        </RelativeLayout>
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="24dp"
+    android:background="@color/white">
 
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+    <TextView
+        android:id="@+id/remName"
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textSize="16dp"
+        android:textStyle="bold|italic"
+        tools:text="Emlekezteto szovege" />
+
+    <LinearLayout
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/choosedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:textSize="16dp"
+            tools:text="Datum" />
+
+        <TextView
+            android:id="@+id/choosedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginLeft="24dp"
+            android:textSize="16dp"
+            tools:text="Ido" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/dropBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_delete" />
+</RelativeLayout>
