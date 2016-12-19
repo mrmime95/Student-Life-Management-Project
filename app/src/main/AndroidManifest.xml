@@ -15,6 +15,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name=".NotifyReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".NotifyService"
+            android:enabled="true"/>
         <!-- TODO CR: Close XML tags if there isn't any content between them. [Peter] -->
         <activity android:name=".CourseDetail"/>
     </application>

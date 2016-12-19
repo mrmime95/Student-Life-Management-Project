@@ -1,8 +1,11 @@
 package com.halcyon.ubb.studentlifemanager.view;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +29,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.halcyon.ubb.studentlifemanager.NotifyReceiver;
 import com.halcyon.ubb.studentlifemanager.database.SQLiteDB;
 import com.halcyon.ubb.studentlifemanager.MySpinner;
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.ReminderContact;
 import com.halcyon.ubb.studentlifemanager.ReminderControl;
 import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -243,6 +251,41 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             ReminderContact temp = new ReminderContact(1, reminderName.getText().toString().replace("\n","")
                     , reminderDate.getText().toString().replace("\n","")
                     , reminderTime.getText().toString().replace("\n",""));
+
+            //make an intent to NotifyReceiver
+            Intent my_intient = new Intent(this, NotifyReceiver.class);
+
+            //with extras i'm giving away the Tittle and the Date/Time
+            my_intient.putExtra("Title", temp.getName());
+            my_intient.putExtra("DateTime", "Tomorrow: " + temp.getDate() + " at " + temp.getTime());
+            AlarmManager mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+            //setting up a calendar to date and time's of the new reminder,this will show us when
+            //will be the notify
+            Calendar calendar = Calendar.getInstance();
+            Date date = null;
+            Date time = null;
+            try {
+                date = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).parse(temp.getDate().toLowerCase());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            try {
+                time = new SimpleDateFormat("h:mma", Locale.getDefault()).parse(temp.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            calendar.setTimeInMillis(date.getTime());
+            calendar.add(calendar.DAY_OF_YEAR, -1);
+            calendar.set(Calendar.MINUTE, time.getMinutes());
+            calendar.set(Calendar.HOUR_OF_DAY, time.getHours());
+            calendar.set(Calendar.SECOND, 00);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, (int)System.currentTimeMillis(), my_intient, PendingIntent.FLAG_UPDATE_CURRENT);
+            mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+
             setNewReminderIcons(false, false);
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
