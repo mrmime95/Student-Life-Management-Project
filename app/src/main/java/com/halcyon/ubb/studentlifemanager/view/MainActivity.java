@@ -271,9 +271,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 e.printStackTrace();
             }
             try {
-                time = new SimpleDateFormat("h:mma", Locale.getDefault()).parse(temp.getTime());
+                time = new SimpleDateFormat("h:mm a", Locale.getDefault()).parse(temp.getTime());
             } catch (ParseException e) {
-                e.printStackTrace();
+                Log.e("ERROR", e.toString());
             }
 
             calendar.setTimeInMillis(date.getTime());
