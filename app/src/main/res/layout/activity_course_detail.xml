@@ -6,16 +6,19 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:id="@+id/appBarLayout">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="?attr/colorPrimary">
 
             <ImageView
                 android:layout_width="match_parent"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
@@ -38,18 +41,17 @@
         android:background="#ffe5e5e5"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingTop="10dp">
+            android:paddingTop="10dp"
+            android:layout_below="@+id/appBarLayout">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:id="@+id/courseTitle"
                 android:textSize="20sp"
                 android:layout_marginTop="24dp"
-                android:layout_below="@+id/contact_image"
                 android:layout_marginBottom="15dp"
                 android:textStyle="bold"
                 android:layout_marginRight="24dp"
@@ -65,32 +67,31 @@
                 android:layout_marginRight="24dp"
                 android:layout_marginLeft="16dp"
                 />
+
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/attachmentIcon"
                 android:src="@drawable/ic_attach_file"
-                android:layout_marginLeft="16dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginTop="24dp"
-                android:clickable="true"
-                android:layout_below="@id/courseDescription"
+                android:layout_below="@+id/courseDescription"
+                android:layout_alignParentRight="true"
                 android:layout_marginBottom="16dp"
                 />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/attachmentName"
-                android:layout_toRightOf="@id/attachmentIcon"
                 android:textSize="14sp"
                 android:text="Algebra_presentation.pdf"
-                android:layout_below="@id/courseDescription"
-                android:layout_marginTop="24dp"
                 android:textColor="@color/attachmentColor"
                 android:letterSpacing="0.1"
-                android:layout_marginBottom="16dp"
-                />
-        </LinearLayout>
+                android:layout_alignTop="@+id/attachmentIcon"
+                android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
 
 
     </android.support.v4.widget.NestedScrollView>

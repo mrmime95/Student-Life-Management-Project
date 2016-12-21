@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -36,6 +37,8 @@ import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.ReminderContact;
 import com.halcyon.ubb.studentlifemanager.ReminderControl;
 import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
+import com.larvalabs.svgandroid.SVG;
+import com.larvalabs.svgandroid.SVGParser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -97,11 +100,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         courseRecyclerView.setLayoutManager(courseLayoutManager);
         courseRecyclerView.setHasFixedSize(true);
 
-        //TODO CR: You're doing way too much Visibility toggling for this to be considered a nice implementation. When you look at a design and see three different pages
-        // with completely different action bars, consider making them part of each Fragment: right now there is too much hidden content in your View hierarchy that consumes
-        // resources and reduces performance. [Peter]
-        // Answer: i think toolbar etc cannot be part of fragment. These elements are in toolbar and they similar between pages [Csaba]
-        //select first tab
         mSpinnerLayout.setVisibility(View.GONE);
         mTabsLayout.setVisibility(View.GONE);
         mToolbar.setVisibility(View.GONE);
@@ -109,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mSpinner.courseSpinnerUpdate(query);
         mFrame.addView(mCourses);
         mSpinner.setMyItemSelectedListener(courseRecyclerView, this);
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Do you want to upload test data?");
         alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {

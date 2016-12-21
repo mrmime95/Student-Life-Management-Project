@@ -46,21 +46,9 @@ public class CourseDetail extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(" ");
-        //dynamicToolbarColor();
-
     }
 
-    private void dynamicToolbarColor() {
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.id.contact_image);
-        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-            @Override
-            public void onGenerated(Palette palette) {
-                collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(ContextCompat.getColor(getApplication(), R.color.defaultToolbarColor)));
-                collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(ContextCompat.getColor(getApplication(), R.color.black)));
-            }
-        });
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
