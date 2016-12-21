@@ -30,12 +30,12 @@
 
                     <ImageView
                         android:id="@+id/addBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:layout_marginRight="16dp"
-                        android:src="@drawable/ic_add_circle_outline"
+                        android:src="@drawable/icaddcircleoutline"
                     />
 
                     <EditText
@@ -83,7 +83,7 @@
                         android:layout_marginTop="24dp"
                         android:onClick="pipeBtnOnClick"
                         android:scaleType="fitEnd"
-                        android:src="@drawable/ic_check"
+                        android:src="@drawable/iccheck"
                         android:layout_below="@+id/time"
                         android:visibility="gone" />
 
@@ -96,7 +96,7 @@
                         android:layout_marginLeft="21dp"
                         android:layout_marginTop="24dp"
                         android:onClick="closeAddingNewReminderOnClick"
-                        android:src="@drawable/ic_close"
+                        android:src="@drawable/icclose"
                         android:layout_below="@+id/time"
                         android:visibility="gone" />
 

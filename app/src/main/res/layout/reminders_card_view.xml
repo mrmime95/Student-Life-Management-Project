@@ -44,9 +44,9 @@
 
     <ImageView
         android:id="@+id/dropBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_delete" />
+        android:src="@drawable/icdelete" />
 </RelativeLayout>
