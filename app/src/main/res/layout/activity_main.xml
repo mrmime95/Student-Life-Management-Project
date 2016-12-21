@@ -67,6 +67,7 @@
             android:layout_height="match_parent"
             android:id="@+id/main_frame"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.BottomNavigationView

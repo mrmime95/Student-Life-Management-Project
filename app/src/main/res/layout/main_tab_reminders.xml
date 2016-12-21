@@ -35,7 +35,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:layout_marginRight="16dp"
-                        android:onClick="addNewReminderOnClick"
                         android:src="@drawable/ic_add_circle_outline"
                     />
 
