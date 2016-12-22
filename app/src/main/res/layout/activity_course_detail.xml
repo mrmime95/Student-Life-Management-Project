@@ -45,7 +45,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="10dp"
-            android:layout_below="@+id/appBarLayout">
+            android:layout_below="@+id/appBarLayout"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="24dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
@@ -55,7 +57,6 @@
                 android:layout_marginBottom="15dp"
                 android:textStyle="bold"
                 android:layout_marginRight="24dp"
-                android:layout_marginLeft="16dp"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -65,7 +66,6 @@
                 android:textSize="16dp"
                 android:text="valami mas"
                 android:layout_marginRight="24dp"
-                android:layout_marginLeft="16dp"
                 />
 
             <ImageView
@@ -73,10 +73,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/attachmentIcon"
                 android:src="@drawable/icattachfile"
-                android:layout_marginRight="24dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="29dp"
                 android:layout_below="@+id/courseDescription"
-                android:layout_alignParentRight="true"
                 android:layout_marginBottom="16dp"
                 />
 
@@ -87,9 +85,11 @@
                 android:textSize="14sp"
                 android:text="Algebra_presentation.pdf"
                 android:textColor="@color/attachmentColor"
+                android:layout_marginTop="32dp"
+                android:layout_below="@+id/courseDescription"
+                android:layout_toRightOf="@id/attachmentIcon"
                 android:letterSpacing="0.1"
-                android:layout_alignTop="@+id/attachmentIcon"
-                android:layout_alignParentStart="true" />
+                 />
 
         </RelativeLayout>
 

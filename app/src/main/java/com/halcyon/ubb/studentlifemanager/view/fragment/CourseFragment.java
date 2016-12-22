@@ -27,8 +27,7 @@ public class CourseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_tab_courses, container, false);
-        View activity_main = inflater.inflate(R.layout.activity_main, container, false);
-        mSpinner = (MySpinner) activity_main.findViewById(R.id.main_spinner);
+        mSpinner = (MySpinner) getActivity().findViewById(R.id.main_spinner);
         courseRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerCourse);
         courseLayoutManager  = new LinearLayoutManager(getActivity());
         courseRecyclerView.setLayoutManager(courseLayoutManager);
