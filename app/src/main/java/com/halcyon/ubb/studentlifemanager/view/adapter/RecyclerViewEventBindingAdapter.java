@@ -50,7 +50,7 @@ public class RecyclerViewEventBindingAdapter extends RecyclerViewBindingAdapter<
         EventViewModel item=mUIItems.get(position);
 
         //event name cannot be null only if its fake and it show starting time
-        if (item.title.get()==null)
+        if (item.course.get()==null)
             return  EVENT_START;
 
         return EVENT;

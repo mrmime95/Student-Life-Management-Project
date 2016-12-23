@@ -12,13 +12,19 @@ import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 
 public class EventViewModel {
     public ObservableField<String> startingTime;
-    public ObservableField<String> title;
+    public ObservableField<String> location;
     public ObservableField<String> description;
+    public ObservableField<String> course;
+    public ObservableField<String> type;
+    public ObservableField<String> shortTitle;
 
     public EventViewModel(Event event) {
         startingTime=new ObservableField<>();
-        title=new ObservableField<>();
+        course=new ObservableField<>();
+        location=new ObservableField<>();
         description=new ObservableField<>();
+        type=new ObservableField<>();
+        shortTitle=new ObservableField<>();
         setEvent(event);
     }
 
@@ -27,7 +33,10 @@ public class EventViewModel {
 
         if (event.getStartingDate()!=null)
             startingTime.set(DateFormat.format("HH:mm",event.getStartingDate()).toString());
-        title.set(event.getName());
+        course.set(event.getCourseKey());
         description.set(event.getDescription());
+        location.set(event.getLocationKey());
+        type.set(event.getTypeString());
+        shortTitle.set(type.get() + " • " + location.get());
     }
 }

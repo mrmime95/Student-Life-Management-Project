@@ -1,12 +1,11 @@
 package com.halcyon.ubb.studentlifemanager.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionManager;
@@ -16,46 +15,33 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import com.halcyon.ubb.studentlifemanager.MySpinner;
 import com.halcyon.ubb.studentlifemanager.R;
+import com.halcyon.ubb.studentlifemanager.database.Database;
 import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
 import com.halcyon.ubb.studentlifemanager.view.fragment.CourseFragment;
 import com.halcyon.ubb.studentlifemanager.view.fragment.ReminderFragment;
+import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableDayFragment;
+import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableFragment;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,DatabaseProvider {
     private BottomNavigationView mNav;
-    private MySpinner mSpinner;
-    private Toolbar mToolbar;
-    private FrameLayout mFrame;
-    private View mTimeTable;
-    private TabLayout mTabsLayout;
-    private View mSpinnerLayout;
-    private View mSpinnerTextView;
     private int mCurrentlySelected;
-    private ViewPager mPager;
-    private CourseFragment courseFragment;
-    private ReminderFragment reminderFragment;
+    private CourseFragment mCourseFragment;
+    private ReminderFragment mReminderFragment;
+    private TimetableFragment mTimetableFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSpinner = (MySpinner) findViewById(R.id.main_spinner);
         mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
-        mToolbar= (Toolbar) findViewById(R.id.toolbars);
-        mFrame = (FrameLayout) findViewById(R.id.main_frame);
-        mTabsLayout=(TabLayout)  findViewById(R.id.main_tabs);
-        mSpinnerLayout=findViewById(R.id.main_spinner_layout);
         //nav
         mNav.setOnNavigationItemSelectedListener(this);
-        mSpinnerLayout.setVisibility(View.GONE);
-        mTabsLayout.setVisibility(View.GONE);
-        mToolbar.setVisibility(View.GONE);
-        mSpinnerLayout.setVisibility(View.VISIBLE);
 
-        courseFragment = new CourseFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, courseFragment).commit();
-        FirebaseDB.getInstance().createTestData();
-        //FirebaseDB.getInstance().deleteTestData();
+        mReminderFragment = new ReminderFragment();
+        mCourseFragment = new CourseFragment();
+        mTimetableFragment = new TimetableFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, mCourseFragment).commit();
     }
 
     @Override
@@ -63,41 +49,32 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         int id=item.getItemId();
         if (mCurrentlySelected==id)
             return false;
-        mTimeTable=null;
-        mFrame.removeAllViews();
-        mSpinnerTextView=mSpinner.findViewById(R.id.spinner_textView);
-        mToolbar.setVisibility(View.GONE);
-        mToolbar.setVisibility(View.GONE);
-        mTabsLayout.setVisibility(View.GONE);
+        //TransitionManager.beginDelayedTransition((ViewGroup) findViewById(android.R.id.content));
+        //TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.main_frame));
 
-        if (id!=R.id.tab_courses && id!=R.id.tab_timetable) mSpinnerLayout.setVisibility(View.GONE);
-        TransitionManager.beginDelayedTransition((ViewGroup) findViewById(android.R.id.content));
-        if (id==R.id.tab_courses || id==R.id.tab_timetable) mSpinnerLayout.setVisibility(View.GONE);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 
         switch (id) {
             case R.id.tab_courses:
-                mSpinnerLayout.setVisibility(View.VISIBLE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, courseFragment).commit();
+                transaction.replace(R.id.main_frame, mCourseFragment);
                 break;
             case R.id.tab_reminders:
-                mTabsLayout.setVisibility(View.GONE);
-                mToolbar.setVisibility(View.VISIBLE);
-                mToolbar.setTitle(item.getTitle());
-
-                reminderFragment = new ReminderFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, reminderFragment).commit();
+                transaction.replace(R.id.main_frame, mReminderFragment);
                 break;
             case R.id.tab_timetable:
-                mTabsLayout.setVisibility(View.VISIBLE);
-                mSpinnerLayout.setVisibility(View.VISIBLE);
-                mTimeTable=getLayoutInflater().inflate(R.layout.main_tab_timetable,mFrame,false);
-                mPager=(ViewPager) mTimeTable.findViewById(R.id.tab_timetable_viewpager);
-                mTabsLayout.setupWithViewPager(mPager);
-                mPager.setAdapter(new DayPagerAdapter(this,getSupportFragmentManager(), "testCourse"));
-                mFrame.addView(mTimeTable);
+                transaction.replace(R.id.main_frame, mTimetableFragment);
                 break;
         }
+        transaction.commit();
+
+        //TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.main_frame));
         mCurrentlySelected=id;
         return true;
+    }
+
+    @Override
+    public Database getDatabase() {
+        return FirebaseDB.getInstance();
     }
 }

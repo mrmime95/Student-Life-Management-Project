@@ -8,24 +8,29 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableDayFragment;
 
+import java.util.List;
+
 /**
  *
  * Created by Baroti Csaba on 12/13/2016.
  */
 
-class DayPagerAdapter extends FragmentStatePagerAdapter {
-    private final String mCourse;
+public class DayPagerAdapter extends FragmentStatePagerAdapter {
+    private final List<String> mCoursesKey;
     private String[] mDays;
 
-    DayPagerAdapter(Context context, FragmentManager fm, String courseID) {
+    public DayPagerAdapter(Context context, FragmentManager fm, List<String> courses) {
         super(fm);
         mDays=context.getResources().getStringArray(R.array.days);
-        mCourse=courseID;
+        mCoursesKey =courses;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return TimetableDayFragment.newInstance(mCourse,position);
+        if (mCoursesKey !=null)
+            return TimetableDayFragment.newInstance(mCoursesKey,position);
+        else
+            return new Fragment();
     }
 
     @Override

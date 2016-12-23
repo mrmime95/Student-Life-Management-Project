@@ -1,74 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.halcyon.ubb.studentlifemanager.view.MainActivity"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context="com.halcyon.ubb.studentlifemanager.view.MainActivity">
 
-    <android.support.design.widget.CoordinatorLayout
+    <FrameLayout
+        android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/nav_heigth"
-        android:id="@+id/main_coord">
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbars"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:transitionName="customToolbar"
-                app:titleTextColor="@color/white" />
-
-            <LinearLayout
-                android:id="@+id/main_spinner_layout"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent" />
-
-                <com.halcyon.ubb.studentlifemanager.MySpinner
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:id="@+id/main_spinner"
-                    android:transitionName="mySpinner"
-                    android:layout_weight="4"
-                    app:backgroundTint="@color/white"/>
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-
-
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/main_tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:tabGravity="fill"
-                    app:tabTextColor="@android:color/white"
-                    app:tabSelectedTextColor="@android:color/white"/>
-
-        </android.support.design.widget.AppBarLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/main_frame"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-    </android.support.design.widget.CoordinatorLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/main_bottom_navigation"
