@@ -10,6 +10,7 @@ import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
  * Created by Baroti Csaba on 12/14/2016.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class EventViewModel {
     public ObservableField<String> startingTime;
     public ObservableField<String> location;
@@ -17,6 +18,7 @@ public class EventViewModel {
     public ObservableField<String> course;
     public ObservableField<String> type;
     public ObservableField<String> shortTitle;
+    public ObservableField<Boolean> isFake;
 
     public EventViewModel(Event event) {
         startingTime=new ObservableField<>();
@@ -25,6 +27,7 @@ public class EventViewModel {
         description=new ObservableField<>();
         type=new ObservableField<>();
         shortTitle=new ObservableField<>();
+        isFake=new ObservableField<>();
         setEvent(event);
     }
 
@@ -33,10 +36,11 @@ public class EventViewModel {
 
         if (event.getStartingDate()!=null)
             startingTime.set(DateFormat.format("HH:mm",event.getStartingDate()).toString());
-        course.set(event.getCourseKey());
+        course.set(event.getCourse()==null?"Loading..":event.getCourse().getName());
         description.set(event.getDescription());
-        location.set(event.getLocationKey());
-        type.set(event.getTypeString());
+        location.set(event.getLocation()==null?"Loading..":event.getLocation().getShortName());
+        type.set(event.getTypeString()==null?"Loading..":event.getTypeString());
         shortTitle.set(type.get() + " • " + location.get());
+        isFake.set(event.getCourseKey()!=null && event.getCourseKey().compareTo("#FAKE")==0);
     }
 }

@@ -23,13 +23,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <com.halcyon.ubb.studentlifemanager.MySpinner
+            <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/main_spinner"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_weight="4"
-                android:transitionName="mySpinner"
-                app:backgroundTint="@color/white" />
+                android:layout_weight="4" />
 
             <Space
                 android:layout_width="0dp"
@@ -48,11 +46,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.view.ViewPager
         android:id="@+id/tab_timetable_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

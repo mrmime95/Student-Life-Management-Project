@@ -3,6 +3,7 @@ package com.halcyon.ubb.studentlifemanager.database.listener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -10,6 +11,6 @@ import java.util.List;
  */
 
 public interface CoursesEventValueListener {
-    void onEventsChange(List<Event> events);
+    void onEventsListChange(Map<String, List<Event>> events, boolean b);
     void onCancelled(Exception e);
 }

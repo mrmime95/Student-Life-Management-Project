@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * Created by Baroti Csaba on 12/11/2016.
  */
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess","unused"})
 public class Event {
     @Retention(SOURCE)
     @IntDef({COURSE,LAB})
@@ -23,10 +23,12 @@ public class Event {
     public static final int LAB=1;
 
     private String mCourseKey;
-    private String mLocation;
+    private String mLocationKey;
     private String mDescription;
     private @EventType int mType;
     private int mDay;
+    private Location mLocation;
+    private Course mCourse;
 
 
     //public String location;
@@ -39,13 +41,14 @@ public class Event {
     public Event() {
     }
 
-    public Event(Date startingTime) {
+    public Event(String courseKey,Date startingTime) {
         this.startingTime=startingTime.getTime();
+        mCourseKey=courseKey;
     }
 
     public Event(String courseKey,@EventType int type, String location) {
         this.mCourseKey =courseKey;
-        this.mLocation=location;
+        this.mLocationKey =location;
         mType=type;
     }
 
@@ -73,15 +76,19 @@ public class Event {
     }
 
     public String getLocationKey() {
-        return mLocation;
+        return mLocationKey;
     }
 
     public void setLocationKey(String locationKey) {
-        mLocation=locationKey;
+        mLocationKey =locationKey;
     }
 
     public @EventType int getType() {
         return mType;
+    }
+
+    public void setType(@EventType int type) {
+        mType=type;
     }
 
     public String getDescription() {
@@ -98,6 +105,29 @@ public class Event {
     }
 
     @Exclude
+    public Date getEndingDate() {
+        return endingTime==0?null:new Date(endingTime);
+    }
+
+    public void setLocation(Location location) {
+        mLocation = location;
+    }
+
+    @Exclude
+    public Location getLocation() {
+        return mLocation;
+    }
+
+    public void setCourse(Course course) {
+        mCourse = course;
+    }
+
+    @Exclude
+    public Course getCourse() {
+        return mCourse;
+    }
+
+    @Exclude
     public String getTypeString() {
         switch (mType) {
             case COURSE:
@@ -105,6 +135,15 @@ public class Event {
             case LAB:
                 return "Laboratory";
         }
-        return "";
+        return null;
+    }
+
+    @Exclude
+    public Event copy() {
+        Event newEvent = new Event(mCourseKey, mType, mDay, mLocationKey, getStartingDate(), getEndingDate());
+        newEvent.setDescription(mDescription);
+        newEvent.setLocation(mLocation);
+        newEvent.setCourse(mCourse);
+        return newEvent;
     }
 }

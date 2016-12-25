@@ -10,13 +10,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.halcyon.ubb.studentlifemanager.MySpinner;
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.Database;
 import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TimetableFragment extends Fragment implements DatabaseProvider, AdapterView.OnItemSelectedListener {
-    private MySpinner mSpinner;
+    private AppCompatSpinner mSpinner;
     private TabLayout mTabLayout;
     private android.support.v4.view.ViewPager mPager;
     private ArrayList<String> mGroupNames;
@@ -39,13 +39,17 @@ public class TimetableFragment extends Fragment implements DatabaseProvider, Ada
     private GroupsValueEventListener mGroupsListener=new GroupsValueEventListener() {
         @Override
         public void onGroupsChange(List<Group> groups) {
-            mGroups=groups;
+            mGroups.clear();
+            mGroups.addAll(groups);
+
             mGroupNames.clear();
-            List<String> groupNames=new ArrayList<>();
             for (Group g:mGroups)
-                groupNames.add(g.getName());
-            mGroupNames.addAll(groupNames);
+                mGroupNames.add(g.getName());
+
             mAdapter.notifyDataSetChanged();
+
+            if (mSpinner.getSelectedItemPosition()>-1 && mSpinner.getSelectedItemPosition()<mGroups.size())
+                onItemSelected(null,null,mSpinner.getSelectedItemPosition(),0);
         }
 
         @Override
@@ -53,6 +57,8 @@ public class TimetableFragment extends Fragment implements DatabaseProvider, Ada
             mGroupNames.clear();
             mGroups.clear();
             mAdapter.notifyDataSetChanged();
+            if (mSpinner.getSelectedItemPosition()>-1 && mSpinner.getSelectedItemPosition()<mGroups.size())
+                onItemSelected(null,null,mSpinner.getSelectedItemPosition(),0);
             Snackbar.make(getActivity().findViewById(android.R.id.content),"Sorry couldn't load groups.",Snackbar.LENGTH_LONG).show();
         }
     };
@@ -75,6 +81,7 @@ public class TimetableFragment extends Fragment implements DatabaseProvider, Ada
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGroupNames =new ArrayList<>();
+        mGroups=new ArrayList<>();
     }
 
     @Override
@@ -83,8 +90,9 @@ public class TimetableFragment extends Fragment implements DatabaseProvider, Ada
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.main_tab_timetable, container, false);
         mTabLayout=(TabLayout)  view.findViewById(R.id.main_tabs);
-        mSpinner = (MySpinner) view.findViewById(R.id.main_spinner);
+        mSpinner = (AppCompatSpinner) view.findViewById(R.id.main_spinner);
         mPager=(ViewPager) view.findViewById(R.id.tab_timetable_viewpager);
+        mPager.setOffscreenPageLimit(2);
         return view;
     }
 
@@ -105,7 +113,7 @@ public class TimetableFragment extends Fragment implements DatabaseProvider, Ada
         mPager.setAdapter(new DayPagerAdapter(getContext(),getActivity().getSupportFragmentManager(), null));
         mTabLayout.setupWithViewPager(mPager);
 
-        mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, mGroupNames);
+        mAdapter =new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, mGroupNames);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(mAdapter);
         mSpinner.setOnItemSelectedListener(this);
@@ -141,6 +149,7 @@ public class TimetableFragment extends Fragment implements DatabaseProvider, Ada
                     alertDialogBuilder.show();
                 }
             });
+            alertDialogBuilder.show();
             mAsked=true;
         }
     }

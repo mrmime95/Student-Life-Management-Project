@@ -37,8 +37,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimaryLight"
-                android:padding="@dimen/stepper_cardview_padding">
+                android:padding="@dimen/stepper_cardview_padding"
+                android:background="@color/colorPrimaryLight">
 
                 <TextView
                     android:id="@+id/event_title"

@@ -1,29 +1,21 @@
 package com.halcyon.ubb.studentlifemanager.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.transition.TransitionManager;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import com.halcyon.ubb.studentlifemanager.MySpinner;
+
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.Database;
 import com.halcyon.ubb.studentlifemanager.database.FirebaseDB;
 import com.halcyon.ubb.studentlifemanager.view.fragment.CourseFragment;
 import com.halcyon.ubb.studentlifemanager.view.fragment.ReminderFragment;
-import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableDayFragment;
 import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableFragment;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,DatabaseProvider {
-    private BottomNavigationView mNav;
     private int mCurrentlySelected;
     private CourseFragment mCourseFragment;
     private ReminderFragment mReminderFragment;
@@ -33,10 +25,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //set windowsDecor white => prevent overdraw
+        // tried setting from style, didn't work
+        //TODO: Figuring out how to set decorview white in theme files.
+        getWindow().getDecorView().setBackgroundColor(Color.WHITE);
 
-        mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
+        BottomNavigationView nav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
         //nav
-        mNav.setOnNavigationItemSelectedListener(this);
+        nav.setOnNavigationItemSelectedListener(this);
 
         mReminderFragment = new ReminderFragment();
         mCourseFragment = new CourseFragment();
@@ -53,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.main_frame));
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+        //transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 
         switch (id) {
             case R.id.tab_courses:

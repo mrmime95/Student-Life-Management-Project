@@ -1,9 +1,7 @@
 package com.halcyon.ubb.studentlifemanager.viewmodel;
 
-import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
-import android.widget.Toast;
 
 import com.halcyon.ubb.studentlifemanager.database.Database;
 import com.halcyon.ubb.studentlifemanager.database.listener.CoursesEventValueListener;
@@ -12,6 +10,7 @@ import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -24,38 +23,53 @@ public class TimetableDayEventViewModel {
     private List<String> mCourseKey;
     private Database mDatabase;
     private CoursesEventValueListener mListener;
-    private Context mContext;
+    private List<TimetableDayEventListener> mListeners;
+    private boolean mSubscribed = false;
 
-    public TimetableDayEventViewModel(Context context, Database database, List<String> coursesKey , @TimetableDay.Days int day) {
-        mDay=day;
-        mCourseKey=coursesKey;
-        mDatabase=database;
-        mContext=context;
-        events=new ObservableArrayList<>();
-        mListener=new CoursesEventValueListener() {
+    public TimetableDayEventViewModel(Database database, List<String> coursesKey, @TimetableDay.Days int day) {
+        mDay = day;
+        mCourseKey = coursesKey;
+        mDatabase = database;
+        events = new ObservableArrayList<>();
+        mListeners = new ArrayList<>();
+        mListener = new CoursesEventValueListener() {
+
             @Override
-            public void onEventsChange(List<Event> eventsDB) {
+            public void onEventsListChange(final Map<String, List<Event>> eventsDB, boolean loading) {
+                if (!loading)
+                    for (TimetableDayEventListener listener : mListeners)
+                        listener.onDayChanged();
+
                 events.clear();
-                if (eventsDB==null) return;
-                ArrayList<Event> noNullEventsDay=new ArrayList<>();
-                for (Event i:eventsDB)
-                    if (i!=null) noNullEventsDay.add(i);
+                if (eventsDB == null) return;
+                ArrayList<Event> noNullEventsDay = new ArrayList<>();
+                for (List<Event> list : eventsDB.values())
+                    if (list != null) noNullEventsDay.addAll(list);
 
                 events.addAll(noNullEventsDay);
             }
 
             @Override
             public void onCancelled(Exception e) {
-                Toast.makeText(mContext,"There was a problem loading your timetable on day "+mDay+".",Toast.LENGTH_SHORT).show();
+                for (TimetableDayEventListener listener : mListeners)
+                    listener.onSubscriptionFailed();
             }
         };
     }
 
-    public void subscribe() {
-        mDatabase.addCoursesEventValueListener(mCourseKey,mDay,mListener);
+    public void subscribe(TimetableDayEventListener listener) {
+        if (!mListeners.contains(listener)) {
+            mListeners.add(listener);
+            if (!mSubscribed)
+                mDatabase.addCoursesEventValueListener(mCourseKey, mDay, mListener);
+        }
     }
 
-    public void unSubscribe() {
-        mDatabase.removeCoursesEventValueListener(mCourseKey,mDay,mListener);
+    public void unSubscribe(TimetableDayEventListener listener) {
+        if (mListeners.contains(listener)) {
+            mListeners.remove(listener);
+            if (mSubscribed)
+                mDatabase.removeCoursesEventValueListener(mCourseKey, mDay, mListener);
+        }
     }
 }
