@@ -3,9 +3,7 @@ package com.halcyon.ubb.studentlifemanager;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
 import com.halcyon.ubb.studentlifemanager.database.SQLiteDB;
-
 import java.util.ArrayList;
 
 /**

@@ -1,12 +1,10 @@
 package com.halcyon.ubb.studentlifemanager.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionManager;
@@ -61,11 +59,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
-        if (mCurrentlySelected==id)
-            return false;
+        if (mCurrentlySelected==id) return false;
+
         mTimeTable=null;
         mFrame.removeAllViews();
         mSpinnerTextView=mSpinner.findViewById(R.id.spinner_textView);
+
         mToolbar.setVisibility(View.GONE);
         mToolbar.setVisibility(View.GONE);
         mTabsLayout.setVisibility(View.GONE);
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 mTabsLayout.setVisibility(View.GONE);
                 mToolbar.setVisibility(View.VISIBLE);
                 mToolbar.setTitle(item.getTitle());
-
                 reminderFragment = new ReminderFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, reminderFragment).commit();
                 break;

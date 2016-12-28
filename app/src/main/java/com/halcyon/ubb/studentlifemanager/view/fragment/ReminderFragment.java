@@ -227,7 +227,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
         reminderDate.setText(str);
         dateChoosed = true;
         //TODO CR: Pay attention to Lint warnings. Don't write logic that doesn't make sense. [Peter]
-        if ((timeChoosed && dateChoosed)){
+        if ( timeChoosed ){
             reminderCheckBtn.setImageResource(R.drawable.iccheckok);
         }
     }
@@ -238,7 +238,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
         reminderTime.setText(str);
         timeChoosed = true;
         //TODO CR: As a general note, you should move duplicated code to a common method. In this case, however, delete it (bad UX). [Peter]
-        if ((timeChoosed && dateChoosed)){
+        if (dateChoosed){
             reminderCheckBtn.setImageResource(R.drawable.iccheckok);
         }
     }

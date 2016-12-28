@@ -17,6 +17,7 @@
         android:layout_alignParentLeft="true"
         android:textSize="16dp"
         android:textStyle="bold|italic"
+        android:hint="Your Hint"
         tools:text="Emlekezteto szovege" />
 
     <LinearLayout
