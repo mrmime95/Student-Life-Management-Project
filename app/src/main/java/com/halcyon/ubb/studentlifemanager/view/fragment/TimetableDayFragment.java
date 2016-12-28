@@ -1,6 +1,7 @@
 package com.halcyon.ubb.studentlifemanager.view.fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -16,22 +17,20 @@ import android.widget.Toast;
 
 import com.halcyon.ubb.studentlifemanager.BR;
 import com.halcyon.ubb.studentlifemanager.R;
-import com.halcyon.ubb.studentlifemanager.database.Database;
+import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
+import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
+import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
-import com.halcyon.ubb.studentlifemanager.view.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.view.adapter.RecyclerViewEventBindingAdapter;
 import com.halcyon.ubb.studentlifemanager.viewmodel.TimetableDayEventListener;
 import com.halcyon.ubb.studentlifemanager.viewmodel.TimetableDayEventViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class TimetableDayFragment extends Fragment implements DatabaseProvider {
+public class TimetableDayFragment extends Fragment {
     public static String PARAMS_DAY = "timetableday_params_day";
-    private static String PARAMS_COURSE = "timetableday_params_course";
-
-    private DatabaseProvider mProvider;
+    public static String PARAMS_GROUPS = "timetableday_params_map";
 
     RecyclerView mRecyclerView;
     private int mDay;
@@ -59,11 +58,11 @@ public class TimetableDayFragment extends Fragment implements DatabaseProvider {
         // Required empty public constructor
     }
 
-    public static TimetableDayFragment newInstance(List<String> coursesKey, @TimetableDay.Days int day) {
+    public static TimetableDayFragment newInstance(ArrayList<Group> groups, @TimetableDay.Days int day) {
         TimetableDayFragment fragment = new TimetableDayFragment();
         Bundle args = new Bundle();
-        args.putInt(PARAMS_DAY, day);
-        args.putStringArray(PARAMS_COURSE, coursesKey.toArray(new String[0]));
+        args.putParcelableArrayList(PARAMS_GROUPS,groups);
+        args.putInt(PARAMS_DAY,day);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,21 +75,15 @@ public class TimetableDayFragment extends Fragment implements DatabaseProvider {
 
         //noinspection WrongConstant
         mDay = getArguments().getInt(PARAMS_DAY);
-        //noinspection ConstantConditions
-        String[] courses = getArguments().getStringArray(PARAMS_COURSE);
-
-        List<String> coursesKey;
-        if (courses == null)
-            coursesKey = new ArrayList<>();
-        else
-            coursesKey = Arrays.asList(courses);
+        //noinspection unchecked
+        List<Group> groups = getArguments().getParcelableArrayList(PARAMS_GROUPS);
 
         //making a connection between viewmodel - mAdapter :
         //  ViewModel.events is an ObservableList<Event>
         //  so RecyclerViewBindingAdapter can listen for changes
         //  When changes happen the mAdapter updates the recycler with new events in list;
         //noinspection WrongConstant
-        mViewModel = new TimetableDayEventViewModel(mProvider.getDatabase(), coursesKey, mDay);
+        mViewModel = new TimetableDayEventViewModel(DatabaseProvider.getInstance().getRemoteDatabase(), groups, mDay);
         mAdapter = new RecyclerViewEventBindingAdapter(BR.item);
     }
 
@@ -104,11 +97,6 @@ public class TimetableDayFragment extends Fragment implements DatabaseProvider {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        if (context instanceof DatabaseProvider)
-            mProvider = (DatabaseProvider) context;
-        else
-            throw new IllegalStateException("Parent activity must implement database provider.");
     }
 
     @Override
@@ -137,8 +125,4 @@ public class TimetableDayFragment extends Fragment implements DatabaseProvider {
         mViewModel.unSubscribe(mListener);
     }
 
-    @Override
-    public Database getDatabase() {
-        return mProvider.getDatabase();
-    }
 }

@@ -6,8 +6,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.halcyon.ubb.studentlifemanager.R;
+import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
+import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableDayFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,19 +19,19 @@ import java.util.List;
  */
 
 public class DayPagerAdapter extends FragmentStatePagerAdapter {
-    private final List<String> mCoursesKey;
+    private ArrayList<Group> mGroups;
     private String[] mDays;
 
-    public DayPagerAdapter(Context context, FragmentManager fm, List<String> courses) {
+    public DayPagerAdapter(Context context, FragmentManager fm, ArrayList<Group> groups) {
         super(fm);
         mDays=context.getResources().getStringArray(R.array.days);
-        mCoursesKey =courses;
+        mGroups =groups;
     }
 
     @Override
     public Fragment getItem(int position) {
-        if (mCoursesKey !=null)
-            return TimetableDayFragment.newInstance(mCoursesKey,position);
+        if (mGroups !=null && mGroups.size()!=0)
+            return TimetableDayFragment.newInstance(mGroups,position);
         else
             return new Fragment();
     }
@@ -41,5 +44,9 @@ public class DayPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return mDays[position];
+    }
+
+    public void setSelectedGroups(ArrayList<Group> selectedGroups) {
+        mGroups =selectedGroups;
     }
 }

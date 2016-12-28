@@ -1,24 +1,29 @@
 package com.halcyon.ubb.studentlifemanager.database;
 
+import android.content.Context;
+
+import com.firebase.client.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.halcyon.ubb.studentlifemanager.database.listener.CoursesEventValueListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Course;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Location;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
-import com.halcyon.ubb.studentlifemanager.database.listener.CoursesEventValueListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -26,116 +31,95 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by Baroti Csaba on 12/12/2016.
  */
 public class FirebaseDB implements Database {
-    private static FirebaseDB ourInstance = new FirebaseDB();
-    private Map<CoursesEventValueListener, List<ValueEventListener>> mCoursesEventMap;
+    private Map<CoursesEventValueListener, Map<DatabaseReference,ValueEventListener>> mCoursesEventMap;
     private Map<GroupsValueEventListener, ValueEventListener> mGroupsMap;
 
-    private FirebaseDB() {
+    public FirebaseDB(Context context) {
         mCoursesEventMap = new HashMap<>();
         mGroupsMap = new HashMap<>();
+        Firebase.setAndroidContext(context);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
-
-    public static FirebaseDB getInstance() {
-        return ourInstance;
-    }
-
 
     //TODO: Documentation...
     @Override
-    public void addCoursesEventValueListener(final List<String> coursesKey, @TimetableDay.Days final int day, final CoursesEventValueListener listener) {
-        if (listener == null) return;
+    public void addEventValueEventListener(List<Group> groups, @TimetableDay.Days int day, final CoursesEventValueListener listener) {
+        if (listener == null || groups==null && groups.size()==0) return;
 
-        final AtomicInteger atom = new AtomicInteger();
-        atom.set(coursesKey.size());
-        final Map<String, List<Event>> events = new HashMap<>();
+        final AtomicInteger atom = new AtomicInteger(groups.size());
+        final List<Event> events = new ArrayList<>();
 
-        final AtomicInteger atomInner = new AtomicInteger(coursesKey.size());
-
-        List<ValueEventListener> listenerList = mCoursesEventMap.get(listener);
-        if (listenerList == null) listenerList = new ArrayList<>();
-        for (final String courseKey : coursesKey) {
-            ValueEventListener l = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<Event> list = new ArrayList<>();
-
-                    synchronized (atomInner) {
-                        atomInner.set((int) (atomInner.decrementAndGet()+dataSnapshot.getChildrenCount()*2));
-                    }
-
-
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        final Event e=postSnapshot.getValue(Event.class);
-                        list.add(e);
-
-                        //join wiht location
-                        FirebaseDatabase.getInstance().getReference().child("test").child("locations")
-                                .orderByKey().equalTo(e.getLocationKey()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                e.setLocation(dataSnapshot.child(e.getLocationKey()).getValue(Location.class));
-                                int loading;
-                                if ((loading=atomInner.decrementAndGet())<=0)
-                                listener.onEventsListChange(events, loading == 0);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                e.setLocation(null);
-                                int loading;
-                                if ((loading=atomInner.decrementAndGet())<=0)
-                                listener.onEventsListChange(events, loading == 0);
-                            }
-                        });
-
-                        //join with courses
-                        FirebaseDatabase.getInstance().getReference().child("test").child("courses")
-                                .orderByKey().equalTo(e.getCourseKey()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                e.setCourse(dataSnapshot.child(e.getCourseKey()).getValue(Course.class));
-                                //boolean loading=atomInner.decrementAndGet()>0;
-                                int loading;
-                                if ((loading=atomInner.decrementAndGet())<=0)
-                                    listener.onEventsListChange(events, loading == 0);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                e.setCourse(null);
-                                int loading;
-                                if ((loading=atomInner.decrementAndGet())<=0)
-                                   listener.onEventsListChange(events,loading==0);
-                            }
-                        });
-                    }
-                    synchronized (events) {
-                        events.put(courseKey, list);
-                    }
-
-                    if (atom.decrementAndGet() <= 0)
-                        listener.onEventsListChange(events,true);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    listener.onCancelled(databaseError.toException());
-                }
-            };
-
-            FirebaseDatabase.getInstance().getReference().child("test").child("events").child(String.valueOf(day))
-                    .orderByChild("courseKey").equalTo(courseKey).addValueEventListener(l);
-            listenerList.add(l);
+        Map<DatabaseReference,ValueEventListener> listenerMap = mCoursesEventMap.get(listener);
+        if (listenerMap == null) {
+            listenerMap = new HashMap<>();
+            mCoursesEventMap.put(listener, listenerMap);
         }
-        mCoursesEventMap.put(listener, listenerList);
+
+        DatabaseReference baseRef = FirebaseDatabase.getInstance().getReference().child("test1");
+
+        for (Group group : groups) {
+            HashMap<String, Boolean> coursesKeys = group.getCoursesKey();
+            DatabaseReference ref;
+            ValueEventListener listenerRef;
+            if (coursesKeys==null || coursesKeys.size()==group.getCoursesCount()) {
+                //get all events to given group
+                ref = baseRef.child("group-eventsWcourse").child(group.getKey());
+                listenerRef = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot post:dataSnapshot.getChildren())
+                            events.add(post.getValue(Event.class));
+                        if (atom.decrementAndGet()<=0)
+                            listener.onEventsListChange(events);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        listener.onCancelled(databaseError.toException());
+                    }
+                };
+                ref.orderByChild("day").equalTo(day).addValueEventListener(listenerRef);
+                listenerMap.put(ref,listenerRef);
+            }
+            else{
+                final AtomicInteger atomCourse = new AtomicInteger(coursesKeys.size());
+                for (String course : coursesKeys.keySet()) {
+                    //join events in different courses but one group
+                    ref = baseRef.child("test1").child("group-course-eventsWcourse")
+                            .child(group.getKey()).child(course);
+                    listenerRef = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot post:dataSnapshot.getChildren())
+                                events.add(post.getValue(Event.class));
+                            if (atomCourse.decrementAndGet()<=0 && atom.decrementAndGet()<=0)
+                                listener.onEventsListChange(events);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            listener.onCancelled(databaseError.toException());
+                        }
+                    };
+                    ref.orderByChild("day").equalTo(day).addValueEventListener(listenerRef);
+                    listenerMap.put(ref,listenerRef);
+                }
+            }
+        }
+
+
+        mCoursesEventMap.put(listener, listenerMap);
     }
 
     @Override
-    public void removeCoursesEventValueListener(List<String> coursesKey, @TimetableDay.Days int day, CoursesEventValueListener listener) {
+    public void removeEventValueEventListener(CoursesEventValueListener listener) {
         if (listener == null || mCoursesEventMap.get(listener) == null) return;
 
-        for (ValueEventListener l : mCoursesEventMap.get(listener))
-            FirebaseDatabase.getInstance().getReference().child("test").child("events").child(String.valueOf(day)).removeEventListener(l);
+        Map<DatabaseReference, ValueEventListener> map = mCoursesEventMap.get(listener);
+
+        for (DatabaseReference ref :map.keySet())
+            ref.removeEventListener(map.get(ref));
+
         mCoursesEventMap.remove(listener);
     }
 
@@ -143,15 +127,12 @@ public class FirebaseDB implements Database {
     public void addGroupsValueEventListener(final GroupsValueEventListener listener) {
         if (listener == null) return;
         ValueEventListener l = new ValueEventListener() {
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Group> groups = new ArrayList<>();
+                Set<Group> groups = new HashSet<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     groups.add(postSnapshot.getValue(Group.class));
-
                 }
-
                 listener.onGroupsChange(groups);
             }
 
@@ -160,94 +141,166 @@ public class FirebaseDB implements Database {
                 listener.onCancelled(databaseError.toException());
             }
         };
-        FirebaseDatabase.getInstance().getReference().child("test").child("groups").addValueEventListener(l);
+        FirebaseDatabase.getInstance().getReference().child("test1").child("groups").addValueEventListener(l);
         mGroupsMap.put(listener, l);
     }
 
     @Override
     public void removeGroupsValueEventListener(GroupsValueEventListener listener) {
         if (listener == null || mGroupsMap.get(listener) == null) return;
-        FirebaseDatabase.getInstance().getReference().child("test").child("groups").removeEventListener(mGroupsMap.get(listener));
+        FirebaseDatabase.getInstance().getReference().child("test1").child("groups").removeEventListener(mGroupsMap.get(listener));
         mGroupsMap.remove(listener);
     }
 
     @SuppressWarnings("WrongConstant")
+    @Override
     public void createTestData() {
-        DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("test");
+        DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("test1");
         DatabaseReference eventRef = firebaseRef.child("events");
         DatabaseReference courseRef = firebaseRef.child("courses");
         DatabaseReference groupRef = firebaseRef.child("groups");
-        DatabaseReference locationRef = firebaseRef.child("locations");
-
-        //setting up locations
-        locationRef.removeValue();
-        String mateKey=locationRef.push().getKey();
-        locationRef.child(mateKey).setValue(new Location("Matemathicum"));
-        String cbKey=locationRef.push().getKey();
-        locationRef.child(cbKey).setValue(new Location("Central building"));
-        String fsegaKey=locationRef.push().getKey();
-        locationRef.child(fsegaKey).setValue(new Location("FSEGA"));
+        DatabaseReference groupEventsWcourseRef = firebaseRef.child("group-eventsWcourse");
+        DatabaseReference groupCourseEventsWcourseRef = firebaseRef.child("group-course-eventsWcourse");
 
         //courses
         courseRef.removeValue();
-        String algebra=courseRef.push().getKey();
-        courseRef.child(algebra).setValue(new Course("Algebra of analytics"));
-        String cstand=courseRef.push().getKey();
-        courseRef.child(cstand).setValue(new Course("C++ coding standards"));
-        String linux=courseRef.push().getKey();
-        courseRef.child(linux).setValue(new Course("Linux basics"));
-        String cadvanced=courseRef.push().getKey();
-        courseRef.child(cadvanced).setValue(new Course("C++ advanced"));
+
+        Map<Course, String> courseMap = new HashMap<>();
+
+        String algebra = courseRef.push().getKey();
+        String cstand = courseRef.push().getKey();
+        String linux = courseRef.push().getKey();
+        String cadvanced = courseRef.push().getKey();
+
+        Course algebraCourse = new Course(algebra, "Algebra of analytics");
+        Course linuxCourse = new Course(cadvanced, "Linux basics");
+        Course cstandCourse = new Course(linux, "C++ coding standards");
+        Course cadvancedCourse = new Course(cadvanced, "C++ advanced");
+
+        courseMap.put(algebraCourse, algebra);
+        courseMap.put(linuxCourse, linux);
+        courseMap.put(cstandCourse, cstand);
+        courseMap.put(cadvancedCourse, cadvanced);
+
+        courseRef.child(algebra).setValue(algebraCourse);
+        courseRef.child(cstand).setValue(cstandCourse);
+        courseRef.child(linux).setValue(linuxCourse);
+        courseRef.child(cadvanced).setValue(cadvancedCourse);
+
+        //gonna be 3 groups 531 532 533
+        groupRef.removeValue();
+
+        String oneref = groupRef.push().getKey();
+        String tworef = groupRef.push().getKey();
+        String threeref = groupRef.push().getKey();
+
+        Group one = new Group(oneref, "531", 3);
+        HashMap<String,Boolean> mapCourse=new HashMap<>();
+        mapCourse.put(algebraCourse.getKey(),true);
+        mapCourse.put(cadvancedCourse.getKey(),true);
+        mapCourse.put(cstandCourse.getKey(),true);
+        mapCourse.put(linuxCourse.getKey(),true);
+        one.setCoursesKey(mapCourse);
+        one.setCoursesCount(mapCourse.size());
+
+        Group two = new Group(tworef, "532", 3);
+        mapCourse=new HashMap<>();
+        mapCourse.put(cadvancedCourse.getKey(),true);
+        mapCourse.put(cstandCourse.getKey(),true);
+        two.setCoursesKey(mapCourse);
+        two.setCoursesCount(mapCourse.size());
+
+        Group three = new Group(threeref, "533", 3);
+        mapCourse=new HashMap<>();
+        mapCourse.put(algebraCourse.getKey(),true);
+        mapCourse.put(linuxCourse.getKey(),true);
+        three.setCoursesKey(mapCourse);
+        three.setCoursesCount(mapCourse.size());
+
+
+        groupRef.child(oneref).setValue(one);
+        groupRef.child(tworef).setValue(two);
+        groupRef.child(threeref).setValue(three);
 
         //events
         eventRef.removeValue();
+
+        Map<Integer, Map<Event, String>> map = new HashMap<>();
+
         for (int i = 0; i < 6; ++i) {
+            DatabaseReference dayRef = eventRef.child(String.valueOf(i));
+            dayRef.removeValue();
+
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
             ArrayList<Event> events = new ArrayList<>();
             cal.set(Calendar.HOUR_OF_DAY, 8);
-            events.add(new Event(algebra, Event.COURSE, i, mateKey, cal.getTime(), cal.getTime()));
-            events.add(new Event(cstand, Event.LAB, i, cbKey, cal.getTime(), cal.getTime()));
+            events.add(new Event(null, algebraCourse, Event.COURSE, 0, new Location("Matemathicum"), cal.getTime(), cal.getTime()));
+            events.add(new Event(null, cstandCourse, Event.LAB, 0, new Location("Central building"), cal.getTime(), cal.getTime()));
             cal.set(Calendar.HOUR_OF_DAY, 14);
-            events.add(new Event(linux, Event.LAB, i, fsegaKey, cal.getTime(), cal.getTime()));
+            events.add(new Event(null, linuxCourse, Event.LAB, 0, new Location("FSEGA"), cal.getTime(), cal.getTime()));
             cal.set(Calendar.HOUR_OF_DAY, 19);
-            events.add(new Event(cadvanced, Event.LAB, i, fsegaKey, cal.getTime(), cal.getTime()));
+            events.add(new Event(null, cadvancedCourse, Event.LAB, 0, new Location("FSEGA"), cal.getTime(), cal.getTime()));
 
-            DatabaseReference dayRef = eventRef.child(String.valueOf(i));
-            dayRef.removeValue();
+            Map<Event, String> innerMap = new HashMap<>();
             for (Event e : events) {
-                dayRef.push().setValue(e);
+                e.setDay(i);
+                String ref = dayRef.push().getKey();
+                innerMap.put(e, ref);
+                Course c = e.getCourse();
+                e.setCourse(null);
+                e.setKey(ref);
+                dayRef.child(ref).setValue(e);
+                e.setCourse(c);
+                e.setKey(null);
+            }
+            map.put(i, innerMap);
+        }
+
+        //group-eventsWcourse && group-course-eventsWcourse
+        groupEventsWcourseRef.removeValue();
+        groupCourseEventsWcourseRef.removeValue();
+
+        DatabaseReference oneGroup = groupEventsWcourseRef
+                .child(oneref);
+        DatabaseReference twoGroup = groupEventsWcourseRef
+                .child(tworef);
+        DatabaseReference threeGroup = groupEventsWcourseRef
+                .child(threeref);
+
+        DatabaseReference oneGroupC = groupCourseEventsWcourseRef
+                .child(oneref);
+        DatabaseReference twoGroupC = groupCourseEventsWcourseRef
+                .child(tworef);
+        DatabaseReference threeGroupC = groupCourseEventsWcourseRef
+                .child(threeref);
+
+        for (Map<Event, String> m : map.values()) {
+            for (Event e : m.keySet()) {
+                oneGroup.child(m.get(e)).setValue(e);
+                oneGroupC.child(courseMap.get(e.getCourse())).child(m.get(e)).setValue(e);
+                if (e.getCourse() == cstandCourse || e.getCourse() == cadvancedCourse) {
+                    twoGroup.child(m.get(e)).setValue(e);
+                    twoGroupC.child(courseMap.get(e.getCourse())).child(m.get(e)).setValue(e);
+                }
+                if (e.getCourse() == algebraCourse || e.getCourse() == linuxCourse) {
+                    threeGroup.child(m.get(e)).setValue(e);
+                    threeGroupC.child(courseMap.get(e.getCourse())).child(m.get(e)).setValue(e);
+                }
             }
         }
 
-        //gonna be 3 groups 531 532 533
-        groupRef.removeValue();
-        HashMap<String, Boolean> map;
-        Group one = new Group("531", 3, null);
-        map = new HashMap<>();
-        map.put(algebra, true);
-        map.put(cstand, true);
-        map.put(linux, true);
-        map.put(cadvanced, true);
-        one.setCourses(map);
-        groupRef.push().setValue(one);
+        //
 
-        Group two = new Group("532", 3, null);
-        map = new HashMap<>();
-        map.put(algebra, true);
-        map.put(cadvanced, true);
-        two.setCourses(map);
-        groupRef.push().setValue(two);
-
-        Group three = new Group("533", 3, null);
-        map = new HashMap<>();
-        map.put(linux, true);
-        map.put(cadvanced, true);
-        three.setCourses(map);
-        groupRef.push().setValue(three);
     }
 
+    @Override
     public void deleteTestData() {
-        FirebaseDatabase.getInstance().getReference().child("test").removeValue();
+        FirebaseDatabase.getInstance().getReference().child("test1").removeValue();
+    }
+
+    @Override
+    public void validateKeysOnGroups(Set<Group> table, GroupsValueEventListener validationListener) {
+        validationListener.onGroupsChange(table);
     }
 }

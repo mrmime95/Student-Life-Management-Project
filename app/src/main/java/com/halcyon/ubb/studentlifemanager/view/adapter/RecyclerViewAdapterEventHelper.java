@@ -2,6 +2,7 @@ package com.halcyon.ubb.studentlifemanager.view.adapter;
 
 import android.databinding.ObservableList;
 
+import com.halcyon.ubb.studentlifemanager.model.timetable.Course;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 import com.halcyon.ubb.studentlifemanager.model.timetable.EventComparators;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
@@ -44,7 +45,7 @@ abstract class RecyclerViewAdapterEventHelper {
                 int ihour = calendar.get(Calendar.HOUR_OF_DAY);
                 if (ihour != hour) {
                     calendar.set(Calendar.MINUTE, 0);
-                    viewModels.add(new EventViewModel(new Event("#FAKE",calendar.getTime())));
+                    viewModels.add(new EventViewModel(new Event(new Course("#FAKE",null),calendar.getTime())));
                 }
                 viewModels.add(new EventViewModel(event));
                 hour=ihour;

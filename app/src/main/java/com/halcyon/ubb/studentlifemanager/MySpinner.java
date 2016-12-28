@@ -70,7 +70,7 @@ public class MySpinner extends AppCompatSpinner{
                     list.add(name);
                     Log.d("INFO", "added " + name);
                 }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item, list);
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,R.layout.main_spinner_textview, list);
                 arrayAdapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
                 setAdapter(arrayAdapter);
             }

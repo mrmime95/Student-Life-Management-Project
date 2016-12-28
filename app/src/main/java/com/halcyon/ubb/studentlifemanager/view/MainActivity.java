@@ -18,7 +18,7 @@ import com.halcyon.ubb.studentlifemanager.view.fragment.CourseFragment;
 import com.halcyon.ubb.studentlifemanager.view.fragment.ReminderFragment;
 import com.halcyon.ubb.studentlifemanager.view.fragment.TimetableFragment;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,DatabaseProvider {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private int mCurrentlySelected;
     private CourseFragment mCourseFragment;
     private ReminderFragment mReminderFragment;
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //set windowsDecor white => prevent overdraw
@@ -36,10 +37,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         BottomNavigationView nav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
         //nav
         nav.setOnNavigationItemSelectedListener(this);
-
-        mReminderFragment = new ReminderFragment();
-        mCourseFragment = new CourseFragment();
-        mTimetableFragment = new TimetableFragment();
+        mCourseFragment=new CourseFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, mCourseFragment).commit();
     }
 
@@ -47,16 +45,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
         if (mCurrentlySelected==id) return false;
-
-        mTimeTable=null;
-        mFrame.removeAllViews();
-        mSpinnerTextView=mSpinner.findViewById(R.id.spinner_textView);
-
-        mToolbar.setVisibility(View.GONE);
-        mToolbar.setVisibility(View.GONE);
-        mTabsLayout.setVisibility(View.GONE);
-        if (mCurrentlySelected==id)
-            return false;
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         //transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
@@ -66,9 +54,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 transaction.replace(R.id.main_frame, mCourseFragment);
                 break;
             case R.id.tab_reminders:
+                if (mReminderFragment==null)
+                    mReminderFragment = new ReminderFragment();
                 transaction.replace(R.id.main_frame, mReminderFragment);
                 break;
             case R.id.tab_timetable:
+                if (mTimetableFragment==null)
+                    mTimetableFragment = new TimetableFragment();
                 transaction.replace(R.id.main_frame, mTimetableFragment);
                 break;
         }
@@ -77,10 +69,5 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.main_frame));
         mCurrentlySelected=id;
         return true;
-    }
-
-    @Override
-    public Database getDatabase() {
-        return FirebaseDB.getInstance();
     }
 }

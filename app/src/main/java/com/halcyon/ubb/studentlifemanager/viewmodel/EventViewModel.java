@@ -41,6 +41,6 @@ public class EventViewModel {
         location.set(event.getLocation()==null?"Loading..":event.getLocation().getShortName());
         type.set(event.getTypeString()==null?"Loading..":event.getTypeString());
         shortTitle.set(type.get() + " • " + location.get());
-        isFake.set(event.getCourseKey()!=null && event.getCourseKey().compareTo("#FAKE")==0);
+        isFake.set(event.getCourse().getKey()!=null && event.getCourse().getKey().compareTo("#FAKE")==0);
     }
 }

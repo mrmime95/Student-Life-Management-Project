@@ -11,6 +11,6 @@ import java.util.Map;
  */
 
 public interface CoursesEventValueListener {
-    void onEventsListChange(Map<String, List<Event>> events, boolean b);
+    void onEventsListChange(List<Event> events);
     void onCancelled(Exception e);
 }
