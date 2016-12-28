@@ -44,7 +44,7 @@ abstract class RecyclerViewAdapterEventHelper {
                 int ihour = calendar.get(Calendar.HOUR_OF_DAY);
                 if (ihour != hour) {
                     calendar.set(Calendar.MINUTE, 0);
-                    viewModels.add(new EventViewModel(new Event(null,null,calendar.getTime(),null)));
+                    viewModels.add(new EventViewModel(new Event("#FAKE",calendar.getTime())));
                 }
                 viewModels.add(new EventViewModel(event));
                 hour=ihour;

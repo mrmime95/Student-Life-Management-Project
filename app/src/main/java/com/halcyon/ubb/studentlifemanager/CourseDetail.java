@@ -35,10 +35,10 @@ public class CourseDetail extends AppCompatActivity {
         courseDescription.setText(getIntent().getStringExtra("courseDescription"));
         courseAttachment.setText(getIntent().getStringExtra("attachmentName"));
 
-        Window window = this.getWindow();
+        /*Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.supportBarColor));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.supportBarColor));*/
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

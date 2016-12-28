@@ -34,11 +34,12 @@ public class RecyclerViewEventBindingAdapter extends RecyclerViewBindingAdapter<
 
     @Override
     protected void listChanged() {
-        int size=mUIItems.size();
-        mUIItems.clear();
-        notifyItemRangeRemoved(0,size);
-        mUIItems= RecyclerViewAdapterEventHelper.createEventsForRecycler(mItems);
-        notifyItemRangeInserted(0,mUIItems.size());
+        //int size=mUIItems.size();
+        //mUIItems.clear();
+        //notifyItemRangeRemoved(0,size);
+        mUIItems=RecyclerViewAdapterEventHelper.createEventsForRecycler(mItems);
+        //notifyItemRangeInserted(0,mUIItems.size());
+        notifyDataSetChanged();
     }
 
     @Override
@@ -49,8 +50,7 @@ public class RecyclerViewEventBindingAdapter extends RecyclerViewBindingAdapter<
 
         EventViewModel item=mUIItems.get(position);
 
-        //event name cannot be null only if its fake and it show starting time
-        if (item.title.get()==null)
+        if (item.isFake.get())
             return  EVENT_START;
 
         return EVENT;
