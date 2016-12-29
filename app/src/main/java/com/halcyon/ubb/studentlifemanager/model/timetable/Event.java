@@ -3,6 +3,7 @@ package com.halcyon.ubb.studentlifemanager.model.timetable;
 import android.support.annotation.IntDef;
 
 import com.google.firebase.database.Exclude;
+import com.halcyon.ubb.studentlifemanager.model.course.Course;
 
 import java.lang.annotation.Retention;
 import java.util.Date;

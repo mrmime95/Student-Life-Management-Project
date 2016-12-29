@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".view.MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,22 +34,13 @@
         <!-- TODO CR: Close XML tags if there isn't any content between them. [Peter] -->
         <activity android:name=".CourseDetail" />
         <activity
-            android:name=".view.TimetableSettingsActivity"
+            android:name=".ui.timetable.usersettings.TimetableSettingsActivity"
             android:label="@string/title_activity_timetable_settings"
-            android:parentActivityName=".view.MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.Base">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.halcyon.ubb.studentlifemanager.view.MainActivity" />
-        </activity>
-        <activity
-            android:name=".view.LocalTimetableSettingsActivity"
-            android:label="@string/title_activity_local_timetable_settings"
-            android:parentActivityName=".view.TimetableSettingsActivity"
-            android:theme="@style/AppTheme.Base">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.halcyon.ubb.studentlifemanager.view.TimetableSettingsActivity" />
+                android:value="com.halcyon.ubb.studentlifemanager.ui.MainActivity" />
         </activity>
     </application>
 

@@ -3,6 +3,8 @@ package com.halcyon.ubb.studentlifemanager.model.timetable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.halcyon.ubb.studentlifemanager.model.course.Course;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

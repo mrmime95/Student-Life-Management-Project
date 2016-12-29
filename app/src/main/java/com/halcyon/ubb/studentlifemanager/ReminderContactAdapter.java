@@ -10,13 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.halcyon.ubb.studentlifemanager.database.SQLiteDB;
+import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
+import com.halcyon.ubb.studentlifemanager.database.local.reminder.ReminderDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
+ *
  * Created by Szilard on 09.12.2016.
  */
 
@@ -67,7 +69,7 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
         private ArrayList<ReminderContact> contacts = new ArrayList<ReminderContact>();
         private Context ctx;
         private TextView rem_name, rem_date, rem_time;
-        private SQLiteDB db;
+        private ReminderDatabase db;
         private RecyclerView recyclerView;
         private ReminderControl reminderControl;
         public ContactViewHolder(View view, ArrayList<ReminderContact> arrayList, final Context ctx, final RecyclerView recyclerView, final ReminderControl reminderControl) {
@@ -76,7 +78,7 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
             this.ctx = ctx;
             this.recyclerView = recyclerView;
             this.reminderControl = reminderControl;
-            db = new SQLiteDB(this.ctx);
+            db = DatabaseProvider.getInstance().getReminderDatabase();
             view.findViewById(R.id.dropBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

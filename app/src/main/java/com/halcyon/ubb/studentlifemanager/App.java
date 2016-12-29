@@ -5,7 +5,7 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
-import com.halcyon.ubb.studentlifemanager.view.TimetableSettingsActivity;
+import com.halcyon.ubb.studentlifemanager.ui.timetable.usersettings.TimetableSettingsActivity;
 
 /**
  *
