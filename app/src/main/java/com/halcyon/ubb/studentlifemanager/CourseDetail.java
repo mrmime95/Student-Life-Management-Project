@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 public class CourseDetail extends AppCompatActivity {
-    private ImageView imgView;
+    private ImageView imgView, courseAttachmentIcon;
     private TextView courseTitle, courseDescription, courseAttachment;
     private Toolbar courseToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout = null;
@@ -34,12 +35,12 @@ public class CourseDetail extends AppCompatActivity {
         courseTitle.setText(getIntent().getStringExtra("courseTitle"));
         courseDescription.setText(getIntent().getStringExtra("courseDescription"));
         courseAttachment.setText(getIntent().getStringExtra("attachmentName"));
+        courseAttachmentIcon = (ImageView)findViewById(R.id.attachmentIcon);
 
-        /*Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.supportBarColor));*/
-
+        if (courseAttachment.getText().toString().equals("none")){
+            courseAttachment.setVisibility(View.GONE);
+            courseAttachmentIcon.setVisibility(View.GONE);
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();

@@ -4,17 +4,17 @@ package com.halcyon.ubb.studentlifemanager;
  * Created by Szilard on 09.12.2016.
  */
 
-public class ReminderContact {
+public class Reminder {
     private int id;
     private String name, date, time;
 
-    public ReminderContact(String name, String date, String time) {
+    public Reminder(String name, String date, String time) {
         this.name = name;
         this.date = date;
         this.time = time;
     }
 
-    public ReminderContact(int id, String name, String date, String time) {
+    public Reminder(int id, String name, String date, String time) {
         this.id = id;
         this.name = name;
         this.date = date;

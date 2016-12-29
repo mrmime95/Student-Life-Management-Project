@@ -2,7 +2,6 @@ package com.halcyon.ubb.studentlifemanager.view.fragment;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Fragment;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -21,7 +20,7 @@ import android.widget.TimePicker;
 
 import com.halcyon.ubb.studentlifemanager.NotifyReceiver;
 import com.halcyon.ubb.studentlifemanager.R;
-import com.halcyon.ubb.studentlifemanager.ReminderContact;
+import com.halcyon.ubb.studentlifemanager.Reminder;
 import com.halcyon.ubb.studentlifemanager.ReminderControl;
 import com.halcyon.ubb.studentlifemanager.database.SQLiteDB;
 
@@ -109,7 +108,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
                 if (timeChoosed && dateChoosed){
                     timeChoosed =  false;
                     dateChoosed = false;
-                    ReminderContact temp = new ReminderContact(1, reminderName.getText().toString().replace("\n","")
+                    Reminder temp = new Reminder(1, reminderName.getText().toString().replace("\n","")
                             , reminderDate.getText().toString().replace("\n","")
                             , reminderTime.getText().toString().replace("\n",""));
 

@@ -8,12 +8,10 @@ import java.util.ArrayList;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.halcyon.ubb.studentlifemanager.ReminderContact;
+import com.halcyon.ubb.studentlifemanager.Reminder;
 
 public class SQLiteDB extends SQLiteOpenHelper implements SQLite{
 
@@ -43,7 +41,7 @@ public class SQLiteDB extends SQLiteOpenHelper implements SQLite{
     }
 
     @Override
-    public boolean insert(ReminderContact contact) {
+    public boolean insert(Reminder contact) {
         String name = contact.getName();
         String date = contact.getDate();
         String time = contact.getTime();
@@ -58,7 +56,7 @@ public class SQLiteDB extends SQLiteOpenHelper implements SQLite{
     }
 
     @Override
-    public boolean delete(ReminderContact contact) {
+    public boolean delete(Reminder contact) {
         SQLiteDatabase database = getWritableDatabase();
         return  database.delete(CONTACTS_TABLE_NAME, CONTACTS_COLUMN_NAME + "= \"" + contact.getName() + "\"" +
                 " and " + CONTACTS_COLUMN_DATE + "=\"" + contact.getDate() + "\"" + " and " +
@@ -66,14 +64,14 @@ public class SQLiteDB extends SQLiteOpenHelper implements SQLite{
     }
 
     @Override
-    public ArrayList<ReminderContact> getAllReminder() {
-        ArrayList<ReminderContact> array_list = new ArrayList<ReminderContact>();
+    public ArrayList<Reminder> getAllReminder() {
+        ArrayList<Reminder> array_list = new ArrayList<Reminder>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from " + CONTACTS_TABLE_NAME, null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
-            ReminderContact temp = new ReminderContact(1,
+            Reminder temp = new Reminder(1,
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)),
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_DATE)),
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_TIME))

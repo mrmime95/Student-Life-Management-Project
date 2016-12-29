@@ -20,13 +20,13 @@ import java.util.Calendar;
  * Created by Szilard on 09.12.2016.
  */
 
-public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContactAdapter.ContactViewHolder> {
-    private ArrayList<ReminderContact> contacts = new ArrayList<ReminderContact>();
+public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecyclerAdapter.ContactViewHolder> {
+    private ArrayList<Reminder> contacts = new ArrayList<Reminder>();
     private Context ctx;
     private RecyclerView recyclerView;
     private ReminderControl reminderControl;
     private Calendar mCalendar;
-    public ReminderContactAdapter(ArrayList<ReminderContact> contacts, Context ctx, RecyclerView recyclerView, ReminderControl reminderControl){
+    public ReminderRecyclerAdapter(ArrayList<Reminder> contacts, Context ctx, RecyclerView recyclerView, ReminderControl reminderControl){
         this.contacts = contacts;
         this.ctx = ctx;
         this.recyclerView = recyclerView;
@@ -48,7 +48,7 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
         mCalendar.add(Calendar.DAY_OF_YEAR, 1 );
         String tomorrowDate = df.format(mCalendar.getTime());
         mCalendar.add(Calendar.DAY_OF_YEAR, -1);
-        ReminderContact reminderContact = contacts.get(position);
+        Reminder reminderContact = contacts.get(position);
         holder.rem_time.setText(reminderContact.getTime());
         //Log.d("INFO", formattedDate + " " + reminderContact.getDate());
         if (reminderContact.getDate().toLowerCase().equals(formattedDate.replace(".",""))) holder.rem_date.setText("Today");
@@ -64,13 +64,13 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder
     {
-        private ArrayList<ReminderContact> contacts = new ArrayList<ReminderContact>();
+        private ArrayList<Reminder> contacts = new ArrayList<Reminder>();
         private Context ctx;
         private TextView rem_name, rem_date, rem_time;
         private SQLiteDB db;
         private RecyclerView recyclerView;
         private ReminderControl reminderControl;
-        public ContactViewHolder(View view, ArrayList<ReminderContact> arrayList, final Context ctx, final RecyclerView recyclerView, final ReminderControl reminderControl) {
+        public ContactViewHolder(View view, ArrayList<Reminder> arrayList, final Context ctx, final RecyclerView recyclerView, final ReminderControl reminderControl) {
             super(view);
             this.contacts = arrayList;
             this.ctx = ctx;
@@ -87,8 +87,8 @@ public class ReminderContactAdapter extends RecyclerView.Adapter<ReminderContact
                                 switch (which){
                                     case DialogInterface.BUTTON_POSITIVE:
                                         int position = getAdapterPosition();
-                                        ReminderContact contact = contacts.get(position);
-                                        ReminderContact deleteReminder = new ReminderContact(1, contact .getName(), contact.getDate(), contact.getTime());
+                                        Reminder contact = contacts.get(position);
+                                        Reminder deleteReminder = new Reminder(1, contact .getName(), contact.getDate(), contact.getTime());
                                         try {
                                             boolean ok = false;
                                             ok = db.delete(deleteReminder);

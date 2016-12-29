@@ -48,19 +48,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         int id=item.getItemId();
         if (mCurrentlySelected==id) return false;
 
-        mTimeTable=null;
-        mFrame.removeAllViews();
-        mSpinnerTextView=mSpinner.findViewById(R.id.spinner_textView);
-
-        mToolbar.setVisibility(View.GONE);
-        mToolbar.setVisibility(View.GONE);
-        mTabsLayout.setVisibility(View.GONE);
         if (mCurrentlySelected==id)
             return false;
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-
         switch (id) {
             case R.id.tab_courses:
                 transaction.replace(R.id.main_frame, mCourseFragment);
@@ -73,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
         }
         transaction.commit();
-
-        //TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.main_frame));
         mCurrentlySelected=id;
         return true;
     }

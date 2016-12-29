@@ -1,6 +1,6 @@
 package com.halcyon.ubb.studentlifemanager.database;
 
-import com.halcyon.ubb.studentlifemanager.ReminderContact;
+import com.halcyon.ubb.studentlifemanager.Reminder;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 
 public interface SQLite {
-    boolean insert(ReminderContact contact);
-    boolean delete(ReminderContact contact);
-    ArrayList<ReminderContact> getAllReminder();
+    boolean insert(Reminder contact);
+    boolean delete(Reminder contact);
+    ArrayList<Reminder> getAllReminder();
 }

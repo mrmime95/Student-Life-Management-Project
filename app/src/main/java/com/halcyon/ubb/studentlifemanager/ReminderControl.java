@@ -22,9 +22,9 @@ public class ReminderControl {
     public void updateReminders(RecyclerView recyclerView, SQLiteDB db)
     {
         try {
-            reminderAdapter = new ReminderContactAdapter(db.getAllReminder(), ctx, recyclerView, new ReminderControl(ctx));
+            reminderAdapter = new ReminderRecyclerAdapter(db.getAllReminder(), ctx, recyclerView, new ReminderControl(ctx));
         } catch (Exception e){
-            reminderAdapter = new ReminderContactAdapter(new ArrayList<ReminderContact>(), ctx, recyclerView, new ReminderControl(ctx));
+            reminderAdapter = new ReminderRecyclerAdapter(new ArrayList<Reminder>(), ctx, recyclerView, new ReminderControl(ctx));
         }
         recyclerView.setHasFixedSize(true);
         reminderLayoutManager = new LinearLayoutManager(ctx);
