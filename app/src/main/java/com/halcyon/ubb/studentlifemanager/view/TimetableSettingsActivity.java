@@ -5,130 +5,42 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
-import android.view.MenuItem;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
+import com.halcyon.ubb.studentlifemanager.database.listener.OperationCompleteListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static com.halcyon.ubb.studentlifemanager.database.LocalTimetableDatabase.PREF_DIVIDER;
 
-/**
- * A {@link PreferenceActivity} that presents a set of application settings. On
- * handset devices, settings are presented as a single list. On tablets,
- * settings are split by category, with category headers shown to the left of
- * the list of settings.
- * <p>
- * See <a href="http://developer.android.com/design/patterns/settings.html">
- * Android Design: Settings</a> for design guidelines and the <a
- * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
- * API Guide</a> for more information on developing a Settings UI.
- */
 public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
 
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
-
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
-
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
-
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
-                }
-
-            } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
-            }
-            return true;
-        }
-    };
-
-
-    /**
-     * Helper method to determine if the device has an extra-large screen. For
-     * example, 10" tablets are extra-large.
-     */
     private static boolean isXLargeTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-    }
-
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
     }
 
     @Override
@@ -142,9 +54,6 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
                 .commit();
     }
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -192,16 +101,78 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
                 || TimetablePreferenceFragment.class.getName().equals(fragmentName);
     }
 
+    public static void initSettings(Context context) {
+            initVisibleTimetables(context);
+    }
+
+    private static void initVisibleTimetables(final Context context) {
+        DatabaseProvider.getInstance().getRemoteDatabase()
+                .fetchGroups(new GroupsValueEventListener() {
+                    @Override
+                    public void onGroupsChange(Set<Group> groups) {
+                        Set<String> entriesSet=new HashSet<>();
+
+                        for (Group group:groups)
+                            entriesSet.add(group.getKey()+PREF_DIVIDER+group.getName());
+
+                            PreferenceManager.getDefaultSharedPreferences(context)
+                                    .edit().putStringSet("visible_timetables",entriesSet).apply();
+                    }
+
+                    @Override
+                    public void onCancelled(Exception e) {
+
+                    }
+                });
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class TimetablePreferenceFragment extends PreferenceFragment {
+        private GroupsValueEventListener mRemoteGroupsListener=new GroupsValueEventListener() {
+            @Override
+            public void onGroupsChange(Set<Group> groups) {
+                MultiSelectListPreference preference= (MultiSelectListPreference) findPreference("visible_timetables");
+                CharSequence[] entries=new CharSequence[groups.size()];
+                CharSequence[] entrieValues=new CharSequence[groups.size()];
 
+                int i=0;
+                for (Group group:groups) {
+                    entries[i]=group.getName();
+                    entrieValues[i++]=group.getKey()+PREF_DIVIDER+group.getName();
+                }
 
+                preference.setPersistent(true);
+                preference.setEntries(entries);
+                preference.setEntryValues(entrieValues);
+            }
+
+            @Override
+            public void onCancelled(Exception e) {
+
+            }
+        };
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_timetable_main);
             setHasOptionsMenu(true);
+
+            DatabaseProvider.getInstance().getRemoteDatabase()
+                    .addGroupsValueEventListener(mRemoteGroupsListener);
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+            DatabaseProvider.getInstance().getRemoteDatabase()
+                    .removeGroupsValueEventListener(mRemoteGroupsListener);
+        }
+
+
+        @Override
+        public void onResume() {
+            super.onResume();
 
             DatabaseProvider.getInstance().getLocalTimetableDatabase()
                     .readLocalTimetables(getActivity(),
@@ -230,30 +201,40 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
 
                                 }
                             });
+        }
 
-            DatabaseProvider.getInstance().getRemoteDatabase()
-                    .addGroupsValueEventListener(new GroupsValueEventListener() {
-                        @Override
-                        public void onGroupsChange(Set<Group> groups) {
-                            MultiSelectListPreference preference= (MultiSelectListPreference) findPreference("visible_timetables");
-                            CharSequence[] entries=new CharSequence[groups.size()];
-                            CharSequence[] entrieValues=new CharSequence[groups.size()];
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = super.onCreateView(inflater, container, savedInstanceState);
 
-                            int i=0;
-                            for (Group group:groups) {
-                                entries[i]=group.getName();
-                                entrieValues[i++]=group.getKey()+PREF_DIVIDER+group.getName();
-                            }
+            FloatingActionButton fab=new FloatingActionButton(v.getContext());
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addNewLocalTimetable();
+                }
+            });
 
-                            preference.setEntries(entries);
-                            preference.setEntryValues(entrieValues);
-                        }
+            return v;
+        }
 
-                        @Override
-                        public void onCancelled(Exception e) {
+        private void addNewLocalTimetable() {
+            final Timetable table=new Timetable("Default timetable title");
+            DatabaseProvider.getInstance().getLocalTimetableDatabase()
+                    .writeLocalTimetable(getActivity(),table,
+                            new OperationCompleteListener() {
+                                @Override
+                                public void onComplete() {
+                                    Intent intent=new Intent(getActivity(),LocalTimetableSettingsActivity.class);
+                                    intent.putExtra(LocalTimetableSettingsActivity.PARAM_TIMETABLE,table);
 
-                        }
-                    });
+                                }
+
+                                @Override
+                                public void onFaliure() {
+
+                                }
+                            });
         }
 
         @Override

@@ -20,6 +20,8 @@ public interface Database {
     void addEventValueEventListener(List<Group> groups, @TimetableDay.Days int day, final CoursesEventValueListener listener);
     void removeEventValueEventListener(CoursesEventValueListener listener);
 
+    void fetchGroups(GroupsValueEventListener groupsValueEventListener);
+
     void addGroupsValueEventListener(GroupsValueEventListener groupsValueEventListener);
     void removeGroupsValueEventListener(GroupsValueEventListener groupsValueEventListener);
 

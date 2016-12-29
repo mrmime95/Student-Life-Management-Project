@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import com.halcyon.ubb.studentlifemanager.App;
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
@@ -116,27 +117,7 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
                         new LocalTimetableListener() {
                             @Override
                             public void onLocalTimetablesLoaded(final List<Timetable> tables) {
-                                if (tables.size()==0)
-                                    DatabaseProvider.getInstance().getRemoteDatabase()
-                                            .addGroupsValueEventListener(new GroupsValueEventListener() {
-                                                @Override
-                                                public void onGroupsChange(Set<Group> groups) {
-                                                    mTables.clear();
-                                                    for (Group group:groups) {
-                                                        Timetable timetable=new Timetable(group.getName());
-                                                        timetable.addGroup(group);
-                                                        mTables.add(timetable);
-                                                    }
-                                                    loadTables(mTables);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(Exception e) {
-
-                                                }
-                                            });
-                                else
-                                    loadTables(tables);
+                                loadTables(tables);
                             }
                         });
     }

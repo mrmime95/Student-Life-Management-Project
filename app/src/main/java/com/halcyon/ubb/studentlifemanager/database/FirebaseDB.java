@@ -107,7 +107,6 @@ public class FirebaseDB implements Database {
             }
         }
 
-
         mCoursesEventMap.put(listener, listenerMap);
     }
 
@@ -123,8 +122,7 @@ public class FirebaseDB implements Database {
         mCoursesEventMap.remove(listener);
     }
 
-    @Override
-    public void addGroupsValueEventListener(final GroupsValueEventListener listener) {
+    private void loadGroups(final GroupsValueEventListener listener, boolean once) {
         if (listener == null) return;
         ValueEventListener l = new ValueEventListener() {
             @Override
@@ -141,8 +139,23 @@ public class FirebaseDB implements Database {
                 listener.onCancelled(databaseError.toException());
             }
         };
-        FirebaseDatabase.getInstance().getReference().child("test1").child("groups").addValueEventListener(l);
-        mGroupsMap.put(listener, l);
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("test1").child("groups");
+        if (once)
+            ref.addListenerForSingleValueEvent(l);
+        else {
+            ref.addValueEventListener(l);
+            mGroupsMap.put(listener, l);
+        }
+    }
+
+    @Override
+    public void fetchGroups(GroupsValueEventListener listener) {
+        loadGroups(listener,true);
+    }
+
+    @Override
+    public void addGroupsValueEventListener(GroupsValueEventListener listener) {
+        loadGroups(listener,false);
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.Set;
 
 public class Timetable implements Parcelable {
     private String mName;
+    private String mID;
     private HashMap<Group, List<Course>> mTimetable;
 
     public Timetable(String name) {
@@ -22,8 +23,10 @@ public class Timetable implements Parcelable {
         mName=name;
     }
 
-    Timetable(Parcel in) {
+
+    private Timetable(Parcel in) {
         this(in.readString());
+        mID=in.readString();
         int size = in.readInt();
         for (int i=0;i<size;i++) {
             Group group=in.readParcelable(Group.class.getClassLoader());
@@ -31,6 +34,14 @@ public class Timetable implements Parcelable {
             in.readList(courses,Course.class.getClassLoader());
             mTimetable.put(group,courses);
         }
+    }
+
+    public void setID(String id) {
+        mID=id;
+    }
+
+    public String getID() {
+        return mID;
     }
 
     public void addGroup(Group group) {
@@ -66,6 +77,7 @@ public class Timetable implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(mName);
+        parcel.writeString(mID);
         parcel.writeInt(mTimetable.size());
         for (Group group :mTimetable.keySet()) {
             parcel.writeParcelable(group,flags);

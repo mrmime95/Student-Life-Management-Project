@@ -8,6 +8,7 @@ import android.support.v4.content.SharedPreferencesCompat;
 
 import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
+import com.halcyon.ubb.studentlifemanager.database.listener.OperationCompleteListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 
@@ -48,7 +49,12 @@ class FileLocalTimetableDB implements LocalTimetableDatabase {
     }
 
     @Override
-    public void readLocalTimetables(Activity activity, LocalTimetableListener listener) {
+    public void readLocalTimetables(Context context, LocalTimetableListener listener) {
         listener.onLocalTimetablesLoaded(new ArrayList<Timetable>());
+    }
+
+    @Override
+    public void writeLocalTimetable(Context context, Timetable table, OperationCompleteListener operationCompleteListener) {
+
     }
 }
