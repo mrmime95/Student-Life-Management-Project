@@ -3,10 +3,13 @@ package com.halcyon.ubb.studentlifemanager;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import com.halcyon.ubb.studentlifemanager.database.SQLiteDB;
+
+import com.halcyon.ubb.studentlifemanager.database.local.reminder.ReminderDatabase;
+
 import java.util.ArrayList;
 
 /**
+ *
  * Created by Szilard on 11.12.2016.
  */
 
@@ -19,7 +22,7 @@ public class ReminderControl {
     {
         this.ctx = ctx;
     }
-    public void updateReminders(RecyclerView recyclerView, SQLiteDB db)
+    public void updateReminders(RecyclerView recyclerView, ReminderDatabase db)
     {
         try {
             reminderAdapter = new ReminderRecyclerAdapter(db.getAllReminder(), ctx, recyclerView, new ReminderControl(ctx));

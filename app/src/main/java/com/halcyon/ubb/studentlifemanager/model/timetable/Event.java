@@ -3,6 +3,7 @@ package com.halcyon.ubb.studentlifemanager.model.timetable;
 import android.support.annotation.IntDef;
 
 import com.google.firebase.database.Exclude;
+import com.halcyon.ubb.studentlifemanager.model.course.Course;
 
 import java.lang.annotation.Retention;
 import java.util.Date;
@@ -22,13 +23,12 @@ public class Event {
     public static final int COURSE=0;
     public static final int LAB=1;
 
-    private String mCourseKey;
-    private String mLocationKey;
     private String mDescription;
     private @EventType int mType;
     private int mDay;
     private Location mLocation;
     private Course mCourse;
+    private String mKey;
 
 
     //public String location;
@@ -39,21 +39,23 @@ public class Event {
 
     //Firebase needs empty constructor
     public Event() {
+        mCourse=new Course();
     }
 
-    public Event(String courseKey,Date startingTime) {
+    public Event(Course course,Date startingTime) {
         this.startingTime=startingTime.getTime();
-        mCourseKey=courseKey;
+        mCourse=course;
     }
 
-    public Event(String courseKey,@EventType int type, String location) {
-        this.mCourseKey =courseKey;
-        this.mLocationKey =location;
+    public Event(String key,Course course,@EventType int type, Location location) {
+        mKey=key;
+        mCourse=course;
+        mLocation=location;
         mType=type;
     }
 
-    public Event(String courseKey, @EventType int type, @TimetableDay.Days int day, String locationKey, Date startingTime, Date endingTime) {
-        this(courseKey,type,locationKey);
+    public Event(String key,Course course, @EventType int type, @TimetableDay.Days int day, Location location, Date startingTime, Date endingTime) {
+        this(key,course,type,location);
         this.mDay=day;
         this.startingTime =startingTime==null?0:startingTime.getTime();
         this.endingTime =endingTime==null?0:endingTime.getTime();
@@ -67,20 +69,24 @@ public class Event {
         return mDay;
     }
 
-    public String getCourseKey() {
-        return mCourseKey;
+    public String getKey() {
+        return mKey;
     }
 
-    public void setCourseKey(String key) {
-        mCourseKey=key;
+    public void setCourse(Course course) {
+        mCourse = course;
     }
 
-    public String getLocationKey() {
-        return mLocationKey;
+    public Course getCourse() {
+        return mCourse;
     }
 
-    public void setLocationKey(String locationKey) {
-        mLocationKey =locationKey;
+    public void setKey(String key) {
+        mKey=key;
+    }
+
+    public void setCourseKey(Course course) {
+        mCourse=course;
     }
 
     public @EventType int getType() {
@@ -113,18 +119,8 @@ public class Event {
         mLocation = location;
     }
 
-    @Exclude
     public Location getLocation() {
         return mLocation;
-    }
-
-    public void setCourse(Course course) {
-        mCourse = course;
-    }
-
-    @Exclude
-    public Course getCourse() {
-        return mCourse;
     }
 
     @Exclude
@@ -140,10 +136,8 @@ public class Event {
 
     @Exclude
     public Event copy() {
-        Event newEvent = new Event(mCourseKey, mType, mDay, mLocationKey, getStartingDate(), getEndingDate());
+        Event newEvent = new Event(mKey,mCourse, mType, mDay, mLocation, getStartingDate(), getEndingDate());
         newEvent.setDescription(mDescription);
-        newEvent.setLocation(mLocation);
-        newEvent.setCourse(mCourse);
         return newEvent;
     }
 }

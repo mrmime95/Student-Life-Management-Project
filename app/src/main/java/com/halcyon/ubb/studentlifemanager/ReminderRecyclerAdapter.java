@@ -2,6 +2,7 @@ package com.halcyon.ubb.studentlifemanager;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,7 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.halcyon.ubb.studentlifemanager.database.SQLiteDB;
+import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
+import com.halcyon.ubb.studentlifemanager.database.local.reminder.ReminderDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,7 +69,7 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
         private ArrayList<Reminder> contacts = new ArrayList<Reminder>();
         private Context ctx;
         private TextView rem_name, rem_date, rem_time;
-        private SQLiteDB db;
+        private ReminderDatabase db;
         private RecyclerView recyclerView;
         private ReminderControl reminderControl;
         public ContactViewHolder(View view, ArrayList<Reminder> arrayList, final Context ctx, final RecyclerView recyclerView, final ReminderControl reminderControl) {
@@ -76,7 +78,7 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
             this.ctx = ctx;
             this.recyclerView = recyclerView;
             this.reminderControl = reminderControl;
-            db = new SQLiteDB(this.ctx);
+            db = DatabaseProvider.getInstance().getReminderDatabase();
             view.findViewById(R.id.dropBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

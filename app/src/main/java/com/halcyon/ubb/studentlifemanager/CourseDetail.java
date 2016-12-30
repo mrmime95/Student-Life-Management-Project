@@ -1,13 +1,11 @@
 package com.halcyon.ubb.studentlifemanager;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.halcyon.ubb.studentlifemanager.ui.course.detail.SmoothScrollBehavior;
 import com.squareup.picasso.Picasso;
 
 public class CourseDetail extends AppCompatActivity {
@@ -36,6 +35,18 @@ public class CourseDetail extends AppCompatActivity {
         courseDescription.setText(getIntent().getStringExtra("courseDescription"));
         courseAttachment.setText(getIntent().getStringExtra("attachmentName"));
         courseAttachmentIcon = (ImageView)findViewById(R.id.attachmentIcon);
+
+        //android CollapsingToolbarLayout's fling is broken
+        // custom behaviour for AppBarLayout solves this for now
+        //TODO: Change back to android implementation once it is working.
+        AppBarLayout appBarLayout= (AppBarLayout) findViewById(R.id.appBarLayout);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        params.setBehavior(new SmoothScrollBehavior(R.id.nested_scroll_view));
+
+        /*Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.supportBarColor));*/
 
         if (courseAttachment.getText().toString().equals("none")){
             courseAttachment.setVisibility(View.GONE);

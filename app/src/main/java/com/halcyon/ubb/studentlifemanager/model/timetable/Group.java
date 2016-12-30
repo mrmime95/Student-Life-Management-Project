@@ -1,27 +1,52 @@
 package com.halcyon.ubb.studentlifemanager.model.timetable;
 
-import com.google.firebase.database.Exclude;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
+ *
  * Created by Baroti Csaba on 12/23/2016.
  */
 
-public class Group {
+@SuppressWarnings("unused")
+public class Group implements Parcelable {
     private String mName;
     private int mYear;
-    private HashMap<String,Boolean> mCourses;
+    private String mKey;
+    private HashMap<String,Boolean> mCoursesKey;
+    private int mCoursesCount;
 
     public Group() { }
 
-    public Group(String name,int year,HashMap<String,Boolean> courses) {
-        this.mCourses =courses;
-        this.mName =name;
-        this.mYear =year;
+    public Group(String key,String name,int year) {
+        mName =name;
+        mYear =year;
+        mKey  =key;
+    }
+
+    public Group(Parcel in) {
+        mName=in.readString();
+        mYear=in.readInt();
+        mCoursesCount=in.readInt();
+        mKey=in.readString();
+        //noinspection unchecked
+        mCoursesKey= (HashMap<String, Boolean>) in.readSerializable();
+    }
+
+    public int getCoursesCount() {
+        return mCoursesKey.size();
+    }
+
+    public void setCoursesCount(int coursesCount) {
+        mCoursesCount=coursesCount;
     }
 
     public String getName() {
@@ -40,19 +65,44 @@ public class Group {
         this.mYear = year;
     }
 
-    public HashMap<String, Boolean> getCourses() {
-        return mCourses;
+    public String getKey() {
+        return mKey;
     }
 
-    public void setCourses(HashMap<String, Boolean> courses) {
-        this.mCourses = courses;
+    public void setKey(String key) {
+        mKey=key;
     }
 
-    @Exclude
-    public List<String> getCoursesNames() {
-        List<String> names=new ArrayList<>();
-        for (String name:mCourses.keySet())
-            names.add(name);
-        return names;
+    public HashMap<String,Boolean> getCoursesKey() {
+        return mCoursesKey;
     }
+
+    public void setCoursesKey(HashMap<String, Boolean> coursesKey) {
+        mCoursesKey=coursesKey;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mName);
+        parcel.writeInt(mYear);
+        parcel.writeInt(mCoursesCount);
+        parcel.writeString(mKey);
+        parcel.writeSerializable(mCoursesKey);
+    }
+
+    public static final Parcelable.Creator<Group> CREATOR
+            = new Parcelable.Creator<Group>() {
+        public Group createFromParcel(Parcel in) {
+            return new Group(in);
+        }
+
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
 }

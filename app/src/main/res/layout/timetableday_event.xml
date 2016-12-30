@@ -5,7 +5,7 @@
 
         <variable
             name="item"
-            type="com.halcyon.ubb.studentlifemanager.viewmodel.EventViewModel" />
+            type="com.halcyon.ubb.studentlifemanager.ui.timetable.viewmodel.EventViewModel" />
     </data>
 
     <LinearLayout
