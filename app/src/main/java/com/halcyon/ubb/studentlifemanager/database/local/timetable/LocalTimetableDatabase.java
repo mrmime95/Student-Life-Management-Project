@@ -19,4 +19,6 @@ public interface LocalTimetableDatabase {
     void readWantedTimetables(Context context, LocalTimetableListener listener);
     void readLocalTimetables(Context context, LocalTimetableListener listener);
     void writeLocalTimetable(Context context, Timetable table, OperationCompleteListener operationCompleteListener);
+
+    void removeWantedTimetable(Context context, Timetable table);
 }

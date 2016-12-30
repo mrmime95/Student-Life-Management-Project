@@ -3,11 +3,8 @@ package com.halcyon.ubb.studentlifemanager.model.timetable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.halcyon.ubb.studentlifemanager.model.course.Course;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,10 +15,10 @@ import java.util.Set;
 public class Timetable implements Parcelable {
     private String mName;
     private String mID;
-    private HashMap<Group, List<Course>> mTimetable;
+    private Set<Group> mGroups;
 
     public Timetable(String name) {
-        mTimetable=new HashMap<>();
+        mGroups =new HashSet<>();
         mName=name;
     }
 
@@ -30,12 +27,8 @@ public class Timetable implements Parcelable {
         this(in.readString());
         mID=in.readString();
         int size = in.readInt();
-        for (int i=0;i<size;i++) {
-            Group group=in.readParcelable(Group.class.getClassLoader());
-            List<Course> courses=new ArrayList<>();
-            in.readList(courses,Course.class.getClassLoader());
-            mTimetable.put(group,courses);
-        }
+        //noinspection unchecked
+        mGroups=new HashSet<>(in.readArrayList(Group.class.getClassLoader()));
     }
 
     public void setID(String id) {
@@ -47,28 +40,19 @@ public class Timetable implements Parcelable {
     }
 
     public void addGroup(Group group) {
-        mTimetable.put(group,null);
+        mGroups.add(group);
     }
 
     public String getName() {
         return mName;
     }
 
-    public void addGroupWithCourses(Group group,List<Course> courses) {
-        List<Course> list = mTimetable.get(group);
-        if (list!=null)
-            list.addAll(courses);
-        else
-            list=courses;
-        mTimetable.put(group,list);
-    }
-
-    public List<Course> getCourses(Group group) {
-        return mTimetable.get(group);
-    }
-
     public Set<Group> getGroups() {
-        return mTimetable.keySet();
+        return mGroups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        mGroups=groups;
     }
 
     @Override
@@ -80,11 +64,8 @@ public class Timetable implements Parcelable {
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(mName);
         parcel.writeString(mID);
-        parcel.writeInt(mTimetable.size());
-        for (Group group :mTimetable.keySet()) {
-            parcel.writeParcelable(group,flags);
-            parcel.writeList(mTimetable.get(group));
-        }
+        parcel.writeInt(mGroups.size());
+        parcel.writeList(new ArrayList<>(mGroups));
     }
 
     public static final Parcelable.Creator<Timetable> CREATOR
@@ -97,4 +78,5 @@ public class Timetable implements Parcelable {
             return new Timetable[size];
         }
     };
+
 }

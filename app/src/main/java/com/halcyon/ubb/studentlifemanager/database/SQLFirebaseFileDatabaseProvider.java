@@ -7,6 +7,7 @@ import com.halcyon.ubb.studentlifemanager.database.local.reminder.SQLiteReminder
 import com.halcyon.ubb.studentlifemanager.database.remote.FirebaseDB;
 
 /**
+ *
  * Created by Baroti Csaba on 12/27/2016.
  */
 public class SQLFirebaseFileDatabaseProvider extends DatabaseProvider {

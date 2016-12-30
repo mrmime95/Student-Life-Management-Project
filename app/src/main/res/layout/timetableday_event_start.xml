@@ -1,4 +1,5 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -38,6 +39,7 @@
             android:layout_weight="4"
             android:fontFamily="Roboto-Medium"
             android:text="@{item.startingTime}"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="8:00"/>
     </LinearLayout>
 </layout>

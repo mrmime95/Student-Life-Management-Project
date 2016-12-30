@@ -53,4 +53,19 @@ public class FileLocalTimetableDatabase implements LocalTimetableDatabase {
     public void writeLocalTimetable(Context context, Timetable table, OperationCompleteListener operationCompleteListener) {
 
     }
+
+    @Override
+    public void removeWantedTimetable(Context context,Timetable table) {
+        Set<String> set = PreferenceManager.getDefaultSharedPreferences(context).getStringSet("visible_timetables",
+                new HashSet<String>());
+
+        Set<String> newSet=new HashSet<>();
+
+        for (Group group:table.getGroups())
+            if(!set.contains(group.getKey()+PREF_DIVIDER+group.getName()))
+                newSet.add(group.getKey()+PREF_DIVIDER+group.getName());
+
+        PreferenceManager.getDefaultSharedPreferences(context).edit()
+                .putStringSet("visible_timetables",newSet).apply();
+    }
 }

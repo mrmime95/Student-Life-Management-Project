@@ -206,7 +206,7 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             LinearLayout v = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
 
-            FloatingActionButton fab=new FloatingActionButton(v.getContext());
+            /*FloatingActionButton fab=new FloatingActionButton(v.getContext());
             v.addView(fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -214,7 +214,7 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
                     addNewLocalTimetable();
                 }
             });
-            fab.show();
+            fab.show();*/
 
             return v;
         }

@@ -37,14 +37,12 @@ public class FirebaseDB implements RemoteDatabase {
     public FirebaseDB(Context context) {
         mCoursesEventMap = new HashMap<>();
         mGroupsMap = new HashMap<>();
-        Firebase.setAndroidContext(context);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     //TODO: Documentation...
     @Override
-    public void addEventValueEventListener(List<Group> groups, @TimetableDay.Days int day, final CoursesEventValueListener listener) {
-        if (listener == null || groups==null && groups.size()==0) return;
+    public void addEventValueEventListener(Set<Group> groups, @TimetableDay.Days int day, final CoursesEventValueListener listener) {
+        if (listener == null || groups==null || groups.size()==0) return;
 
         final AtomicInteger atom = new AtomicInteger(groups.size());
         final List<Event> events = new ArrayList<>();
@@ -67,6 +65,7 @@ public class FirebaseDB implements RemoteDatabase {
                 listenerRef = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        events.clear();
                         for (DataSnapshot post:dataSnapshot.getChildren())
                             events.add(post.getValue(Event.class));
                         if (atom.decrementAndGet()<=0)
@@ -90,6 +89,11 @@ public class FirebaseDB implements RemoteDatabase {
                     listenerRef = new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            //TODO TESTING, possible bug: course collision
+                            String courseKey = dataSnapshot.getKey();
+                            for (int i=events.size()-1;i>=0;--i)
+                                if (events.get(i).getCourse().getKey().compareTo(courseKey)==0)
+                                    events.remove(i);
                             for (DataSnapshot post:dataSnapshot.getChildren())
                                 events.add(post.getValue(Event.class));
                             if (atomCourse.decrementAndGet()<=0 && atom.decrementAndGet()<=0)
@@ -313,7 +317,27 @@ public class FirebaseDB implements RemoteDatabase {
     }
 
     @Override
-    public void validateKeysOnGroups(Set<Group> table, GroupsValueEventListener validationListener) {
-        validationListener.onGroupsChange(table);
+    public void validateKeysOnGroups(final Set<Group> groups, final GroupsValueEventListener validationListener) {
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("test1")
+                .child("groups");
+        final Set<Group> validatedGroups=new HashSet<>();
+        final AtomicInteger atom=new AtomicInteger(groups.size());
+        for (final Group group:groups) {
+            ref.child(group.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null)
+                        validatedGroups.add(dataSnapshot.getValue(Group.class));
+                    if (atom.decrementAndGet()==0) {
+                        validationListener.onGroupsChange(validatedGroups);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 }

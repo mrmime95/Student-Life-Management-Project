@@ -1,9 +1,9 @@
 package com.halcyon.ubb.studentlifemanager.ui.timetable.fragment;
 
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -24,12 +24,18 @@ import com.halcyon.ubb.studentlifemanager.ui.timetable.viewmodel.TimetableDayEve
 import com.halcyon.ubb.studentlifemanager.ui.timetable.viewmodel.TimetableDayEventViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TimetableDayFragment extends Fragment {
     public static String PARAMS_DAY = "timetableday_params_day";
     public static String PARAMS_GROUPS = "timetableday_params_map";
 
+    private static String SAVE_STATE_GROUPS="timetable_save_state_groups";
+
+    private Set<Group> mGroups;
     RecyclerView mRecyclerView;
     private int mDay;
     private TimetableDayEventViewModel mViewModel;
@@ -56,32 +62,36 @@ public class TimetableDayFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TimetableDayFragment newInstance(ArrayList<Group> groups, @TimetableDay.Days int day) {
+    public static TimetableDayFragment newInstance(Set<Group> groups, @TimetableDay.Days int day) {
         TimetableDayFragment fragment = new TimetableDayFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(PARAMS_GROUPS,groups);
+        if (groups!=null)
+            args.putParcelableArrayList(PARAMS_GROUPS, new ArrayList<>(groups));
         args.putInt(PARAMS_DAY,day);
         fragment.setArguments(args);
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() == null)
+        if (getArguments() == null && savedInstanceState==null)
             throw new IllegalStateException("Should instantiate with static method (no args found).");
 
         //noinspection WrongConstant
         mDay = getArguments().getInt(PARAMS_DAY);
         //noinspection unchecked
-        List<Group> groups = getArguments().getParcelableArrayList(PARAMS_GROUPS);
+        List<Group> groups= getArguments().getParcelableArrayList(PARAMS_GROUPS);
+        if (groups!=null)
+             mGroups = new HashSet<>(groups);
 
         //making a connection between viewmodel - mAdapter :
         //  ViewModel.events is an ObservableList<Event>
         //  so RecyclerViewBindingAdapter can listen for changes
         //  When changes happen the mAdapter updates the recycler with new events in list;
         //noinspection WrongConstant
-        mViewModel = new TimetableDayEventViewModel(DatabaseProvider.getInstance().getRemoteDatabase(), groups, mDay);
+        mViewModel = new TimetableDayEventViewModel(DatabaseProvider.getInstance().getRemoteDatabase(), mGroups, mDay);
         mAdapter = new RecyclerViewEventBindingAdapter(BR.item);
     }
 
@@ -92,10 +102,6 @@ public class TimetableDayFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_timetable_day, container, false);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -121,6 +127,16 @@ public class TimetableDayFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mViewModel.unSubscribe(mListener);
+        if (mGroups!=null)
+            outState.putParcelableArrayList(PARAMS_GROUPS, new ArrayList<>(mGroups));
     }
 
+    public void setGroups(Set<Group> groups) {
+        mGroups=groups;
+        if (mViewModel!=null) mViewModel.setGroups(groups);
+    }
+
+    public Set<Group> getGroups() {
+        return mGroups;
+    }
 }

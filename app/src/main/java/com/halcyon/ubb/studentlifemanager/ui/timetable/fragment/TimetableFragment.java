@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +40,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+
+import static android.support.v4.view.ViewPager.SCROLL_STATE_DRAGGING;
 
 public class TimetableFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private AppCompatSpinner mSpinner;
@@ -74,7 +79,7 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
         mTabLayout = (TabLayout) view.findViewById(R.id.main_tabs);
         mSpinner = (AppCompatSpinner) view.findViewById(R.id.main_spinner);
         mPager = (ViewPager) view.findViewById(R.id.tab_timetable_viewpager);
-        mPager.setOffscreenPageLimit(2);
+        mPager.setOffscreenPageLimit(6);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.timetable_toolbar);
 
@@ -88,22 +93,36 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mPager.setAdapter(mDayPager);
-        mTabLayout.setupWithViewPager(mPager);
 
         mAdapter = new ArrayAdapter<>(getContext(), R.layout.main_spinner_textview, mGroupNames);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(mAdapter);
         mSpinner.setOnItemSelectedListener(this);
+        mPager.setAdapter(mDayPager);
+        mTabLayout.setupWithViewPager(mPager);
+
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int pos, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int pos) {
+                if (mSpinner.getSelectedItemPosition()<0) return;
+                Set<Group> groups = mTables.get(mSpinner.getSelectedItemPosition()).getGroups();
+                mDayPager.setSelectedGroups(pos-1, groups);
+                mDayPager.setSelectedGroups(pos,groups);
+                mDayPager.setSelectedGroups(pos+1,groups);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
     }
 
 
@@ -142,6 +161,7 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
         int pos = mSpinner.getSelectedItemPosition();
         if (pos > -1 && pos < mGroupNames.size())
             onItemSelected(null, null, mSpinner.getSelectedItemPosition(), 0);
+
     }
 
     @Override
@@ -152,16 +172,23 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
                         new GroupsValueEventListener() {
                             @Override
                             public void onGroupsChange(Set<Group> groups) {
-                                if (groups==null) {
-                                    //timtable is deleted
+                                if (groups.size()==0) {
+                                    //timetable is deleted
                                     mTables.remove(table);
                                     mGroupNames.remove(table.getName());
-                                    mDayPager.setSelectedGroups(null);
+                                    mAdapter.notifyDataSetChanged();
+                                    Snackbar.make(getView(),"Table "+ table.getName()+" has been deleted.",
+                                            Snackbar.LENGTH_LONG).show();
+                                    DatabaseProvider.getInstance().getLocalTimetableDatabase()
+                                            .removeWantedTimetable(getContext(),table);
                                 }
-                                else
-                                    mDayPager.setSelectedGroups(new ArrayList<>(groups));
-
-                                mPager.setAdapter(mDayPager);
+                                else {
+                                    table.setGroups(groups);
+                                    //mDayPager.setSelectedGroups(groups);
+                                    mDayPager.setSelectedGroups(mPager.getCurrentItem() - 1, groups);
+                                    mDayPager.setSelectedGroups(mPager.getCurrentItem(), groups);
+                                    mDayPager.setSelectedGroups(mPager.getCurrentItem() + 1, groups);
+                                }
                             }
 
                             @Override
@@ -173,8 +200,7 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        mPager.setAdapter(new DayPagerAdapter(getContext(), getActivity().getSupportFragmentManager(),
-                null));
+        mDayPager.setSelectedGroups(null);
     }
 
     @Override

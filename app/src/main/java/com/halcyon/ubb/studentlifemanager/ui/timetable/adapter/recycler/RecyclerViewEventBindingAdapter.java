@@ -33,12 +33,12 @@ public class RecyclerViewEventBindingAdapter extends RecyclerViewBindingAdapter<
 
     @Override
     protected void listChanged() {
-        //int size=mUIItems.size();
-        //mUIItems.clear();
-        //notifyItemRangeRemoved(0,size);
+        int size=mUIItems.size();
+        mUIItems.clear();
+        notifyItemRangeRemoved(0,size);
         mUIItems=RecyclerViewAdapterEventHelper.createEventsForRecycler(mItems);
-        //notifyItemRangeInserted(0,mUIItems.size());
-        notifyDataSetChanged();
+        notifyItemRangeInserted(0,mUIItems.size());
+        //notifyDataSetChanged();
     }
 
     @Override
