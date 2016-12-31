@@ -1,6 +1,6 @@
 package com.halcyon.ubb.studentlifemanager.database.local.reminder;
 
-import com.halcyon.ubb.studentlifemanager.Reminder;
+import com.halcyon.ubb.studentlifemanager.model.reminder.Reminder;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.halcyon.ubb.studentlifemanager;
+package com.halcyon.ubb.studentlifemanager.ui.course.viewmodel;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.halcyon.ubb.studentlifemanager.ui.course.adapter.MyFirebaseRecycleAdapter;
 
 /**
  * Created by matyas on 2016.12.11..

@@ -9,24 +9,24 @@ import android.os.Parcelable;
  */
 
 @SuppressWarnings("unused")
-public class Course implements Parcelable {
+public class Course_t implements Parcelable {
     private String mName;
     private String mDescription;
     private String mKey;
 
-    public Course() {}
+    public Course_t() {}
 
-    public Course(String key,String name) {
+    public Course_t(String key, String name) {
         mName = name;
         mKey= key;
     }
 
-    public Course(String key,String name, String description) {
+    public Course_t(String key, String name, String description) {
         this(key,name);
         this.mDescription = description;
     }
 
-    public Course(Parcel in) {
+    public Course_t(Parcel in) {
         mName=in.readString();
         mKey=in.readString();
         mDescription=in.readString();
@@ -68,14 +68,14 @@ public class Course implements Parcelable {
         parcel.writeString(mDescription);
     }
 
-    public static final Parcelable.Creator<Course> CREATOR
-            = new Parcelable.Creator<Course>() {
-        public Course createFromParcel(Parcel in) {
-            return new Course(in);
+    public static final Parcelable.Creator<Course_t> CREATOR
+            = new Parcelable.Creator<Course_t>() {
+        public Course_t createFromParcel(Parcel in) {
+            return new Course_t(in);
         }
 
-        public Course[] newArray(int size) {
-            return new Course[size];
+        public Course_t[] newArray(int size) {
+            return new Course_t[size];
         }
     };
 }

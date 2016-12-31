@@ -3,7 +3,7 @@ package com.halcyon.ubb.studentlifemanager.model.timetable;
 import android.support.annotation.IntDef;
 
 import com.google.firebase.database.Exclude;
-import com.halcyon.ubb.studentlifemanager.model.course.Course;
+import com.halcyon.ubb.studentlifemanager.model.course.Course_t;
 
 import java.lang.annotation.Retention;
 import java.util.Date;
@@ -27,7 +27,7 @@ public class Event {
     private @EventType int mType;
     private int mDay;
     private Location mLocation;
-    private Course mCourse;
+    private Course_t mCourse;
     private String mKey;
 
 
@@ -39,22 +39,22 @@ public class Event {
 
     //Firebase needs empty constructor
     public Event() {
-        mCourse=new Course();
+        mCourse=new Course_t();
     }
 
-    public Event(Course course,Date startingTime) {
+    public Event(Course_t course, Date startingTime) {
         this.startingTime=startingTime.getTime();
         mCourse=course;
     }
 
-    public Event(String key,Course course,@EventType int type, Location location) {
+    public Event(String key, Course_t course, @EventType int type, Location location) {
         mKey=key;
         mCourse=course;
         mLocation=location;
         mType=type;
     }
 
-    public Event(String key,Course course, @EventType int type, @TimetableDay.Days int day, Location location, Date startingTime, Date endingTime) {
+    public Event(String key, Course_t course, @EventType int type, @TimetableDay.Days int day, Location location, Date startingTime, Date endingTime) {
         this(key,course,type,location);
         this.mDay=day;
         this.startingTime =startingTime==null?0:startingTime.getTime();
@@ -73,11 +73,11 @@ public class Event {
         return mKey;
     }
 
-    public void setCourse(Course course) {
+    public void setCourse(Course_t course) {
         mCourse = course;
     }
 
-    public Course getCourse() {
+    public Course_t getCourse() {
         return mCourse;
     }
 
@@ -85,7 +85,7 @@ public class Event {
         mKey=key;
     }
 
-    public void setCourseKey(Course course) {
+    public void setCourseKey(Course_t course) {
         mCourse=course;
     }
 
@@ -127,7 +127,7 @@ public class Event {
     public String getTypeString() {
         switch (mType) {
             case COURSE:
-                return "Course";
+                return "Course_c";
             case LAB:
                 return "Laboratory";
         }

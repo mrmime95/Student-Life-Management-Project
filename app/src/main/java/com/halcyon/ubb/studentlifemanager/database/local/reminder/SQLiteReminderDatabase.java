@@ -11,7 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.halcyon.ubb.studentlifemanager.Reminder;
+import com.halcyon.ubb.studentlifemanager.model.reminder.Reminder;
 
 public class SQLiteReminderDatabase extends SQLiteOpenHelper implements ReminderDatabase{
 

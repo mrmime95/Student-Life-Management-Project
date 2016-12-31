@@ -2,7 +2,6 @@ package com.halcyon.ubb.studentlifemanager.database.remote;
 
 import android.content.Context;
 
-import com.firebase.client.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -10,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.CoursesEventValueListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
-import com.halcyon.ubb.studentlifemanager.model.course.Course;
+import com.halcyon.ubb.studentlifemanager.model.course.Course_t;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Location;
@@ -182,17 +181,17 @@ public class FirebaseDB implements RemoteDatabase {
         //courses
         courseRef.removeValue();
 
-        Map<Course, String> courseMap = new HashMap<>();
+        Map<Course_t, String> courseMap = new HashMap<>();
 
         String algebra = courseRef.push().getKey();
         String cstand = courseRef.push().getKey();
         String linux = courseRef.push().getKey();
         String cadvanced = courseRef.push().getKey();
 
-        Course algebraCourse = new Course(algebra, "Algebra of analytics");
-        Course linuxCourse = new Course(cadvanced, "Linux basics");
-        Course cstandCourse = new Course(linux, "C++ coding standards");
-        Course cadvancedCourse = new Course(cadvanced, "C++ advanced");
+        Course_t algebraCourse = new Course_t(algebra, "Algebra of analytics");
+        Course_t linuxCourse = new Course_t(cadvanced, "Linux basics");
+        Course_t cstandCourse = new Course_t(linux, "C++ coding standards");
+        Course_t cadvancedCourse = new Course_t(cadvanced, "C++ advanced");
 
         courseMap.put(algebraCourse, algebra);
         courseMap.put(linuxCourse, linux);
@@ -264,7 +263,7 @@ public class FirebaseDB implements RemoteDatabase {
                 e.setDay(i);
                 String ref = dayRef.push().getKey();
                 innerMap.put(e, ref);
-                Course c = e.getCourse();
+                Course_t c = e.getCourse();
                 e.setCourse(null);
                 e.setKey(ref);
                 dayRef.child(ref).setValue(e);

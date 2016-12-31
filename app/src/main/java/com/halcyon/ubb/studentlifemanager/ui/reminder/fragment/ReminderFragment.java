@@ -1,5 +1,4 @@
-package com.halcyon.ubb.studentlifemanager.ui.reminder;
-
+package com.halcyon.ubb.studentlifemanager.ui.reminder.fragment;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
@@ -18,10 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.halcyon.ubb.studentlifemanager.NotifyReceiver;
+import com.halcyon.ubb.studentlifemanager.ui.reminder.notification.NotifyReceiver;
 import com.halcyon.ubb.studentlifemanager.R;
-import com.halcyon.ubb.studentlifemanager.Reminder;
-import com.halcyon.ubb.studentlifemanager.ReminderControl;
+import com.halcyon.ubb.studentlifemanager.model.reminder.Reminder;
+import com.halcyon.ubb.studentlifemanager.ui.reminder.update.ReminderUpdateData;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.database.local.reminder.ReminderDatabase;
 
@@ -47,14 +46,14 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
     private boolean timeChoosed, dateChoosed;
     private RecyclerView reminderRecyclerView;
     private ReminderDatabase dbHandler;
-    private ReminderControl reminderControl;
+    private ReminderUpdateData updateReminders;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_tab_reminders, container, false);
         reminderCloseBtn = (ImageView) rootView.findViewById(R.id.closeBtn);
-        reminderCheckBtn = (ImageView)rootView.findViewById(R.id.pipeBtn);
+        reminderCheckBtn = (ImageView)rootView.findViewById(R.id.checkBtn);
         reminderDate = (TextView)rootView.findViewById(R.id.date);
         reminderTime = (TextView)rootView.findViewById(R.id.time);
         reminderName = (EditText)rootView.findViewById(R.id.reminderName);
@@ -62,9 +61,9 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
 
         myCalendar = Calendar.getInstance();
         dbHandler = DatabaseProvider.getInstance().getReminderDatabase();
-        reminderControl = new ReminderControl(getActivity());
+        updateReminders = new ReminderUpdateData(getActivity());
         reminderRecyclerView = (RecyclerView)rootView.findViewById(R.id.reminders_recycler);
-        reminderControl.updateReminders(reminderRecyclerView,dbHandler);
+        updateReminders.updateReminders(reminderRecyclerView,dbHandler);
 
         timeChoosed = dateChoosed = false;
         date = new DatePickerDialog.OnDateSetListener() {
@@ -156,7 +155,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
                     String formattedTime = tf.format(c.getTime());
                     setNewRemindersData("Enter reminder title", formattedDate, formattedTime);
                     dbHandler.insert(temp);
-                    reminderControl.updateReminders(reminderRecyclerView, dbHandler);
+                    updateReminders.updateReminders(reminderRecyclerView, dbHandler);
                 }
             }
         });
@@ -200,7 +199,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
         reminderTime.setText(time);
     }
 
-    public void setNewReminderIcons(boolean visability, boolean pipe)
+    public void setNewReminderIcons(boolean visability, boolean check)
     {
         if (visability){
             reminderCloseBtn.setVisibility(View.VISIBLE);
@@ -217,7 +216,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
             reminderAddBtn.setVisibility(View.VISIBLE);
             reminderName.setEnabled(visability);
         }
-        if (pipe) reminderCheckBtn.setImageResource(R.drawable.iccheckok);
+        if (check) reminderCheckBtn.setImageResource(R.drawable.iccheckok);
         else reminderCheckBtn.setImageResource(R.drawable.iccheck);
     }
 

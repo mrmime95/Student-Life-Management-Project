@@ -24,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <com.halcyon.ubb.studentlifemanager.MySpinner
+            <com.halcyon.ubb.studentlifemanager.ui.course.viewmodel.MySpinner
                 android:id="@+id/main_spinner"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"

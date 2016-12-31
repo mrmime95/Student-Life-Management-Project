@@ -1,10 +1,10 @@
-package com.halcyon.ubb.studentlifemanager;
+package com.halcyon.ubb.studentlifemanager.model.course;
 
 /**
  * Created by matyas on 2016.12.09..
  */
 
-public class Course {
+public class Course_c {
     //TODO CR: Model classes belong to the model package. [Peter]
     private String title;
     private String description;
@@ -12,10 +12,10 @@ public class Course {
     private String pictureName;
     private String course;
 
-    public Course() {
+    public Course_c() {
     }
 
-    public Course(String title, String description, String fileName, String pictureName, String courseName) {
+    public Course_c(String title, String description, String fileName, String pictureName, String courseName) {
         this.title = title;
         this.description = description;
         this.fileName = fileName;

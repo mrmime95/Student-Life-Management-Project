@@ -1,4 +1,4 @@
-package com.halcyon.ubb.studentlifemanager.ui.course;
+package com.halcyon.ubb.studentlifemanager.ui.course.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.halcyon.ubb.studentlifemanager.MySpinner;
+import com.halcyon.ubb.studentlifemanager.ui.course.viewmodel.MySpinner;
 import com.halcyon.ubb.studentlifemanager.R;
 
 /**

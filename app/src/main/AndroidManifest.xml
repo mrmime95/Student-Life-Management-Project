@@ -20,7 +20,7 @@
         </activity>
 
         <receiver
-            android:name=".NotifyReceiver"
+            android:name=".ui.reminder.notification.NotifyReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -29,10 +29,10 @@
         </receiver>
 
         <service
-            android:name=".NotifyService"
+            android:name=".ui.reminder.notification.NotifyService"
             android:enabled="true" />
         <!-- TODO CR: Close XML tags if there isn't any content between them. [Peter] -->
-        <activity android:name=".CourseDetail" />
+        <activity android:name=".ui.course.selectedcourse.DetailedCourseActivity" />
         <activity
             android:name=".ui.timetable.usersettings.TimetableSettingsActivity"
             android:label="@string/title_activity_timetable_settings"

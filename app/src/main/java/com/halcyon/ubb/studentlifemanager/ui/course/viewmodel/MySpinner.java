@@ -1,4 +1,4 @@
-package com.halcyon.ubb.studentlifemanager;
+package com.halcyon.ubb.studentlifemanager.ui.course.viewmodel;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,6 +11,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.halcyon.ubb.studentlifemanager.R;
+import com.halcyon.ubb.studentlifemanager.ui.course.viewmodel.MyItemSelectedListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +73,7 @@ public class MySpinner extends AppCompatSpinner{
                     list.add(name);
                     Log.d("INFO", "added " + name);
                 }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,R.layout.main_spinner_textview, list);
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, R.layout.main_spinner_textview, list);
                 arrayAdapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
                 setAdapter(arrayAdapter);
             }

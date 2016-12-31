@@ -1,4 +1,4 @@
-package com.halcyon.ubb.studentlifemanager;
+package com.halcyon.ubb.studentlifemanager.ui.reminder.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

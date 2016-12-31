@@ -1,4 +1,4 @@
-package com.halcyon.ubb.studentlifemanager;
+package com.halcyon.ubb.studentlifemanager.ui.course.selectedcourse;
 
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,10 +14,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.ui.course.detail.SmoothScrollBehavior;
 import com.squareup.picasso.Picasso;
 
-public class CourseDetail extends AppCompatActivity {
+public class DetailedCourseActivity extends AppCompatActivity {
     private ImageView imgView, courseAttachmentIcon;
     private TextView courseTitle, courseDescription, courseAttachment;
     private Toolbar courseToolbar;

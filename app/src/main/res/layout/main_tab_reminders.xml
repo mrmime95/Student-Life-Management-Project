@@ -76,7 +76,7 @@
                         android:visibility="gone" />
 
                     <ImageView
-                        android:id="@+id/pipeBtn"
+                        android:id="@+id/checkBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -84,7 +84,6 @@
                         android:layout_marginBottom="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="24dp"
-                        android:onClick="pipeBtnOnClick"
                         android:scaleType="fitEnd"
                         android:src="@drawable/iccheck"
                         android:visibility="gone" />
@@ -98,7 +97,6 @@
                         android:layout_marginBottom="19dp"
                         android:layout_marginLeft="21dp"
                         android:layout_marginTop="24dp"
-                        android:onClick="closeAddingNewReminderOnClick"
                         android:src="@drawable/icclose"
                         android:visibility="gone" />
 

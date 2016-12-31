@@ -1,4 +1,4 @@
-package com.halcyon.ubb.studentlifemanager;
+package com.halcyon.ubb.studentlifemanager.ui.reminder.notification;
 
 import android.annotation.TargetApi;
 import android.app.Notification;

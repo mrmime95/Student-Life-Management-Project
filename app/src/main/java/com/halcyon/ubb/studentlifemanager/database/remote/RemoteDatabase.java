@@ -1,13 +1,10 @@
 package com.halcyon.ubb.studentlifemanager.database.remote;
 
 import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
-import com.halcyon.ubb.studentlifemanager.model.course.Course;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 import com.halcyon.ubb.studentlifemanager.database.listener.CoursesEventValueListener;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
