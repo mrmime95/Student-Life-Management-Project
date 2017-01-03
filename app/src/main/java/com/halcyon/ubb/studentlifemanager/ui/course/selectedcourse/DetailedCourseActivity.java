@@ -37,6 +37,9 @@ public class DetailedCourseActivity extends AppCompatActivity {
         courseAttachment.setText(getIntent().getStringExtra("attachmentName"));
         courseAttachmentIcon = (ImageView)findViewById(R.id.attachmentIcon);
 
+        //TODO CR: This is your decision but I'd argue that fixing such a minor glitch is not worth the effort and the amount of ugly code it introduces (you're trying
+        //TODO CR: to use reflection 60 times each second - imagine how that affects performance on low-end devices...). If you researched the topic you know that the
+        //TODO CR: creators of the Support Library are working on a solution, it shouldn't be your job to fix library bugs. [Peter]
         //android CollapsingToolbarLayout's fling is broken
         // custom behaviour for AppBarLayout solves this for now
         //TODO: Change back to android implementation once it is working.

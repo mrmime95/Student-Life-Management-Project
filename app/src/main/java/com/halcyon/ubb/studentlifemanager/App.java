@@ -2,24 +2,23 @@ package com.halcyon.ubb.studentlifemanager;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.usersettings.TimetableSettingsActivity;
 
 /**
- *
  * Created by matyas on 2016.12.17..
  */
-
+//TODO CR: Consider renaming this class to something more specific, like StudentLifeManagerApplication. [Peter]
 public class App extends Application {
-    public static String INITIAL_LUNCH="initial_lunch";
+    public static String INITIAL_LAUNCH = "initial_launch";
 
     public static boolean isInitial(Context context) {
-        boolean init=PreferenceManager.getDefaultSharedPreferences(context).getBoolean(INITIAL_LUNCH,true);
-        if (init) {
-            PreferenceManager.getDefaultSharedPreferences(context).edit()
-                    .putBoolean(INITIAL_LUNCH,false).apply();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPreferences.getBoolean(INITIAL_LAUNCH, true)) {
+            sharedPreferences.edit().putBoolean(INITIAL_LAUNCH, false).apply();
             return true;
         }
         return false;
@@ -28,9 +27,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DatabaseProvider.setDatabaseType(this,DatabaseProvider.FIREBASE_FILE);
+        DatabaseProvider.setDatabaseType(this, DatabaseProvider.FIREBASE_FILE);
 
-        if (App.isInitial(this)) {
+        if (isInitial(this)) {
             TimetableSettingsActivity.initSettings(this);
         }
     }

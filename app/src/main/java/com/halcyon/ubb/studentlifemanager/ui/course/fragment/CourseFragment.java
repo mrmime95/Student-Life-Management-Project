@@ -19,6 +19,7 @@ import com.halcyon.ubb.studentlifemanager.R;
  */
 
 public class CourseFragment extends Fragment {
+    //TODO CR: So far there is no need for global variables in this class. [Peter]
     private RecyclerView courseRecyclerView;
     private RecyclerView.LayoutManager courseLayoutManager;
     private MySpinner mSpinner;

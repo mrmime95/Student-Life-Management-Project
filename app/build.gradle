@@ -30,6 +30,11 @@ android {
 }
 
 dependencies {
+    //TODO CR: Since you're past the 65k method limit, it's about time to carefully review the libraries you're using and remove everything that's not essential.
+    //TODO CR: For instance, you're not going to write unit or integration tests so all related dependencies and files should be deleted (espresso, junit, etc).
+    //TODO CR: I also don't see the point of the AndroidSvg and LastAdapter libraries. If not vital, consider removing Palette as well and see if there is a way
+    //TODO CR: to reduce the footprint of Firebase which seems to be the largest of them all. Right now I can't build the app but only add multidex support if
+    //TODO CR: there is no other way. [Peter]
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -48,10 +53,5 @@ dependencies {
     compile 'com.caverock:androidsvg:1.2.1'
     testCompile 'junit:junit:4.12'
 }
-
-
-
-
-
 
 apply plugin: 'com.google.gms.google-services'

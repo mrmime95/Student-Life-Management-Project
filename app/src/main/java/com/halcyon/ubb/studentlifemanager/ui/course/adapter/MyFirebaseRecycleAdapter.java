@@ -18,6 +18,7 @@ import com.halcyon.ubb.studentlifemanager.model.course.Course_c;
 public class MyFirebaseRecycleAdapter extends  FirebaseRecyclerAdapter<Course_c,CourseViewHolder> {
 
     private Query query;
+    //TODO CR: Don't save the Context as a global variable unless you absolutely have to (here it can be avoided, see the comments in the CourseViewHolder class). [Peter]
     private Context context;
 
     public MyFirebaseRecycleAdapter(Query query, final Context context) {
