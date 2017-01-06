@@ -1,14 +1,16 @@
 package com.halcyon.ubb.studentlifemanager.model.course;
 
+import java.net.URL;
+
 /**
  * Created by matyas on 2016.12.09..
  */
 
 public class Course_c {
-    //TODO CR: Model classes belong to the model package. [Peter]
     private String title;
     private String description;
     private String fileName;
+    private String fileUrl;
     private String pictureName;
     private String course;
 
@@ -61,5 +63,13 @@ public class Course_c {
 
     public void setCourse(String course) {
         this.course = course;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 }

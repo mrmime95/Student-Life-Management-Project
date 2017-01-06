@@ -1,28 +1,45 @@
 package com.halcyon.ubb.studentlifemanager.ui.course.selectedcourse;
 
+import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.halcyon.ubb.studentlifemanager.Manifest;
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.ui.course.detail.SmoothScrollBehavior;
 import com.squareup.picasso.Picasso;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class DetailedCourseActivity extends AppCompatActivity {
     private ImageView imgView, courseAttachmentIcon;
     private TextView courseTitle, courseDescription, courseAttachment;
     private Toolbar courseToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +79,24 @@ public class DetailedCourseActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(" ");
+        courseAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(DetailedCourseActivity.this);
+                dlgAlert.setMessage("Are you want to download the file?");
+                dlgAlert.setTitle("Downloading...");
+                dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fileDownload();
+                    }
+                });
+                dlgAlert.setNegativeButton("Cancel", null);
+                dlgAlert.setCancelable(true);
+                dlgAlert.create().show();
+            }
+        });
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -73,5 +105,37 @@ public class DetailedCourseActivity extends AppCompatActivity {
             finish();
         }
         return false;
+    }
+
+    private void fileDownload(){
+        if (!isStoragePermissionGranted()) return;
+        String mURL = getIntent().getStringExtra("attachmentURL");
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(mURL));
+        request.setTitle("File download...");
+        request.setDescription("File is being downloaded...");
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        String fileName = URLUtil.guessFileName(mURL, null, MimeTypeMap.getFileExtensionFromUrl(mURL));
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        downloadManager.enqueue(request);
+    }
+
+    private  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v("permission","Permission is granted");
+                return true;
+            } else {
+
+                Log.v("permission","Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -62,7 +62,7 @@ public class MySpinner extends AppCompatSpinner{
 
     public void courseSpinnerUpdate(Query query){
         final List<String> list = new ArrayList<String>();
-        query.addValueEventListener(new ValueEventListener() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 list.clear();
@@ -82,7 +82,9 @@ public class MySpinner extends AppCompatSpinner{
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        query.addValueEventListener(valueEventListener);
+
     }
 
     public void setMyItemSelectedListener(RecyclerView recyclerView, Context context){
