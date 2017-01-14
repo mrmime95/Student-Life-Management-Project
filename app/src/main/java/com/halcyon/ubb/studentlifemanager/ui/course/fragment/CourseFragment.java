@@ -21,15 +21,13 @@ import com.halcyon.ubb.studentlifemanager.R;
  */
 
 public class CourseFragment extends Fragment {
-    //TODO CR: So far there is no need for global variables in this class. [Peter]
-    private RecyclerView courseRecyclerView;
-    private RecyclerView.LayoutManager courseLayoutManager;
-    private MySpinner mSpinner;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_tab_courses, container, false);
+        RecyclerView courseRecyclerView;
+        RecyclerView.LayoutManager courseLayoutManager;
+        MySpinner mSpinner;
         mSpinner = (MySpinner) rootView.findViewById(R.id.main_spinner);
         courseRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerCourse);
         courseLayoutManager  = new LinearLayoutManager(getActivity());

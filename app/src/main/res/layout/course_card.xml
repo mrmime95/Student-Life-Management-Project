@@ -12,14 +12,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cardBackcolor"
+        android:background="@color/white"
         android:orientation="vertical"
         >
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="190dp"
             android:id="@+id/contact_image"
             />
+
         <RelativeLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -30,22 +32,23 @@
             android:layout_marginLeft="16dp">
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:id="@+id/backBtn"
                 android:src="@drawable/icattachfile"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
                 android:layout_marginRight="16dp"
                 />
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/courseTitle"
-                    tools:text="Kurzuscikk cime"
-                    android:textSize="24dp"
-                    android:textStyle="bold|italic"
+                    tools:text="Kurzuscikk cime, ami ahhoz kell hogy láthassuk, hogy milyen lesz az előnézet"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
                     android:layout_toLeftOf="@+id/backBtn"
-                    android:maxLines="1"
+                    android:maxLines="3"
                     android:ellipsize="end"
                     />
 

@@ -31,6 +31,11 @@ public class MyFirebaseRecycleAdapter extends  FirebaseRecyclerAdapter<Course_c,
         } else {
             viewHolder.setFileIconVisibility(true);
         }
+        if (model.getPictureName().equals("none")){
+            viewHolder.checkPictureExisting(false);
+        } else {
+            viewHolder.checkPictureExisting(true);
+        }
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

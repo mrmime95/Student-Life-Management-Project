@@ -78,6 +78,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
             }
 
         };
+
         reminderAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -237,7 +238,6 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
         String str = tf.format(myCalendar.getTime());
         reminderTime.setText(str);
         timeChoosed = true;
-        //TODO CR: As a general note, you should move duplicated code to a common method. In this case, however, delete it (bad UX). [Peter]
         if (dateChoosed){
             reminderCheckBtn.setImageResource(R.drawable.iccheckok);
         }

@@ -64,11 +64,6 @@ public class DetailedCourseActivity extends AppCompatActivity {
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         params.setBehavior(new SmoothScrollBehavior(R.id.nested_scroll_view));
 
-        /*Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.supportBarColor));*/
-
         if (courseAttachment.getText().toString().equals("none")){
             courseAttachment.setVisibility(View.GONE);
             courseAttachmentIcon.setVisibility(View.GONE);

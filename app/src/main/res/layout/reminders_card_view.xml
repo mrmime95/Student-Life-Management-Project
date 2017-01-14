@@ -45,7 +45,7 @@
 
     <ImageView
         android:id="@+id/dropBtn"
-        android:layout_width="24dp"
+        android:layout_width="48dp"
         android:layout_height="24dp"
         android:layout_alignParentRight="true"
         android:layout_centerInParent="true"

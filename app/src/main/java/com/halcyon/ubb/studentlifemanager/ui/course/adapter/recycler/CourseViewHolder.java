@@ -25,6 +25,14 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
         fileView = (ImageView) itemView.findViewById(R.id.backBtn);
     }
 
+    public void checkPictureExisting(Boolean exist){
+        if (exist){
+            imageView.setVisibility(View.VISIBLE);
+        }else{
+            imageView.setVisibility(View.GONE);
+        }
+    }
+
     public void setTitle(String title) {
         titleTextView.setText(title);
     }
