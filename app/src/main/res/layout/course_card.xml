@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/courseCard"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        style="?attr/cardStyle"
-        >
+<android.support.v7.widget.CardView android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/courseCard"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="4dp"
+    style="?attr/cardStyle"
+    app:cardCornerRadius="2dp"
+    android:elevation="2dp"
+    app:cardUseCompatPadding="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:id="@+id/contact_image"
-            />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="172dp"
+                android:id="@+id/contact_image"
+                android:scaleType="centerCrop"
+                />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="@dimen/progress_bar_size"
+                android:layout_height="@dimen/progress_bar_size"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_height="wrap_content"
@@ -30,6 +42,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:layout_marginLeft="16dp">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"

@@ -47,22 +47,22 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
     private List<Timetable> mTables;
     private ArrayAdapter<String> mAdapter;
     private DayPagerAdapter mDayPager;
-    private boolean mIsOnline;
+    private boolean mFirstCheck=true;
     private ConnectionListener mConnectionListener=new ConnectionListener() {
 
         @Override
         public void onConnected() {
-            if (getView()!=null && !mIsOnline) {
+            if (getView()!=null && !mFirstCheck) {
                 Snackbar.make(getView(), "Database connected", Snackbar.LENGTH_LONG).show();
-                mIsOnline=true;
+                mFirstCheck =false;
             }
         }
 
         @Override
         public void onDisconnected() {
-            if (getView()!=null && mIsOnline) {
+            if (getView()!=null && !mFirstCheck) {
                 Snackbar.make(getView(), "Database disconnected", Snackbar.LENGTH_LONG).show();
-                mIsOnline=false;
+                mFirstCheck =false;
             }
         }
     };
@@ -83,7 +83,6 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
         mTables = new ArrayList<>();
         mTables = new ArrayList<>();
         mDayPager = new DayPagerAdapter(getContext(), getActivity().getSupportFragmentManager(), null);
-        mIsOnline = true;
     }
 
     @Override

@@ -94,8 +94,9 @@ public class TimetableDayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return DataBindingUtil.inflate(inflater, R.layout.fragment_timetable_day, container, false).getRoot();
-        //return inflater.inflate(R.layout.fragment_timetable_day, container, false);
+        View view=DataBindingUtil.inflate(inflater, R.layout.fragment_timetable_day, container, false).getRoot();
+        view.setAlpha(0);
+        return view;
     }
 
 
@@ -115,6 +116,8 @@ public class TimetableDayFragment extends Fragment {
         //      ==> RecyclerViewBindingAdapter listener ==> notify data changed
         // Notice that viewmodel doesn't need reference to mAdapter
         mViewModel.subscribe(mListener);
+
+        view.setAlpha(1);
     }
 
 

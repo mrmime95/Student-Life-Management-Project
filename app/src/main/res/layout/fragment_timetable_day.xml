@@ -43,8 +43,8 @@
 
         <ProgressBar
             android:id="@+id/fragment_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
             android:layout_centerInParent="true"
             android:visibility="@{item}" />
 

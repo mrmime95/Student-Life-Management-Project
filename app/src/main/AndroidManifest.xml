@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:hardwareAccelerated="true"
         android:name=".StudentLifeManagerApplication"
         android:allowBackup="true"
         android:icon="@drawable/placeholder_landing"

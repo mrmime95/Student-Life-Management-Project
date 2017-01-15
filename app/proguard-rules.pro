@@ -18,6 +18,7 @@
 
 # Add this global rule
 -keepattributes Signature
+-keepattributes *Annotation*
 
 # This rule will properly ProGuard all the model classes in
 # the package com.yourcompany.models. Modify to fit the structure
@@ -25,3 +26,13 @@
 -keepclassmembers class com.halcyon.ubb.studentlifemanager.model.**{
   *;
 }
+-keep class com.google.firebase.**
+-keep public class com.google.android.gms.**
+-keep class org.w3c.dom**
+-keep class com.google.firebase.FirebaseApp
+-keep class android.util.FloatMath
+-dontwarn com.google.android.gms.**
+-dontwarn android.support.**
+-dontwarn com.github.**
+-dontwarn com.squareup.picasso.**
+-dontwarn com.etsy.android.grid.**

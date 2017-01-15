@@ -3,9 +3,11 @@ package com.halcyon.ubb.studentlifemanager.ui.course.adapter.recycler;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.halcyon.ubb.studentlifemanager.R;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -14,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 public class CourseViewHolder extends RecyclerView.ViewHolder {
 
+    private final ProgressBar mProgressBar;
     private TextView titleTextView;
     private ImageView imageView;
     private ImageView fileView;
@@ -23,6 +26,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
         titleTextView = (TextView) itemView.findViewById(R.id.courseTitle);
         imageView = (ImageView) itemView.findViewById(R.id.contact_image);
         fileView = (ImageView) itemView.findViewById(R.id.backBtn);
+        mProgressBar= (ProgressBar) itemView.findViewById(R.id.progress_bar);
     }
 
     public void checkPictureExisting(Boolean exist){
@@ -38,7 +42,21 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setPicture(String image) {
-        Picasso.with(itemView.getContext()).load(image).into(imageView);
+        Picasso.with(itemView.getContext()).load(image)
+                .error(android.R.drawable.ic_dialog_alert)
+                .into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                if (mProgressBar!=null)
+                    mProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError() {
+                if (mProgressBar!=null)
+                    mProgressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void setFileIconVisibility(Boolean b){

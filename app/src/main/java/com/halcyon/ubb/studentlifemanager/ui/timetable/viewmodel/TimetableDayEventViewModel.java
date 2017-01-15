@@ -44,7 +44,8 @@ public class TimetableDayEventViewModel extends BaseObservable{
         mGroups =groups;
         mChanged=false;
         mAreEventsNotAvilable =new ObservableField<>(false);
-        mIsTimetableNotAvilable =new ObservableField<>(false);
+        boolean g=groups==null;
+        mIsTimetableNotAvilable =new ObservableField<>(g);
         mHasNoEvents =new ObservableField<>(false);
         mRemoteDatabase = remoteDatabase;
         events = new ObservableArrayList<>();
