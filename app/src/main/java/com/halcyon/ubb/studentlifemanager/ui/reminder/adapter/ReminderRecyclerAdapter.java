@@ -1,7 +1,14 @@
 package com.halcyon.ubb.studentlifemanager.ui.reminder.adapter;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +19,8 @@ import android.widget.TextView;
 
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.model.reminder.Reminder;
+import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
+import com.halcyon.ubb.studentlifemanager.ui.reminder.notification.NotifyReceiver;
 import com.halcyon.ubb.studentlifemanager.ui.reminder.update.ReminderUpdateData;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.database.local.reminder.ReminderDatabase;
@@ -19,6 +28,8 @@ import com.halcyon.ubb.studentlifemanager.database.local.reminder.ReminderDataba
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Created by Szilard on 09.12.2016.
@@ -86,6 +97,7 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
                 public void onClick(View view) {
                     if (view.getId() == R.id.dropBtn) {
                         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.M)
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which){
@@ -95,7 +107,13 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
                                         Reminder deleteReminder = new Reminder(1, contact .getName(), contact.getDate(), contact.getTime());
                                         try {
                                             boolean ok = false;
+
+                                            int deletingID = db.findIdByOthers(deleteReminder);
+                                            Intent my_intient = new Intent(ctx, NotifyReceiver.class);
+
                                             ok = db.delete(deleteReminder);
+                                            PendingIntent.getBroadcast(ctx, deletingID, my_intient, PendingIntent.FLAG_UPDATE_CURRENT).cancel();
+
                                             reminderControl.updateReminders(recyclerView, db);
                                         }catch (Exception e){
                                             Log.d("INFO","Deleting was not succesfull!" + contact.getName() + contact.getTime() + contact.getDate());

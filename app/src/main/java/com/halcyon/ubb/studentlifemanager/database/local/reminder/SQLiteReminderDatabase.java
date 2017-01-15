@@ -64,6 +64,20 @@ public class SQLiteReminderDatabase extends SQLiteOpenHelper implements Reminder
     }
 
     @Override
+    public int findIdByOthers(Reminder contact) {
+        String name = contact.getName();
+        String date = contact.getDate();
+        String time = contact.getTime();
+        android.database.sqlite.SQLiteDatabase db = this.getWritableDatabase();
+        String query = "select "+ CONTACTS_COLUMN_ID +" from " + CONTACTS_TABLE_NAME + " where " + CONTACTS_COLUMN_NAME +
+        " = ? and " + CONTACTS_COLUMN_DATE + " = ? and " + CONTACTS_COLUMN_TIME + "= ? ";
+        Cursor res =  db.rawQuery(query, new String[] {name, date, time});
+        res.moveToFirst();
+
+        return res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ID));
+    }
+
+    @Override
     public ArrayList<Reminder> getAllReminder() {
         ArrayList<Reminder> array_list = new ArrayList<Reminder>();
         android.database.sqlite.SQLiteDatabase db = this.getReadableDatabase();

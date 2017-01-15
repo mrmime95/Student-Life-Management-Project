@@ -30,9 +30,6 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".ui.reminder.notification.NotifyService"
-            android:enabled="true" />
         <!-- TODO CR: Close XML tags if there isn't any content between them. [Peter] -->
         <activity android:name=".ui.course.selectedcourse.DetailedCourseActivity" />
         <activity

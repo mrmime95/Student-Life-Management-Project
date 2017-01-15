@@ -12,5 +12,6 @@ import java.util.ArrayList;
 public interface ReminderDatabase {
     boolean insert(Reminder contact);
     boolean delete(Reminder contact);
+    int findIdByOthers(Reminder contact);
     ArrayList<Reminder> getAllReminder();
 }

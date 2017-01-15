@@ -3,6 +3,7 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -119,7 +120,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
 
                     //with extras i'm giving away the Tittle and the Date/Time
                     my_intient.putExtra("Title", temp.getName());
-                    my_intient.putExtra("DateTime", "Tomorrow: " + temp.getDate() + " at " + temp.getTime());
+                    my_intient.putExtra("DateTime", temp.getDate() + " at " + temp.getTime());
                     AlarmManager mAlarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
 
                     //setting up a calendar to date and time's of the new reminder,this will show us when
@@ -139,14 +140,10 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
                     }
 
                     calendar.setTimeInMillis(date.getTime());
-                    calendar.add(calendar.DAY_OF_YEAR, -1);
+                    /*calendar.add(calendar.DAY_OF_YEAR, -1);*/
                     calendar.set(Calendar.MINUTE, time.getMinutes());
                     calendar.set(Calendar.HOUR_OF_DAY, time.getHours());
-                    calendar.set(Calendar.SECOND, 00);
-
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), (int)System.currentTimeMillis(), my_intient, PendingIntent.FLAG_UPDATE_CURRENT);
-                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
+                    calendar.set(Calendar.SECOND, 0);
 
                     setNewReminderIcons(false, false);
                     Calendar c = Calendar.getInstance();
@@ -156,6 +153,10 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
                     String formattedTime = tf.format(c.getTime());
                     setNewRemindersData("Enter reminder title", formattedDate, formattedTime);
                     dbHandler.insert(temp);
+
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), dbHandler.findIdByOthers(temp), my_intient, PendingIntent.FLAG_UPDATE_CURRENT);
+                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
                     updateReminders.updateReminders(reminderRecyclerView, dbHandler);
                 }
             }
