@@ -22,15 +22,12 @@ public abstract class DatabaseProvider {
     public static final int FIREBASE_FILE =1;
 
     private static DatabaseProvider mInstance;
-    RemoteDatabase mRemoteDatabase;
-    LocalTimetableDatabase mLocalTimetableDatabase;
-    ReminderDatabase mRemainderDatabase;
 
     public static void setDatabaseType(Context context, @DatabaseType int type) {
         if (mInstance==null)
             switch (type) {
                 case FIREBASE_FILE:
-                    mInstance=new SQLFirebaseFileDatabaseProvider(context);
+                    mInstance=new SQLFirebaseFileDatabaseProvider();
             }
     }
 
@@ -43,15 +40,9 @@ public abstract class DatabaseProvider {
     DatabaseProvider() {
     }
 
-    public RemoteDatabase getRemoteDatabase() {
-        return mRemoteDatabase;
-    }
+    public abstract RemoteDatabase getRemoteDatabase();
 
-    public LocalTimetableDatabase getLocalTimetableDatabase() {
-        return mLocalTimetableDatabase;
-    }
+    public abstract LocalTimetableDatabase getLocalTimetableDatabase(Context context);
 
-    public ReminderDatabase getReminderDatabase() {
-        return mRemainderDatabase;
-    }
+    public abstract ReminderDatabase getReminderDatabase(Context context);
 }

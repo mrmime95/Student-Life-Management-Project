@@ -13,17 +13,21 @@ import android.view.ViewGroup;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.ui.course.viewmodel.MySpinner;
 import com.halcyon.ubb.studentlifemanager.R;
 
 /**
+ *
  * Created by Szilard on 2016. 12. 21..
  */
+
 
 public class CourseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        DatabaseProvider.getInstance().getRemoteDatabase();
         View rootView = inflater.inflate(R.layout.main_tab_courses, container, false);
         RecyclerView courseRecyclerView;
         RecyclerView.LayoutManager courseLayoutManager;

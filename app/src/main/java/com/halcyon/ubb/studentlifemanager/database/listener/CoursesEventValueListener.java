@@ -12,5 +12,6 @@ import java.util.Map;
 
 public interface CoursesEventValueListener {
     void onEventsListChange(List<Event> events);
+    void onTimeout();
     void onCancelled(Exception e);
 }

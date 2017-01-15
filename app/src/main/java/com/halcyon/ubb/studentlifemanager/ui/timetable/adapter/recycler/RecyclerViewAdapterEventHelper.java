@@ -5,7 +5,6 @@ import android.databinding.ObservableList;
 import com.halcyon.ubb.studentlifemanager.model.course.Course_t;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 import com.halcyon.ubb.studentlifemanager.model.timetable.EventComparators;
-import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.viewmodel.EventViewModel;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ abstract class RecyclerViewAdapterEventHelper {
      * Event:  |      | Event1  |
      *         |      | Event2  |</pre>
      * @param events events that can be displayed
-     * @return a ViewModel representation of {@link TimetableDay}
+     * @return a ViewModel representation
      */
     static ArrayList<EventViewModel> createEventsForRecycler(ObservableList<Event> events) {
         if (events==null) return new ArrayList<>();

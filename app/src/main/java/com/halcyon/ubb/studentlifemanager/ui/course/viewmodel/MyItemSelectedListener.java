@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.model.course.Course_c;
 import com.halcyon.ubb.studentlifemanager.ui.course.adapter.MyFirebaseRecycleAdapter;
 
@@ -28,6 +29,7 @@ public class MyItemSelectedListener implements AdapterView.OnItemSelectedListene
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        DatabaseProvider.getInstance().getRemoteDatabase();
         courseList.getRecycledViewPool().clear();
         if (i!=0) {
             Query queryAnousments = FirebaseDatabase.getInstance().getReference().child("courses").

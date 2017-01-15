@@ -3,7 +3,6 @@ package com.halcyon.ubb.studentlifemanager.ui.timetable.fragment;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -18,13 +17,12 @@ import com.halcyon.ubb.studentlifemanager.BR;
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
-import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
+import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.adapter.recycler.RecyclerViewEventBindingAdapter;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.viewmodel.TimetableDayEventListener;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.viewmodel.TimetableDayEventViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,8 +30,6 @@ import java.util.Set;
 public class TimetableDayFragment extends Fragment {
     public static String PARAMS_DAY = "timetableday_params_day";
     public static String PARAMS_GROUPS = "timetableday_params_map";
-
-    private static String SAVE_STATE_GROUPS="timetable_save_state_groups";
 
     private Set<Group> mGroups;
     RecyclerView mRecyclerView;
@@ -51,8 +47,9 @@ public class TimetableDayFragment extends Fragment {
 
         @Override
         public void onDayChanged() {
-            if (getView() != null)
+            if (getView() != null) {
                 Snackbar.make(getView(), "Day " + (mDay + 1) + " has changed.", Snackbar.LENGTH_LONG).show();
+            }
             else
                 Toast.makeText(getContext(), "Day " + (mDay + 1) + " has changed.", Toast.LENGTH_LONG).show();
         }
@@ -62,7 +59,7 @@ public class TimetableDayFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TimetableDayFragment newInstance(Set<Group> groups, @TimetableDay.Days int day) {
+    public static TimetableDayFragment newInstance(Set<Group> groups, @Timetable.Days int day) {
         TimetableDayFragment fragment = new TimetableDayFragment();
         Bundle args = new Bundle();
         if (groups!=null)
@@ -71,7 +68,6 @@ public class TimetableDayFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,9 +106,8 @@ public class TimetableDayFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setHasFixedSize(true);
 
-
         //setting variable (data binding) of recyclerview
-        DataBindingUtil.getBinding(mRecyclerView).setVariable(BR.item, mViewModel);
+        DataBindingUtil.getBinding(view).setVariable(BR.item, mViewModel);
 
         mRecyclerView.setAdapter(mAdapter);
 

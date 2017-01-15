@@ -54,18 +54,18 @@ public class Event {
         mType=type;
     }
 
-    public Event(String key, Course_t course, @EventType int type, @TimetableDay.Days int day, Location location, Date startingTime, Date endingTime) {
+    public Event(String key, Course_t course, @EventType int type, @Timetable.Days int day, Location location, Date startingTime, Date endingTime) {
         this(key,course,type,location);
         this.mDay=day;
         this.startingTime =startingTime==null?0:startingTime.getTime();
         this.endingTime =endingTime==null?0:endingTime.getTime();
     }
 
-    public void setDay(@TimetableDay.Days int day) {
+    public void setDay(@Timetable.Days int day) {
         mDay=day;
     }
 
-    public @TimetableDay.Days int getDay() {
+    public @Timetable.Days int getDay() {
         return mDay;
     }
 

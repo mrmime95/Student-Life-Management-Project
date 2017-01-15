@@ -1,6 +1,6 @@
 package com.halcyon.ubb.studentlifemanager.database.remote;
 
-import android.content.Context;
+import android.os.Handler;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,7 +13,7 @@ import com.halcyon.ubb.studentlifemanager.model.course.Course_t;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Location;
-import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
+import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,17 +30,19 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by Baroti Csaba on 12/12/2016.
  */
 public class FirebaseDB implements RemoteDatabase {
+    private static final long TIMEOUT_TIME = 2500;
     private Map<CoursesEventValueListener, Map<DatabaseReference,ValueEventListener>> mCoursesEventMap;
     private Map<GroupsValueEventListener, ValueEventListener> mGroupsMap;
 
-    public FirebaseDB(Context context) {
+    public FirebaseDB() {
         mCoursesEventMap = new HashMap<>();
         mGroupsMap = new HashMap<>();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     //TODO: Documentation...
     @Override
-    public void addEventValueEventListener(Set<Group> groups, @TimetableDay.Days int day, final CoursesEventValueListener listener) {
+    public void addEventValueEventListener(Set<Group> groups, @Timetable.Days int day, final CoursesEventValueListener listener) {
         if (listener == null || groups==null || groups.size()==0) return;
 
         final AtomicInteger atom = new AtomicInteger(groups.size());
@@ -111,6 +113,13 @@ public class FirebaseDB implements RemoteDatabase {
         }
 
         mCoursesEventMap.put(listener, listenerMap);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (atom.get()>0)
+                    listener.onTimeout();
+            }
+        },TIMEOUT_TIME);
     }
 
     @Override
@@ -131,9 +140,10 @@ public class FirebaseDB implements RemoteDatabase {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Set<Group> groups = new HashSet<>();
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    groups.add(postSnapshot.getValue(Group.class));
-                }
+                if (dataSnapshot!=null && dataSnapshot.getChildren()!=null)
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren())
+                        groups.add(postSnapshot.getValue(Group.class));
+
                 listener.onGroupsChange(groups);
             }
 
@@ -338,5 +348,12 @@ public class FirebaseDB implements RemoteDatabase {
                 }
             });
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (atom.get()>0)
+                    validationListener.onTimeout();
+            }
+        },TIMEOUT_TIME);
     }
 }

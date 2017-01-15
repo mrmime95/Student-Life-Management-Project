@@ -12,7 +12,6 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
@@ -119,6 +118,11 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
                     }
 
                     @Override
+                    public void onTimeout() {
+
+                    }
+
+                    @Override
                     public void onCancelled(Exception e) {
 
                     }
@@ -127,22 +131,31 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class TimetablePreferenceFragment extends PreferenceFragment {
+        CharSequence[] mEntries =new CharSequence[0];
+        CharSequence[] mEntrieValues =new CharSequence[0];
+        MultiSelectListPreference preference;
+
         private GroupsValueEventListener mRemoteGroupsListener=new GroupsValueEventListener() {
             @Override
             public void onGroupsChange(Set<Group> groups) {
-                MultiSelectListPreference preference= (MultiSelectListPreference) findPreference("visible_timetables");
-                CharSequence[] entries=new CharSequence[groups.size()];
-                CharSequence[] entrieValues=new CharSequence[groups.size()];
+                if (groups.size()==0) return;
+                mEntries =new CharSequence[groups.size()];
+                mEntrieValues =new CharSequence[groups.size()];
 
                 int i=0;
                 for (Group group:groups) {
-                    entries[i]=group.getName();
-                    entrieValues[i++]=group.getKey()+PREF_DIVIDER+group.getName();
+                    mEntries[i]=group.getName();
+                    mEntrieValues[i++]=group.getKey()+PREF_DIVIDER+group.getName();
                 }
 
-                preference.setPersistent(true);
-                preference.setEntries(entries);
-                preference.setEntryValues(entrieValues);
+                preference.setEntries(mEntries);
+                preference.setEntryValues(mEntrieValues);
+
+            }
+
+            @Override
+            public void onTimeout() {
+
             }
 
             @Override
@@ -156,6 +169,11 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_timetable_main);
             setHasOptionsMenu(true);
+
+            preference=(MultiSelectListPreference) findPreference("visible_timetables");
+            preference.setPersistent(true);
+            preference.setEntries(mEntries);
+            preference.setEntryValues(mEntrieValues);
 
             DatabaseProvider.getInstance().getRemoteDatabase()
                     .addGroupsValueEventListener(mRemoteGroupsListener);
@@ -173,7 +191,7 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
         public void onResume() {
             super.onResume();
 
-            DatabaseProvider.getInstance().getLocalTimetableDatabase()
+            DatabaseProvider.getInstance().getLocalTimetableDatabase(getActivity())
                     .readLocalTimetables(getActivity(),
                             new LocalTimetableListener() {
                                 @Override
@@ -221,7 +239,7 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
 
         private void addNewLocalTimetable() {
             final Timetable table=new Timetable("Default timetable title");
-            DatabaseProvider.getInstance().getLocalTimetableDatabase()
+            DatabaseProvider.getInstance().getLocalTimetableDatabase(getActivity())
                     .writeLocalTimetable(getActivity(),table,
                             new OperationCompleteListener() {
                                 @Override

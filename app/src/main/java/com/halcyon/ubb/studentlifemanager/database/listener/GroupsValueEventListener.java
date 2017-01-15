@@ -12,5 +12,6 @@ import java.util.Set;
 
 public interface GroupsValueEventListener {
     void onGroupsChange(Set<Group> groups);
+    void onTimeout();
     void onCancelled(Exception e);
 }

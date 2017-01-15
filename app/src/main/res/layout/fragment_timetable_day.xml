@@ -7,10 +7,33 @@
             type="com.halcyon.ubb.studentlifemanager.ui.timetable.viewmodel.TimetableDayEventViewModel"/>
     </data>
 
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/offline_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{item.mIsOfflineMessageVisible}"
+            android:text="@string/fragment_offline_message"
+            android:layout_centerInParent="true"
+            android:textSize="20sp"
+            android:textColor="@color/inputLabelColor" />
+
+        <ProgressBar
+            android:id="@+id/fragment_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{item}" />
+
+        <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/recycler_timetable_day"
-            app:items="@{item.events}"/>
+            app:items="@{item.events}"
+            android:visibility="@{item.events}"/>
+    </RelativeLayout>
 
 </layout>

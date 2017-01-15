@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
-import com.halcyon.ubb.studentlifemanager.model.timetable.TimetableDay;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.fragment.TimetableDayFragment;
 
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 

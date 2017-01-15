@@ -80,7 +80,7 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
             this.ctx = ctx;
             this.recyclerView = recyclerView;
             this.reminderControl = reminderControl;
-            db = DatabaseProvider.getInstance().getReminderDatabase();
+            db = DatabaseProvider.getInstance().getReminderDatabase(view.getContext());
             view.findViewById(R.id.dropBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -2,17 +2,32 @@ package com.halcyon.ubb.studentlifemanager.model.timetable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.IntDef;
 
+import java.lang.annotation.Retention;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
  *
  * Created by Baroti Csaba on 12/27/2016.
  */
 
+@SuppressWarnings({"unused","WeakerAccess"})
 public class Timetable implements Parcelable {
+    @Retention(SOURCE)
+    @IntDef({MON,TUE,WED,THU,FRI,SAT})
+    public @interface Days {}
+    public static final int MON=0;
+    public static final int TUE=1;
+    public static final int WED=2;
+    public static final int THU=3;
+    public static final int FRI=4;
+    public static final int SAT=5;
+
     private String mName;
     private String mID;
     private Set<Group> mGroups;

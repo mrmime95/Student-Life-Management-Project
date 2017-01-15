@@ -15,7 +15,7 @@ import java.util.Collection;
  * Created by Baroti Csaba on 12/14/2016.
  */
 
-public abstract class RecyclerViewBindingAdapter<Model,ViewModel> extends RecyclerView.Adapter<BasicEventViewHolder> {
+abstract class RecyclerViewBindingAdapter<Model,ViewModel> extends RecyclerView.Adapter<BasicEventViewHolder> {
     ObservableList<Model> mItems;
 
     //not every viewholder has real model => fake events
@@ -41,7 +41,7 @@ public abstract class RecyclerViewBindingAdapter<Model,ViewModel> extends Recycl
     }
 
     @SuppressWarnings("unchecked")
-    public void setItems(@Nullable Collection<Model> items)
+    void setItems(@Nullable Collection<Model> items)
     {
         if (mItems==items)
             return;
