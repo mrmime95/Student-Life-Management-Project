@@ -23,6 +23,7 @@ public class RecyclerViewEventBindingAdapter extends RecyclerViewBindingAdapter<
     private final static int EVENT=2;
     private final static int EVENT_START=3;
 
+    @SuppressWarnings("unused")
     public RecyclerViewEventBindingAdapter(int itemBinder, Collection<Event> items) {
         super(itemBinder, items);
     }
@@ -33,12 +34,9 @@ public class RecyclerViewEventBindingAdapter extends RecyclerViewBindingAdapter<
 
     @Override
     protected void listChanged() {
-        int size=mUIItems.size();
         mUIItems.clear();
-        notifyItemRangeRemoved(0,size);
         mUIItems=RecyclerViewAdapterEventHelper.createEventsForRecycler(mItems);
-        notifyItemRangeInserted(0,mUIItems.size());
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     @Override

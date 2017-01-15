@@ -5,15 +5,16 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".App"
+        android:name=".StudentLifeManagerApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/placeholder_landing"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/AppTheme.SplashTheme">
+            android:theme="@style/AppTheme.SplashTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,14 +30,21 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <!-- TODO CR: Close XML tags if there isn't any content between them. [Peter] -->
+<!--
+<<<<<<< HEAD
+        &lt;!&ndash; TODO CR: Close XML tags if there isn't any content between them. [Peter] &ndash;&gt;
+=======
+        <service
+            android:name=".ui.reminder.notification.NotifyService"
+            android:enabled="true" />
+>>>>>>> 1cf8173a4b0f37523f85d6c07468ca858223c55e-->
         <activity android:name=".ui.course.selectedcourse.DetailedCourseActivity" />
         <activity
             android:name=".ui.timetable.usersettings.TimetableSettingsActivity"
             android:label="@string/title_activity_timetable_settings"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.Base">
+            android:theme="@style/AppTheme.Base"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.halcyon.ubb.studentlifemanager.ui.MainActivity" />

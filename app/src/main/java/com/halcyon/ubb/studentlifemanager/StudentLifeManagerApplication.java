@@ -9,10 +9,11 @@ import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.usersettings.TimetableSettingsActivity;
 
 /**
+ *
  * Created by matyas on 2016.12.17..
  */
-//TODO CR: Consider renaming this class to something more specific, like StudentLifeManagerApplication. [Peter]
-public class App extends Application {
+
+public class StudentLifeManagerApplication extends Application {
     public static String INITIAL_LAUNCH = "initial_launch";
 
     public static boolean isInitial(Context context) {

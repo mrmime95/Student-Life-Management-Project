@@ -37,6 +37,7 @@ import static android.content.Context.ALARM_SERVICE;
  * Created by Szilard on 2016. 12. 21..
  */
 
+//TODO Fix recycler to see last item when list is full.
 public class ReminderFragment extends android.support.v4.app.Fragment {
     private Calendar myCalendar;
     private ImageView reminderCheckBtn, reminderCloseBtn, reminderAddBtn;
@@ -61,7 +62,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
         reminderAddBtn = (ImageView)rootView.findViewById(R.id.addBtn);
 
         myCalendar = Calendar.getInstance();
-        dbHandler = DatabaseProvider.getInstance().getReminderDatabase();
+        dbHandler = DatabaseProvider.getInstance().getReminderDatabase(getContext());
         updateReminders = new ReminderUpdateData(getActivity());
         reminderRecyclerView = (RecyclerView)rootView.findViewById(R.id.reminders_recycler);
         updateReminders.updateReminders(reminderRecyclerView,dbHandler);

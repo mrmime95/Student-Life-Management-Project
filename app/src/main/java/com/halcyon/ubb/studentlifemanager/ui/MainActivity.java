@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.halcyon.ubb.studentlifemanager.R;
+import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.ui.course.fragment.CourseFragment;
 import com.halcyon.ubb.studentlifemanager.ui.reminder.fragment.ReminderFragment;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.fragment.TimetableFragment;
@@ -16,11 +17,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private CourseFragment mCourseFragment;
     private ReminderFragment mReminderFragment;
     private TimetableFragment mTimetableFragment;
-    private BottomNavigationView mNav;
     private int mCurrentPos;
 
     private static String NAV_POS="nav_pos";
-    private boolean mFragmentsRemoved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //TODO: Figuring out how to set decorview white in theme files.
         getWindow().getDecorView().setBackgroundColor(Color.WHITE);
 
-        mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
+        BottomNavigationView mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
         //nav
         mNav.setOnNavigationItemSelectedListener(this);
 
@@ -47,9 +46,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         mNav.getMenu().getItem(mCurrentPos).setChecked(true);
         onNavigationItemSelected(mNav.getMenu().getItem(mCurrentPos));
-
-
-        mFragmentsRemoved=true;
     }
 
     @Override

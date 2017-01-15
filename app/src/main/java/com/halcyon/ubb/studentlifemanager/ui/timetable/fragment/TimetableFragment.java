@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,8 +37,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-
-import static android.support.v4.view.ViewPager.SCROLL_STATE_DRAGGING;
 
 public class TimetableFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private AppCompatSpinner mSpinner;
@@ -130,7 +125,7 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
     public void onResume() {
         super.onResume();
 
-        DatabaseProvider.getInstance().getLocalTimetableDatabase()
+        DatabaseProvider.getInstance().getLocalTimetableDatabase(getContext())
                 .readWantedTimetables(getContext(),
                         new LocalTimetableListener() {
                             @Override
@@ -179,16 +174,21 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
                                     mAdapter.notifyDataSetChanged();
                                     Snackbar.make(getView(),"Table "+ table.getName()+" has been deleted.",
                                             Snackbar.LENGTH_LONG).show();
-                                    DatabaseProvider.getInstance().getLocalTimetableDatabase()
+                                    DatabaseProvider.getInstance().getLocalTimetableDatabase(getContext())
                                             .removeWantedTimetable(getContext(),table);
                                 }
                                 else {
                                     table.setGroups(groups);
                                     //mDayPager.setSelectedGroups(groups);
-                                    mDayPager.setSelectedGroups(mPager.getCurrentItem() - 1, groups);
-                                    mDayPager.setSelectedGroups(mPager.getCurrentItem(), groups);
-                                    mDayPager.setSelectedGroups(mPager.getCurrentItem() + 1, groups);
                                 }
+                                mDayPager.setSelectedGroups(mPager.getCurrentItem() - 1, groups);
+                                mDayPager.setSelectedGroups(mPager.getCurrentItem(), groups);
+                                mDayPager.setSelectedGroups(mPager.getCurrentItem() + 1, groups);
+                            }
+
+                            @Override
+                            public void onTimeout() {
+
                             }
 
                             @Override
