@@ -1,5 +1,6 @@
 package com.halcyon.ubb.studentlifemanager.database.remote;
 
+import com.halcyon.ubb.studentlifemanager.database.ConnectionListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
@@ -26,4 +27,7 @@ public interface RemoteDatabase {
 
     //same group reference returned
     void validateKeysOnGroups(Set<Group> table, GroupsValueEventListener validationListener);
+
+    void addConnectionListener(ConnectionListener connectionListener);
+    void removeConnectionListener(ConnectionListener connectionListener);
 }

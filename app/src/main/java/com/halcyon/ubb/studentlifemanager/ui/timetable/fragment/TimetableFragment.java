@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.halcyon.ubb.studentlifemanager.R;
+import com.halcyon.ubb.studentlifemanager.database.ConnectionListener;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
@@ -46,6 +47,25 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
     private List<Timetable> mTables;
     private ArrayAdapter<String> mAdapter;
     private DayPagerAdapter mDayPager;
+    private boolean mIsOnline;
+    private ConnectionListener mConnectionListener=new ConnectionListener() {
+
+        @Override
+        public void onConnected() {
+            if (getView()!=null && !mIsOnline) {
+                Snackbar.make(getView(), "Database connected", Snackbar.LENGTH_LONG).show();
+                mIsOnline=true;
+            }
+        }
+
+        @Override
+        public void onDisconnected() {
+            if (getView()!=null && mIsOnline) {
+                Snackbar.make(getView(), "Database disconnected", Snackbar.LENGTH_LONG).show();
+                mIsOnline=false;
+            }
+        }
+    };
 
     public TimetableFragment() {
         // Required empty public constructor
@@ -63,6 +83,7 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
         mTables = new ArrayList<>();
         mTables = new ArrayList<>();
         mDayPager = new DayPagerAdapter(getContext(), getActivity().getSupportFragmentManager(), null);
+        mIsOnline = true;
     }
 
     @Override
@@ -120,6 +141,12 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        DatabaseProvider.getInstance().getRemoteDatabase()
+                .removeConnectionListener(mConnectionListener);
+    }
 
     @Override
     public void onResume() {
@@ -127,12 +154,14 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
 
         DatabaseProvider.getInstance().getLocalTimetableDatabase(getContext())
                 .readWantedTimetables(getContext(),
-                        new LocalTimetableListener() {
-                            @Override
-                            public void onLocalTimetablesLoaded(final List<Timetable> tables) {
-                                loadTables(tables);
-                            }
-                        });
+        new LocalTimetableListener() {
+            @Override
+            public void onLocalTimetablesLoaded(final List<Timetable> tables) {
+                loadTables(tables);
+            }
+        });
+        DatabaseProvider.getInstance().getRemoteDatabase()
+                .addConnectionListener(mConnectionListener);
     }
 
     private void loadTables(List<Timetable> tables) {
@@ -156,6 +185,11 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
         int pos = mSpinner.getSelectedItemPosition();
         if (pos > -1 && pos < mGroupNames.size())
             onItemSelected(null, null, mSpinner.getSelectedItemPosition(), 0);
+        else {
+            mDayPager.setSelectedGroups(mPager.getCurrentItem() - 1, null);
+            mDayPager.setSelectedGroups(mPager.getCurrentItem(), null);
+            mDayPager.setSelectedGroups(mPager.getCurrentItem() + 1, null);
+        }
 
     }
 
@@ -188,7 +222,9 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
 
                             @Override
                             public void onTimeout() {
-
+                                mDayPager.setSelectedGroups(mPager.getCurrentItem() - 1, null);
+                                mDayPager.setSelectedGroups(mPager.getCurrentItem(), null);
+                                mDayPager.setSelectedGroups(mPager.getCurrentItem() + 1, null);
                             }
 
                             @Override

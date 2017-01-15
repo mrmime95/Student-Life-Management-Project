@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.halcyon.ubb.studentlifemanager.database.ConnectionListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.CoursesEventValueListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
 import com.halcyon.ubb.studentlifemanager.model.course.Course_t;
@@ -33,11 +34,32 @@ public class FirebaseDB implements RemoteDatabase {
     private static final long TIMEOUT_TIME = 2500;
     private Map<CoursesEventValueListener, Map<DatabaseReference,ValueEventListener>> mCoursesEventMap;
     private Map<GroupsValueEventListener, ValueEventListener> mGroupsMap;
+    private List<ConnectionListener> mConnectionListeners;
+
+    private ValueEventListener mConnectionListener=new ValueEventListener() {
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            boolean connected = dataSnapshot.getValue(Boolean.class);
+            for (ConnectionListener listener:mConnectionListeners)
+                if (connected)
+                    listener.onConnected();
+                else
+                    listener.onDisconnected();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
     public FirebaseDB() {
         mCoursesEventMap = new HashMap<>();
         mGroupsMap = new HashMap<>();
+        mConnectionListeners=new ArrayList<>();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().getReference().keepSynced(true);
     }
 
     //TODO: Documentation...
@@ -355,5 +377,28 @@ public class FirebaseDB implements RemoteDatabase {
                     validationListener.onTimeout();
             }
         },TIMEOUT_TIME);
+    }
+
+    @Override
+    public void addConnectionListener(ConnectionListener connectionListener) {
+        if (connectionListener==null) return;
+        mConnectionListeners.add(connectionListener);
+
+        DatabaseReference ref=
+                FirebaseDatabase.getInstance().getReference().child(".info/connected");
+        ref.addValueEventListener(mConnectionListener);
+    }
+
+    @Override
+    public void removeConnectionListener(ConnectionListener connectionListener) {
+        if (connectionListener==null) return;
+
+        mConnectionListeners.remove(connectionListener);
+
+        if (mConnectionListeners.size()==0) {
+            DatabaseReference ref=
+            FirebaseDatabase.getInstance().getReference().child(".info/connected");
+            ref.removeEventListener(mConnectionListener);
+        }
     }
 }

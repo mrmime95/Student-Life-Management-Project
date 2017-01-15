@@ -8,6 +8,7 @@ import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.halcyon.ubb.studentlifemanager.database.remote.RemoteDatabase;
 import com.halcyon.ubb.studentlifemanager.database.listener.CoursesEventValueListener;
@@ -26,7 +27,9 @@ import java.util.Set;
 
 public class TimetableDayEventViewModel extends BaseObservable{
     public ObservableList<Event> events;
-    public ObservableField<Integer> mIsOfflineMessageVisible;
+    public ObservableField<Boolean> mAreEventsNotAvilable;
+    public ObservableField<Boolean> mIsTimetableNotAvilable;
+    public ObservableField<Boolean> mHasNoEvents;
 
     private int mDay;
     private Set<Group> mGroups;
@@ -40,7 +43,9 @@ public class TimetableDayEventViewModel extends BaseObservable{
         mDay = day;
         mGroups =groups;
         mChanged=false;
-        mIsOfflineMessageVisible=new ObservableField<>(View.GONE);
+        mAreEventsNotAvilable =new ObservableField<>(false);
+        mIsTimetableNotAvilable =new ObservableField<>(false);
+        mHasNoEvents =new ObservableField<>(false);
         mRemoteDatabase = remoteDatabase;
         events = new ObservableArrayList<>();
         mListeners = new ArrayList<>();
@@ -57,14 +62,21 @@ public class TimetableDayEventViewModel extends BaseObservable{
                 for (Event event : eventsDB)
                     if (event != null) noNullEventsDay.add(event);
 
-                mIsOfflineMessageVisible.set(View.GONE);
-                notifyChange();
                 events.addAll(noNullEventsDay);
+
+                mAreEventsNotAvilable.set(false);
+                mHasNoEvents.set(events.size()==0);
+                mIsTimetableNotAvilable.set(false);
+                notifyChange();
             }
 
             @Override
             public void onTimeout() {
-                if (events.size()==0) mIsOfflineMessageVisible.set(View.VISIBLE);
+                mIsTimetableNotAvilable.set(false);
+                mHasNoEvents.set(false);
+                if (events.size()==0) {
+                    mAreEventsNotAvilable.set(true);
+                }
                 notifyChange();
             }
 
@@ -109,6 +121,8 @@ public class TimetableDayEventViewModel extends BaseObservable{
         removeDatabaseListener();
         mGroups=groups;
         events.clear();
+        mAreEventsNotAvilable.set(false);
+        mIsTimetableNotAvilable.set(mGroups==null);
         notifyChange();
         addDatabaseListener();
     }
@@ -120,7 +134,13 @@ public class TimetableDayEventViewModel extends BaseObservable{
 
     @BindingAdapter("android:visibility")
     public static void setVisibility(ProgressBar view, TimetableDayEventViewModel model) {
-        view.setVisibility(model.events.isEmpty() && model.mIsOfflineMessageVisible.get()==View.GONE
+        view.setVisibility(model.events.isEmpty() && !model.mAreEventsNotAvilable.get()
+                && !model.mIsTimetableNotAvilable.get() && !model.mHasNoEvents.get()
                 ?View.VISIBLE:View.GONE);
+    }
+
+    @BindingAdapter("android:visibility")
+    public static void setVisibility(TextView view, Boolean expr) {
+        view.setVisibility(expr?View.VISIBLE:View.GONE);
     }
 }

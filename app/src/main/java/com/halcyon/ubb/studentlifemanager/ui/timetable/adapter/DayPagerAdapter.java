@@ -68,14 +68,14 @@ public class DayPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public void setSelectedGroups(int position, Set<Group> groups) {
-        if (position>-1 && position<groups.size())
+        if (position<0 || position>6) return;
         mGroups=groups;
 
         Fragment fragment=mRegisteredFragments.get(position);
         if (fragment==null) return;
 
         TimetableDayFragment timetableFragment=(TimetableDayFragment)fragment;
-        if (timetableFragment.getGroups()!=groups)
+        if (timetableFragment.getGroups()!=groups || groups==null)
             timetableFragment.setGroups(groups);
     }
 }

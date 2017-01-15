@@ -127,7 +127,7 @@ public class Event {
     public String getTypeString() {
         switch (mType) {
             case COURSE:
-                return "Course_c";
+                return "Course";
             case LAB:
                 return "Laboratory";
         }

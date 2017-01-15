@@ -1,13 +1,13 @@
 package com.halcyon.ubb.studentlifemanager.ui;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.graphics.Color;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
 import com.halcyon.ubb.studentlifemanager.R;
-import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.ui.course.fragment.CourseFragment;
 import com.halcyon.ubb.studentlifemanager.ui.reminder.fragment.ReminderFragment;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.fragment.TimetableFragment;

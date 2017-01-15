@@ -80,5 +80,7 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_local_timetable_settings">Local timetables</string>
-    <string name="fragment_offline_message">No offline events.</string>
+    <string name="fragment_offline_message_groups">No offline data for groups.</string>
+    <string name="fragment_offline_message_events">No offline data for events.</string>
+    <string name="fragment_message_groups_events">No events here.</string>
 </resources>
