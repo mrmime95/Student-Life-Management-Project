@@ -26,7 +26,8 @@ import android.widget.ArrayAdapter;
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.ConnectionListener;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
-import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
+import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventListListener;
+import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventSetListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
@@ -138,6 +139,8 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
             }
         });
 
+        DatabaseProvider.getInstance().getRemoteDatabase()
+                .addConnectionListener(mConnectionListener);
     }
 
     @Override
@@ -153,42 +156,58 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
 
         DatabaseProvider.getInstance().getLocalTimetableDatabase(getContext())
                 .readWantedTimetables(getContext(),
-        new LocalTimetableListener() {
-            @Override
-            public void onLocalTimetablesLoaded(final List<Timetable> tables) {
-                loadTables(tables);
-            }
-        });
-        DatabaseProvider.getInstance().getRemoteDatabase()
-                .addConnectionListener(mConnectionListener);
+                        new LocalTimetableListener() {
+                            @Override
+                            public void onLocalTimetablesLoaded(final List<Timetable> tables) {
+                                loadTables(tables);
+                            }
+                        });
     }
 
     private void loadTables(List<Timetable> tables) {
-        mGroupNames.clear();
+        DatabaseProvider.getInstance().getRemoteDatabase()
+                .validateKeysOnTimetablesGroups(tables,
+                        new ValueEventListListener<Timetable>() {
+                            @Override
+                            public void onChange(List<Timetable> items) {
+                                mGroupNames.clear();
 
-        mTables=tables;
+                                mTables=items;
 
-        Collections.sort(mTables, new Comparator<Timetable>() {
-            @Override
-            public int compare(Timetable a, Timetable b) {
-                return a.getName().compareTo(b.getName());
-            }
-        });
+                                Collections.sort(mTables, new Comparator<Timetable>() {
+                                    @Override
+                                    public int compare(Timetable a, Timetable b) {
+                                        return a.getName().compareTo(b.getName());
+                                    }
+                                });
 
-        for (Timetable table : tables) {
-            mGroupNames.add(table.getName());
-        }
+                                for (Timetable table : mTables) {
+                                    mGroupNames.add(table.getName());
+                                }
 
-        mAdapter.notifyDataSetChanged();
+                                mAdapter.notifyDataSetChanged();
 
-        int pos = mSpinner.getSelectedItemPosition();
-        if (pos > -1 && pos < mGroupNames.size())
-            onItemSelected(null, null, mSpinner.getSelectedItemPosition(), 0);
-        else {
-            mDayPager.setSelectedGroups(mPager.getCurrentItem() - 1, null);
-            mDayPager.setSelectedGroups(mPager.getCurrentItem(), null);
-            mDayPager.setSelectedGroups(mPager.getCurrentItem() + 1, null);
-        }
+                                int pos = mSpinner.getSelectedItemPosition();
+                                if (pos > -1 && pos < mGroupNames.size())
+                                    onItemSelected(null, null, mSpinner.getSelectedItemPosition(), 0);
+                                else {
+                                    mDayPager.setSelectedGroups(mPager.getCurrentItem() - 1, null);
+                                    mDayPager.setSelectedGroups(mPager.getCurrentItem(), null);
+                                    mDayPager.setSelectedGroups(mPager.getCurrentItem() + 1, null);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(Exception e) {
+
+                            }
+
+                            @Override
+                            public void onTimeout() {
+
+                            }
+                        }
+                );
 
     }
 
@@ -197,9 +216,9 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
         final Timetable table = mTables.get(pos);
         DatabaseProvider.getInstance().getRemoteDatabase()
                 .validateKeysOnGroups(table.getGroups(),
-                        new GroupsValueEventListener() {
+                        new ValueEventSetListener<Group>() {
                             @Override
-                            public void onGroupsChange(Set<Group> groups) {
+                            public void onChange(Set<Group> groups) {
                                 if (groups.size()==0) {
                                     //timetable is deleted
                                     mTables.remove(table);

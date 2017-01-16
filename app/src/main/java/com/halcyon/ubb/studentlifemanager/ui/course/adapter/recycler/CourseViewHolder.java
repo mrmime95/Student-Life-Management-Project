@@ -43,6 +43,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
 
     public void setPicture(String image) {
         Picasso.with(itemView.getContext()).load(image)
+                //TODO refresh error img
                 .error(android.R.drawable.ic_dialog_alert)
                 .into(imageView, new Callback() {
             @Override

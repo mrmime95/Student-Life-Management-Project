@@ -36,7 +36,7 @@ public class Group implements Parcelable {
     }
 
     public int getCoursesCount() {
-        return mCoursesKey.size();
+        return mCoursesKey==null?0:mCoursesKey.size();
     }
 
     public void setCoursesCount(int coursesCount) {
@@ -99,4 +99,19 @@ public class Group implements Parcelable {
             return new Group[size];
         }
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Group) {
+            if (obj==null)
+                return false;
+            Group group= (Group) obj;
+            return group.getName().compareTo(getName())==0
+                    && group.getKey().compareTo(getKey())==0
+                    && group.getCoursesCount() == getCoursesCount()
+                    && group.getYear()==getYear();
+        }
+        return false;
+    }
+
 }

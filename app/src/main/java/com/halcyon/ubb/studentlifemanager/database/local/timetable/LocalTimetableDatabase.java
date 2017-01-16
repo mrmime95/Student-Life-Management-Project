@@ -1,14 +1,10 @@
 package com.halcyon.ubb.studentlifemanager.database.local.timetable;
 
-import android.app.Activity;
 import android.content.Context;
 
-import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.OperationCompleteListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
-
-import java.util.List;
 
 /**
  *

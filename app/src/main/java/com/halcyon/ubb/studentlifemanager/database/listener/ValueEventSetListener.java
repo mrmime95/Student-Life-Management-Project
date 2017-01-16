@@ -10,8 +10,6 @@ import java.util.Set;
  * Created by Baroti Csaba on 12/23/2016.
  */
 
-public interface GroupsValueEventListener {
-    void onGroupsChange(Set<Group> groups);
-    void onTimeout();
-    void onCancelled(Exception e);
+public interface ValueEventSetListener<T> extends TimeoutListener,CancelattionListener{
+    void onChange(Set<T> items);
 }

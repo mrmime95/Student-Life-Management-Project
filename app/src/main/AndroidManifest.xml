@@ -31,15 +31,8 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-<!--
-<<<<<<< HEAD
-        &lt;!&ndash; TODO CR: Close XML tags if there isn't any content between them. [Peter] &ndash;&gt;
-=======
-        <service
-            android:name=".ui.reminder.notification.NotifyService"
-            android:enabled="true" />
->>>>>>> 1cf8173a4b0f37523f85d6c07468ca858223c55e-->
-        <activity android:name=".ui.course.selectedcourse.DetailedCourseActivity" />
+        <activity android:name=".ui.course.selectedcourse.DetailedCourseActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.timetable.usersettings.TimetableSettingsActivity"
             android:label="@string/title_activity_timetable_settings"

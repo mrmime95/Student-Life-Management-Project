@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
-import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
+import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventSetListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.OperationCompleteListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
@@ -105,9 +105,9 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
 
     private static void initVisibleTimetables(final Context context) {
         DatabaseProvider.getInstance().getRemoteDatabase()
-                .fetchGroups(new GroupsValueEventListener() {
+                .fetchGroups(new ValueEventSetListener<Group>() {
                     @Override
-                    public void onGroupsChange(Set<Group> groups) {
+                    public void onChange(Set<Group> groups) {
                         Set<String> entriesSet=new HashSet<>();
 
                         for (Group group:groups)
@@ -135,9 +135,9 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
         CharSequence[] mEntrieValues =new CharSequence[0];
         MultiSelectListPreference preference;
 
-        private GroupsValueEventListener mRemoteGroupsListener=new GroupsValueEventListener() {
+        private ValueEventSetListener mRemoteGroupsListener=new ValueEventSetListener<Group>() {
             @Override
-            public void onGroupsChange(Set<Group> groups) {
+            public void onChange(Set<Group> groups) {
                 if (groups.size()==0) return;
                 mEntries =new CharSequence[groups.size()];
                 mEntrieValues =new CharSequence[groups.size()];

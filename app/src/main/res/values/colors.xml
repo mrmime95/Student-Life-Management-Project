@@ -4,7 +4,6 @@
     <color name="colorPrimaryLight">#eeffff</color>
     <color name="colorPrimaryDark">#006666</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorControlNormal">@color/white</color>
     <color name="colorDisabled">#55ffffff</color>
     <color name="colorControlActivated">@color/colorPrimary</color>
     <color name="white">#FFFFFF</color>

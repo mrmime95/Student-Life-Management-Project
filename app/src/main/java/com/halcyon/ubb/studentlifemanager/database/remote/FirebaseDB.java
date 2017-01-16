@@ -6,10 +6,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.halcyon.ubb.studentlifemanager.database.ConnectionListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.CoursesEventValueListener;
-import com.halcyon.ubb.studentlifemanager.database.listener.GroupsValueEventListener;
+import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventListListener;
+import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventSetListener;
 import com.halcyon.ubb.studentlifemanager.model.course.Course_t;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
@@ -21,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,11 +35,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class FirebaseDB implements RemoteDatabase {
     private static final long TIMEOUT_TIME = 2500;
-    private Map<CoursesEventValueListener, Map<DatabaseReference,ValueEventListener>> mCoursesEventMap;
-    private Map<GroupsValueEventListener, ValueEventListener> mGroupsMap;
+    private Map<CoursesEventValueListener, Map<DatabaseReference, com.google.firebase.database.ValueEventListener>> mCoursesEventMap;
+    private Map<ValueEventSetListener, com.google.firebase.database.ValueEventListener> mGroupsMap;
     private List<ConnectionListener> mConnectionListeners;
 
-    private ValueEventListener mConnectionListener=new ValueEventListener() {
+    private com.google.firebase.database.ValueEventListener mConnectionListener=new com.google.firebase.database.ValueEventListener() {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -70,7 +73,7 @@ public class FirebaseDB implements RemoteDatabase {
         final AtomicInteger atom = new AtomicInteger(groups.size());
         final List<Event> events = new ArrayList<>();
 
-        Map<DatabaseReference,ValueEventListener> listenerMap = mCoursesEventMap.get(listener);
+        Map<DatabaseReference, com.google.firebase.database.ValueEventListener> listenerMap = mCoursesEventMap.get(listener);
         if (listenerMap == null) {
             listenerMap = new HashMap<>();
             mCoursesEventMap.put(listener, listenerMap);
@@ -81,11 +84,11 @@ public class FirebaseDB implements RemoteDatabase {
         for (Group group : groups) {
             HashMap<String, Boolean> coursesKeys = group.getCoursesKey();
             DatabaseReference ref;
-            ValueEventListener listenerRef;
+            com.google.firebase.database.ValueEventListener listenerRef;
             if (coursesKeys==null || coursesKeys.size()==group.getCoursesCount()) {
                 //get all events to given group
                 ref = baseRef.child("group-eventsWcourse").child(group.getKey());
-                listenerRef = new ValueEventListener() {
+                listenerRef = new com.google.firebase.database.ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         events.clear();
@@ -109,7 +112,7 @@ public class FirebaseDB implements RemoteDatabase {
                     //join events in different courses but one group
                     ref = baseRef.child("test1").child("group-course-eventsWcourse")
                             .child(group.getKey()).child(course);
-                    listenerRef = new ValueEventListener() {
+                    listenerRef = new com.google.firebase.database.ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             //TODO TESTING, possible bug: course collision
@@ -156,9 +159,9 @@ public class FirebaseDB implements RemoteDatabase {
         mCoursesEventMap.remove(listener);
     }
 
-    private void loadGroups(final GroupsValueEventListener listener, boolean once) {
+    private void loadGroups(final ValueEventSetListener<Group> listener, boolean once) {
         if (listener == null) return;
-        ValueEventListener l = new ValueEventListener() {
+        com.google.firebase.database.ValueEventListener l = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Set<Group> groups = new HashSet<>();
@@ -166,7 +169,7 @@ public class FirebaseDB implements RemoteDatabase {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren())
                         groups.add(postSnapshot.getValue(Group.class));
 
-                listener.onGroupsChange(groups);
+                listener.onChange(groups);
             }
 
             @Override
@@ -184,17 +187,17 @@ public class FirebaseDB implements RemoteDatabase {
     }
 
     @Override
-    public void fetchGroups(GroupsValueEventListener listener) {
+    public void fetchGroups(ValueEventSetListener<Group> listener) {
         loadGroups(listener,true);
     }
 
     @Override
-    public void addGroupsValueEventListener(GroupsValueEventListener listener) {
+    public void addGroupsValueEventListener(ValueEventSetListener<Group> listener) {
         loadGroups(listener,false);
     }
 
     @Override
-    public void removeGroupsValueEventListener(GroupsValueEventListener listener) {
+    public void removeGroupsValueEventListener(ValueEventSetListener listener) {
         if (listener == null || mGroupsMap.get(listener) == null) return;
         FirebaseDatabase.getInstance().getReference().child("test1").child("groups").removeEventListener(mGroupsMap.get(listener));
         mGroupsMap.remove(listener);
@@ -348,19 +351,19 @@ public class FirebaseDB implements RemoteDatabase {
     }
 
     @Override
-    public void validateKeysOnGroups(final Set<Group> groups, final GroupsValueEventListener validationListener) {
+    public void validateKeysOnGroups(Set<Group> groups, final ValueEventSetListener<Group> validationListener) {
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("test1")
                 .child("groups");
         final Set<Group> validatedGroups=new HashSet<>();
         final AtomicInteger atom=new AtomicInteger(groups.size());
-        for (final Group group:groups) {
+        for (Group group:groups) {
             ref.child(group.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null)
                         validatedGroups.add(dataSnapshot.getValue(Group.class));
                     if (atom.decrementAndGet()==0) {
-                        validationListener.onGroupsChange(validatedGroups);
+                        validationListener.onChange(validatedGroups);
                     }
                 }
 
@@ -377,6 +380,55 @@ public class FirebaseDB implements RemoteDatabase {
                     validationListener.onTimeout();
             }
         },TIMEOUT_TIME);
+    }
+
+    @Override
+    public void validateKeysOnTimetablesGroups(final List<Timetable> timetables, final ValueEventListListener<Timetable> validationListener) {
+        final Set<Group> validatedGroups=new HashSet<>();
+
+        final AtomicInteger atom=new AtomicInteger(timetables.size());
+
+        for (Timetable timetable:timetables) {
+            validateKeysOnGroups(timetable.getGroups(), new ValueEventSetListener<Group>() {
+                @Override
+                public void onChange(Set<Group> items) {
+                    validatedGroups.addAll(items);
+
+                    if (atom.decrementAndGet() == 0)
+                        for (int i=timetables.size()-1;i>=0;--i) {
+                            Timetable timetable=timetables.get(i);
+                            Iterator<Group> itOutside = timetable.getGroups().iterator();
+                            while (itOutside.hasNext()) {
+                                    boolean inIt = false;
+                                    Group group=itOutside.next();
+
+                                    Iterator<Group> it = validatedGroups.iterator();
+                                    //noinspection StatementWithEmptyBody
+                                    while (it.hasNext() && !inIt)
+                                        if (group.getKey().compareTo(it.next().getKey()) == 0) {
+                                            inIt = true;
+                                        }
+                                    if (!inIt) {
+                                        itOutside.remove();
+                                        if (timetable.getGroups().size()==0)
+                                            timetables.remove(timetable);
+                                    }
+                            }
+                            validationListener.onChange(timetables);
+                        }
+                }
+
+                @Override
+                public void onCancelled(Exception e) {
+                    validationListener.onCancelled(e);
+                }
+
+                @Override
+                public void onTimeout() {
+                    validationListener.onTimeout();
+                }
+            });
+        }
     }
 
     @Override

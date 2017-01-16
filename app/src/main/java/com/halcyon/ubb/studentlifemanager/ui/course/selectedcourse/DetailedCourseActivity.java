@@ -5,6 +5,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -48,7 +49,6 @@ public class DetailedCourseActivity extends AppCompatActivity {
         courseTitle = (TextView) findViewById(R.id.courseTitle);
         courseDescription = (TextView) findViewById(R.id.courseDescription);
         courseAttachment = (TextView) findViewById(R.id.attachmentName);
-        Picasso.with(this).load(getIntent().getStringExtra("img_id")).into(imgView);
         courseTitle.setText(getIntent().getStringExtra("courseTitle"));
         courseDescription.setText(getIntent().getStringExtra("courseDescription"));
         courseAttachment.setText(getIntent().getStringExtra("attachmentName"));
@@ -61,6 +61,17 @@ public class DetailedCourseActivity extends AppCompatActivity {
         // custom behaviour for AppBarLayout solves this for now
         //TODO: Change back to android implementation once it is working.
         AppBarLayout appBarLayout= (AppBarLayout) findViewById(R.id.appBarLayout);
+
+        String imgAdress=getIntent().getStringExtra("img_id");
+        if (imgAdress.isEmpty() || imgAdress.compareTo("none")==0)
+            appBarLayout.setExpanded(false);
+        else
+            Picasso.with(this).load(imgAdress)
+                    //TODO refresh error img
+                    .error(android.R.drawable.ic_dialog_alert)
+                    .into(imgView);
+
+
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         params.setBehavior(new SmoothScrollBehavior(R.id.nested_scroll_view));
 
@@ -73,7 +84,8 @@ public class DetailedCourseActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(" ");
+        collapsingToolbarLayout.setTitle(courseTitle.getText());
+        collapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
         courseAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

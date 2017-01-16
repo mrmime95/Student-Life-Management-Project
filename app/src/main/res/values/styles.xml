@@ -6,11 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlNormal">@color/colorControlNormal</item>
         <item name="colorControlActivated">@color/colorControlActivated</item>
 
-        <item name="android:spinnerStyle">@style/SpinnerAppTheme</item>
-        <item name="actionDropDownStyle">@style/SpinnerDropDownAppTheme</item>
+        <item name="actionDropDownStyle">@style/AppTheme.SpinnerDropDown</item>
+        <item name="android:actionDropDownStyle">@style/AppTheme.SpinnerDropDown</item>
         <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemAppTheme</item>
 
         <item name="android:toolbarStyle">@style/AppTheme.ToolbarStyle</item>
@@ -19,15 +18,28 @@
         <item name="windowNoTitle">false</item>
 
         <item name="cardStyle">@style/CardView.Light</item>
+        <item name="android:spinnerStyle">@style/AppTheme.SpinnerStyle</item>
+        <item name="spinnerStyle">@style/AppTheme.SpinnerStyle</item>
+
+        <item name="android:popupMenuStyle">@style/AppTheme.PopUpMenuStyle</item>
+
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
-    <style name="AppTheme.ToolbarStyle" parent="AppTheme.ToolbarStyle">
+    <style name="AppTheme.SpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:colorControlNormal">@color/white</item>
+    </style>
+
+    <style name="AppTheme.ToolbarStyle" parent="@style/ThemeOverlay.AppCompat">
         <item name="android:titleTextAppearance">@style/AppTheme.ToolbarStyle.TextAppearance</item>
 
         <item name="android:titleTextStyle">@style/MyActionBarTitle</item>
         <item name="android:background">@color/colorPrimary</item>
         <!-- Support library compatibility -->
         <item name="background">@color/colorPrimary</item>
+
+        <item name="android:popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <style name="AppTheme.ToolbarStyle.TextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
@@ -48,14 +60,10 @@
 
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="SpinnerAppTheme" parent="Widget.AppCompat.Spinner">
-        <!--<item name="android:background">@drawable/spinner_arrow</item>
-        <item name="android:dropDownSelector">@drawable/spinner_arrow</item>-->
+    <style name="AppTheme.SpinnerDropDown" parent="Widget.AppCompat.Spinner.DropDown">
         <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="SpinnerDropDownAppTheme" parent="Widget.AppCompat.Spinner.DropDown">
-        <item name="android:textColor">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:colorControlNormal">@color/white</item>
     </style>
 
     <style name="SpinnerDropDownItemAppTheme" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
@@ -81,5 +89,15 @@
         <item name="android:windowBackground">@drawable/splash_layer</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.CourseDetail.CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="AppTheme.PopUpMenuStyle">
+
     </style>
 </resources>
