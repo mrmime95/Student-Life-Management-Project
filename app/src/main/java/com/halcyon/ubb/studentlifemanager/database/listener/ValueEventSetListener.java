@@ -1,8 +1,5 @@
 package com.halcyon.ubb.studentlifemanager.database.listener;
 
-import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
-
-import java.util.ArrayList;
 import java.util.Set;
 
 /**

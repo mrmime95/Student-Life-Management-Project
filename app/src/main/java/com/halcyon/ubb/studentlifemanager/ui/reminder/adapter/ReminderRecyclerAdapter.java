@@ -1,8 +1,5 @@
 package com.halcyon.ubb.studentlifemanager.ui.reminder.adapter;
 
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.model.reminder.Reminder;
-import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.ui.reminder.notification.NotifyReceiver;
 import com.halcyon.ubb.studentlifemanager.ui.reminder.update.ReminderUpdateData;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
@@ -29,14 +25,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-
 /**
+ *
  * Created by Szilard on 09.12.2016.
  */
 
 public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecyclerAdapter.ContactViewHolder> {
-    private ArrayList<Reminder> contacts = new ArrayList<Reminder>();
+    private ArrayList<Reminder> contacts = new ArrayList<>();
     private Context ctx;
     private RecyclerView recyclerView;
     private ReminderUpdateData reminderControl;
@@ -52,8 +47,7 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reminders_card_view, parent, false);
-        ContactViewHolder recyclerViewHolder = new ContactViewHolder(view, contacts, ctx, recyclerView, reminderControl);
-        return recyclerViewHolder;
+        return new ContactViewHolder(view, contacts, ctx, recyclerView, reminderControl);
     }
 
     @Override
@@ -77,20 +71,16 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
         return contacts.size();
     }
 
-    public static class ContactViewHolder extends RecyclerView.ViewHolder
+    static class ContactViewHolder extends RecyclerView.ViewHolder
     {
-        private ArrayList<Reminder> contacts = new ArrayList<Reminder>();
-        private Context ctx;
+        private ArrayList<Reminder> contacts = new ArrayList<>();
         private TextView rem_name, rem_date, rem_time;
         private ReminderDatabase db;
-        private RecyclerView recyclerView;
-        private ReminderUpdateData reminderControl;
-        public ContactViewHolder(View view, ArrayList<Reminder> arrayList, final Context ctx, final RecyclerView recyclerView, final ReminderUpdateData reminderControl) {
+
+        ContactViewHolder(View view, ArrayList<Reminder> arrayList, final Context ctx, final RecyclerView recyclerView, final ReminderUpdateData reminderControl) {
             super(view);
             this.contacts = arrayList;
-            this.ctx = ctx;
-            this.recyclerView = recyclerView;
-            this.reminderControl = reminderControl;
+
             db = DatabaseProvider.getInstance().getReminderDatabase(view.getContext());
             view.findViewById(R.id.dropBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -106,12 +96,11 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
                                         Reminder contact = contacts.get(position);
                                         Reminder deleteReminder = new Reminder(1, contact .getName(), contact.getDate(), contact.getTime());
                                         try {
-                                            boolean ok = false;
 
                                             int deletingID = db.findIdByOthers(deleteReminder);
                                             Intent my_intient = new Intent(ctx, NotifyReceiver.class);
 
-                                            ok = db.delete(deleteReminder);
+                                            db.delete(deleteReminder);
                                             PendingIntent.getBroadcast(ctx, deletingID, my_intient, PendingIntent.FLAG_UPDATE_CURRENT).cancel();
 
                                             reminderControl.updateReminders(recyclerView, db);
@@ -140,9 +129,7 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
             view.findViewById(R.id.remCardData).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (view.getId() == R.id.remCardData) {
 
-                    }
                 }
             });
             rem_name = (TextView) view.findViewById(R.id.remName);

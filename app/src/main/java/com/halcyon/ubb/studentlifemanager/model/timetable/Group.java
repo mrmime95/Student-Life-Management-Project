@@ -103,8 +103,6 @@ public class Group implements Parcelable {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Group) {
-            if (obj==null)
-                return false;
             Group group= (Group) obj;
             return group.getName().compareTo(getName())==0
                     && group.getKey().compareTo(getKey())==0

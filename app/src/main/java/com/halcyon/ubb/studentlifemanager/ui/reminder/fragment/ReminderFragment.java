@@ -3,7 +3,6 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -210,14 +209,14 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
             reminderDate.setVisibility(View.VISIBLE);
             reminderTime.setVisibility(View.VISIBLE);
             reminderAddBtn.setVisibility(View.GONE);
-            reminderName.setEnabled(visability);
+            reminderName.setEnabled(true);
         }else{
             reminderCloseBtn.setVisibility(View.GONE);
             reminderCheckBtn.setVisibility(View.GONE);
             reminderDate.setVisibility(View.GONE);
             reminderTime.setVisibility(View.GONE);
             reminderAddBtn.setVisibility(View.VISIBLE);
-            reminderName.setEnabled(visability);
+            reminderName.setEnabled(false);
         }
         if (check) reminderCheckBtn.setImageResource(R.drawable.iccheckok);
         else reminderCheckBtn.setImageResource(R.drawable.iccheck);

@@ -2,13 +2,11 @@
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_coord"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/nav_heigth"
-    android:background="@color/cardBackcolor"
-    >
+    android:background="@color/courseBackground">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/main_appbar"

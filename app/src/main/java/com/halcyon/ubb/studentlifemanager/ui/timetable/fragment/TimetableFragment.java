@@ -224,6 +224,7 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
                                     mTables.remove(table);
                                     mGroupNames.remove(table.getName());
                                     mAdapter.notifyDataSetChanged();
+                                    assert getView()!=null;
                                     Snackbar.make(getView(),"Table "+ table.getName()+" has been deleted.",
                                             Snackbar.LENGTH_LONG).show();
                                     DatabaseProvider.getInstance().getLocalTimetableDatabase(getContext())

@@ -3,7 +3,6 @@ package com.halcyon.ubb.studentlifemanager.database.listener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Event;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  *

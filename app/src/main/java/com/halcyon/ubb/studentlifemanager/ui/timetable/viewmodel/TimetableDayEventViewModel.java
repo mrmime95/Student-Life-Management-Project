@@ -103,14 +103,14 @@ public class TimetableDayEventViewModel extends BaseObservable{
         }
     }
 
-    public void addDatabaseListener() {
+    private void addDatabaseListener() {
         if (!mSubscribed) {
             mRemoteDatabase.addEventValueEventListener(mGroups, mDay, mListener);
             mSubscribed=true;
         }
     }
 
-    public void removeDatabaseListener() {
+    private void removeDatabaseListener() {
         if (mSubscribed) {
             mRemoteDatabase.removeEventValueEventListener(mListener);
             mSubscribed=false;

@@ -22,9 +22,9 @@ import android.widget.LinearLayout;
 
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
-import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventSetListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.OperationCompleteListener;
+import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventSetListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 
@@ -135,7 +135,7 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
         CharSequence[] mEntrieValues =new CharSequence[0];
         MultiSelectListPreference preference;
 
-        private ValueEventSetListener mRemoteGroupsListener=new ValueEventSetListener<Group>() {
+        private ValueEventSetListener<Group> mRemoteGroupsListener=new ValueEventSetListener<Group>() {
             @Override
             public void onChange(Set<Group> groups) {
                 if (groups.size()==0) return;
@@ -222,7 +222,8 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            LinearLayout v = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
+            return super.onCreateView(inflater, container, savedInstanceState);
+            //LinearLayout v = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
 
             /*FloatingActionButton fab=new FloatingActionButton(v.getContext());
             v.addView(fab);
@@ -234,7 +235,7 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
             });
             fab.show();*/
 
-            return v;
+            //return v;
         }
 
         private void addNewLocalTimetable() {

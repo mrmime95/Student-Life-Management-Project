@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/AppTheme.CourseDetail.CollapsedAppBar">
 
             <ImageView
@@ -58,16 +57,16 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="15dp"
                 android:textStyle="bold"
-                android:layout_marginRight="24dp"
+                android:layout_marginEnd="24dp"
                 />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/courseDescription"
                 android:layout_below="@+id/courseTitle"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:text="valami mas"
-                android:layout_marginRight="24dp"
+                android:layout_marginEnd="24dp"
                 />
 
             <ImageView
@@ -89,7 +88,7 @@
                 android:textColor="@color/attachmentColor"
                 android:layout_marginTop="32dp"
                 android:layout_below="@+id/courseDescription"
-                android:layout_toRightOf="@id/attachmentIcon"
+                android:layout_toEndOf="@id/attachmentIcon"
                 android:letterSpacing="0.1"
                  />
 

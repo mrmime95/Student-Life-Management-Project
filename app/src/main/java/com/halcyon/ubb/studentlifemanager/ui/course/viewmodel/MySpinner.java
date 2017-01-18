@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * Created by matyas on 2016.12.11..
  */
 
@@ -61,7 +62,7 @@ public class MySpinner extends AppCompatSpinner{
     }
 
     public void courseSpinnerUpdate(Query query){
-        final List<String> list = new ArrayList<String>();
+        final List<String> list = new ArrayList<>();
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -73,7 +74,7 @@ public class MySpinner extends AppCompatSpinner{
                     list.add(name);
                     Log.d("INFO", "added " + name);
                 }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, R.layout.main_spinner_textview, list);
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, R.layout.main_spinner_textview, list);
                 arrayAdapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
                 setAdapter(arrayAdapter);
             }

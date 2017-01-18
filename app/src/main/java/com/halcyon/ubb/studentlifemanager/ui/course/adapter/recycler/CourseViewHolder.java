@@ -11,6 +11,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 /**
+ *
  * Created by matyas on 2016.12.11..
  */
 

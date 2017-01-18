@@ -11,6 +11,8 @@
     <color name="stepper_line">#f9f9f9</color>
     <color name="defaultToolbarColor">#339999</color>
     <color name="supportBarColor">#2b8282</color>
-    <color name="cardBackcolor">#EEEEEE</color>
+    <color name="courseBackground">#EEEEEE</color>
     <color name="attachmentColor">#339999</color>
+    <color name="remainderBackground">@color/white</color>
+    <color name="timetableBackground">@color/white</color>
 </resources>

@@ -74,17 +74,21 @@ public class SQLiteReminderDatabase extends SQLiteOpenHelper implements Reminder
         Cursor res =  db.rawQuery(query, new String[] {name, date, time});
         res.moveToFirst();
 
-        return res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ID));
+        int toReturn=res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ID));
+        res.close();
+        //TODO TEST
+
+        return toReturn;
     }
 
     @Override
     public ArrayList<Reminder> getAllReminder() {
-        ArrayList<Reminder> array_list = new ArrayList<Reminder>();
+        ArrayList<Reminder> array_list = new ArrayList<>();
         android.database.sqlite.SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from " + CONTACTS_TABLE_NAME, null );
         res.moveToFirst();
 
-        while(res.isAfterLast() == false){
+        while(!res.isAfterLast()){
             Reminder temp = new Reminder(1,
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)),
                     res.getString(res.getColumnIndex(CONTACTS_COLUMN_DATE)),
@@ -94,6 +98,8 @@ public class SQLiteReminderDatabase extends SQLiteOpenHelper implements Reminder
             array_list.add(temp);
             res.moveToNext();
         }
+        //TODO TEST
+        res.close();
         return array_list;
     }
 }

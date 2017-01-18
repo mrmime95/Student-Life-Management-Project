@@ -41,7 +41,6 @@ public class Timetable implements Parcelable {
     private Timetable(Parcel in) {
         this(in.readString());
         mID=in.readString();
-        int size = in.readInt();
         //noinspection unchecked
         mGroups=new HashSet<>(in.readArrayList(Group.class.getClassLoader()));
     }

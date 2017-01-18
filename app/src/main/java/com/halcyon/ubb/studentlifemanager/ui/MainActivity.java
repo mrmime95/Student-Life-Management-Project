@@ -1,5 +1,5 @@
 package com.halcyon.ubb.studentlifemanager.ui;
-import android.graphics.Color;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -26,10 +26,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //set windowsDecor white => prevent overdraw
-        // tried setting from style, didn't work
-        //TODO: Figuring out how to set decorview white in theme files.
-        getWindow().getDecorView().setBackgroundColor(Color.WHITE);
 
         BottomNavigationView mNav = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
         //nav

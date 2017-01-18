@@ -1,6 +1,7 @@
 package com.halcyon.ubb.studentlifemanager.model.reminder;
 
 /**
+ *
  * Created by Szilard on 09.12.2016.
  */
 

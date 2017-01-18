@@ -8,16 +8,15 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 
-import java.util.logging.Logger;
-
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
+ *
  * Created by szilard on 2016.12.19..
  */
 
 public class NotifyReceiver extends BroadcastReceiver {
-    private final static Logger LOGGER = Logger.getLogger(NotifyReceiver.class.getName());
+    //private final static Logger LOGGER = Logger.getLogger(NotifyReceiver.class.getName());
     @Override
     public void onReceive(Context context, Intent intent) {
         String title = intent.getExtras().getString("Title");

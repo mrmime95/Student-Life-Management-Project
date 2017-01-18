@@ -1,8 +1,7 @@
 package com.halcyon.ubb.studentlifemanager.model.course;
 
-import java.net.URL;
-
 /**
+ *
  * Created by matyas on 2016.12.09..
  */
 

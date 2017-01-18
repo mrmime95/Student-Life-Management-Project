@@ -20,39 +20,29 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.halcyon.ubb.studentlifemanager.Manifest;
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.ui.course.detail.SmoothScrollBehavior;
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class DetailedCourseActivity extends AppCompatActivity {
-    private ImageView imgView, courseAttachmentIcon;
-    private TextView courseTitle, courseDescription, courseAttachment;
-    private Toolbar courseToolbar;
-    private CollapsingToolbarLayout collapsingToolbarLayout = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
-        imgView = (ImageView) findViewById(R.id.contact_image);
-        courseTitle = (TextView) findViewById(R.id.courseTitle);
-        courseDescription = (TextView) findViewById(R.id.courseDescription);
-        courseAttachment = (TextView) findViewById(R.id.attachmentName);
+        ImageView imgView = (ImageView) findViewById(R.id.contact_image);
+        TextView courseTitle = (TextView) findViewById(R.id.courseTitle);
+        TextView courseDescription = (TextView) findViewById(R.id.courseDescription);
+        TextView courseAttachment = (TextView) findViewById(R.id.attachmentName);
         courseTitle.setText(getIntent().getStringExtra("courseTitle"));
         courseDescription.setText(getIntent().getStringExtra("courseDescription"));
         courseAttachment.setText(getIntent().getStringExtra("attachmentName"));
-        courseAttachmentIcon = (ImageView)findViewById(R.id.attachmentIcon);
+        ImageView courseAttachmentIcon = (ImageView) findViewById(R.id.attachmentIcon);
 
         //TODO CR: This is your decision but I'd argue that fixing such a minor glitch is not worth the effort and the amount of ugly code it introduces (you're trying
         //TODO CR: to use reflection 60 times each second - imagine how that affects performance on low-end devices...). If you researched the topic you know that the
@@ -82,8 +72,9 @@ public class DetailedCourseActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar!=null;
         actionBar.setDisplayHomeAsUpEnabled(true);
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(courseTitle.getText());
         collapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
         courseAttachment.setOnClickListener(new View.OnClickListener() {
