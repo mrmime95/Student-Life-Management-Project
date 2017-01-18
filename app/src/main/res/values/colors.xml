@@ -7,10 +7,7 @@
     <color name="colorDisabled">#55ffffff</color>
     <color name="colorControlActivated">@color/colorPrimary</color>
     <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
     <color name="stepper_line">#f9f9f9</color>
-    <color name="defaultToolbarColor">#339999</color>
-    <color name="supportBarColor">#2b8282</color>
     <color name="courseBackground">#EEEEEE</color>
     <color name="attachmentColor">#339999</color>
     <color name="remainderBackground">@color/white</color>

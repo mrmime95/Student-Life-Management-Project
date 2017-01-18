@@ -36,7 +36,7 @@ import static android.content.Context.ALARM_SERVICE;
  * Created by Szilard on 2016. 12. 21..
  */
 
-//TODO Fix recycler to see last item when list is full.
+
 public class ReminderFragment extends android.support.v4.app.Fragment {
     private Calendar myCalendar;
     private ImageView reminderCheckBtn, reminderCloseBtn, reminderAddBtn;
@@ -228,7 +228,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
         String str = sdf.format(myCalendar.getTime());
         reminderDate.setText(str);
         dateChoosed = true;
-        //TODO CR: Pay attention to Lint warnings. Don't write logic that doesn't make sense. [Peter]
+
         if ( timeChoosed ){
             reminderCheckBtn.setImageResource(R.drawable.iccheckok);
         }

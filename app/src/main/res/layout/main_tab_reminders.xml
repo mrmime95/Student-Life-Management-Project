@@ -5,7 +5,6 @@
     android:background="@color/remainderBackground">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/main_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
@@ -20,7 +19,6 @@
 
 
             <android.support.v7.widget.CardView
-                android:id="@+id/addNewReminderLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_collapseMode="none"

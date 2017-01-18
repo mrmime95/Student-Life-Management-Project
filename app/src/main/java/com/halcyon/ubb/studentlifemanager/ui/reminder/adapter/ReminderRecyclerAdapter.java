@@ -118,7 +118,6 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
                             }
                         };
 
-                        //TODO CR: Try to keep all texts that appear on the UI in the strings.xml file. [Peter]
                         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                         builder.setMessage("Deleting your reminder will permanently remove it.").setPositiveButton("Yes", dialogClickListener)
                                 .setNegativeButton("No", dialogClickListener).setTitle("Delete reminder?").show();

@@ -64,7 +64,7 @@ public class FirebaseDB implements RemoteDatabase {
         FirebaseDatabase.getInstance().getReference().keepSynced(true);
     }
 
-    //TODO: Documentation...
+
     @Override
     public void addEventValueEventListener(Set<Group> groups, @Timetable.Days int day, final CoursesEventValueListener listener) {
         if (listener == null || groups==null || groups.size()==0) return;

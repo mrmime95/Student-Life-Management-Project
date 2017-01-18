@@ -5,10 +5,4 @@
         android:key="visible_timetables"
         android:title="Manage visible remote groups"/>
 
-    <PreferenceCategory
-        android:title="Local Timetables"
-        android:key="local_timetables"
-        >
-    </PreferenceCategory>
-
 </PreferenceScreen>

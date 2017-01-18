@@ -18,12 +18,12 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 public abstract class DatabaseProvider {
     @Retention(SOURCE)
     @IntDef({FIREBASE_FILE})
-    public @interface DatabaseType {}
+    @interface DatabaseType {}
     public static final int FIREBASE_FILE =1;
 
     private static DatabaseProvider mInstance;
 
-    public static void setDatabaseType(Context context, @DatabaseType int type) {
+    public static void setDatabaseType(@DatabaseType int type) {
         if (mInstance==null)
             switch (type) {
                 case FIREBASE_FILE:

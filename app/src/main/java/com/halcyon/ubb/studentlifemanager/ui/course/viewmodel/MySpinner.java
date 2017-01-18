@@ -88,7 +88,7 @@ public class MySpinner extends AppCompatSpinner{
 
     }
 
-    public void setMyItemSelectedListener(RecyclerView recyclerView, Context context){
-        setOnItemSelectedListener(new MyItemSelectedListener(recyclerView, context));
+    public void setMyItemSelectedListener(RecyclerView recyclerView){
+        setOnItemSelectedListener(new MyItemSelectedListener(recyclerView));
     }
 }

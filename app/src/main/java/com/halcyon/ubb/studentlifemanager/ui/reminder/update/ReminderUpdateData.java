@@ -17,8 +17,6 @@ import java.util.ArrayList;
 
 public class ReminderUpdateData {
     private Context ctx;
-    private RecyclerView.Adapter reminderAdapter;
-    private RecyclerView.LayoutManager reminderLayoutManager;
 
     public ReminderUpdateData(Context ctx)
     {
@@ -26,13 +24,14 @@ public class ReminderUpdateData {
     }
     public void updateReminders(RecyclerView recyclerView, ReminderDatabase db)
     {
+        RecyclerView.Adapter reminderAdapter;
         try {
             reminderAdapter = new ReminderRecyclerAdapter(db.getAllReminder(), ctx, recyclerView, new ReminderUpdateData(ctx));
         } catch (Exception e){
             reminderAdapter = new ReminderRecyclerAdapter(new ArrayList<Reminder>(), ctx, recyclerView, new ReminderUpdateData(ctx));
         }
         recyclerView.setHasFixedSize(true);
-        reminderLayoutManager = new LinearLayoutManager(ctx);
+        RecyclerView.LayoutManager reminderLayoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(reminderLayoutManager);
         recyclerView.setAdapter(reminderAdapter);
     }

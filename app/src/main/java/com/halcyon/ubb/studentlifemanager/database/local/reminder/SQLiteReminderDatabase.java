@@ -76,7 +76,6 @@ public class SQLiteReminderDatabase extends SQLiteOpenHelper implements Reminder
 
         int toReturn=res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ID));
         res.close();
-        //TODO TEST
 
         return toReturn;
     }
@@ -98,7 +97,6 @@ public class SQLiteReminderDatabase extends SQLiteOpenHelper implements Reminder
             array_list.add(temp);
             res.moveToNext();
         }
-        //TODO TEST
         res.close();
         return array_list;
     }

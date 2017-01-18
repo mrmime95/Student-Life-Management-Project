@@ -28,7 +28,7 @@ public class StudentLifeManagerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DatabaseProvider.setDatabaseType(this, DatabaseProvider.FIREBASE_FILE);
+        DatabaseProvider.setDatabaseType(DatabaseProvider.FIREBASE_FILE);
 
         if (isInitial(this)) {
             TimetableSettingsActivity.initSettings(this);

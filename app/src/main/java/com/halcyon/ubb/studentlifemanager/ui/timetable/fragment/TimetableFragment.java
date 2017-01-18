@@ -2,7 +2,6 @@ package com.halcyon.ubb.studentlifemanager.ui.timetable.fragment;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
@@ -26,9 +24,9 @@ import android.widget.ArrayAdapter;
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.ConnectionListener;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
+import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventListListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventSetListener;
-import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.adapter.DayPagerAdapter;
@@ -276,37 +274,6 @@ public class TimetableFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_timetable_action_test:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                alertDialogBuilder.setMessage("Do you want to upload test data?");
-                alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        DatabaseProvider.getInstance().getRemoteDatabase().createTestData();
-                    }
-                });
-                alertDialogBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                        alertDialogBuilder.setMessage("Do you want to delete test data?");
-                        alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                DatabaseProvider.getInstance().getRemoteDatabase().deleteTestData();
-                            }
-                        });
-                        alertDialogBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        });
-                        alertDialogBuilder.show();
-                    }
-                });
-                alertDialogBuilder.show();
-                break;
             case R.id.menu_timetable_action_settings:
                 Intent intent = new Intent(getContext(), TimetableSettingsActivity.class);
                 startActivity(intent);

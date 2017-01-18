@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.halcyon.ubb.studentlifemanager.R;
-import com.halcyon.ubb.studentlifemanager.ui.course.detail.SmoothScrollBehavior;
 import com.squareup.picasso.Picasso;
 
 public class DetailedCourseActivity extends AppCompatActivity {
@@ -44,12 +42,6 @@ public class DetailedCourseActivity extends AppCompatActivity {
         courseAttachment.setText(getIntent().getStringExtra("attachmentName"));
         ImageView courseAttachmentIcon = (ImageView) findViewById(R.id.attachmentIcon);
 
-        //TODO CR: This is your decision but I'd argue that fixing such a minor glitch is not worth the effort and the amount of ugly code it introduces (you're trying
-        //TODO CR: to use reflection 60 times each second - imagine how that affects performance on low-end devices...). If you researched the topic you know that the
-        //TODO CR: creators of the Support Library are working on a solution, it shouldn't be your job to fix library bugs. [Peter]
-        //android CollapsingToolbarLayout's fling is broken
-        // custom behaviour for AppBarLayout solves this for now
-        //TODO: Change back to android implementation once it is working.
         AppBarLayout appBarLayout= (AppBarLayout) findViewById(R.id.appBarLayout);
 
         String imgAdress=getIntent().getStringExtra("img_id");
@@ -60,10 +52,6 @@ public class DetailedCourseActivity extends AppCompatActivity {
                     //TODO refresh error img
                     .error(android.R.drawable.ic_dialog_alert)
                     .into(imgView);
-
-
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-        params.setBehavior(new SmoothScrollBehavior(R.id.nested_scroll_view));
 
         if (courseAttachment.getText().toString().equals("none")){
             courseAttachment.setVisibility(View.GONE);

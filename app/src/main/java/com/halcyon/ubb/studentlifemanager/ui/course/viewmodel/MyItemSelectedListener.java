@@ -1,6 +1,5 @@
 package com.halcyon.ubb.studentlifemanager.ui.course.viewmodel;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,14 +15,12 @@ import com.halcyon.ubb.studentlifemanager.ui.course.adapter.MyFirebaseRecycleAda
 
 
 
-public class MyItemSelectedListener implements AdapterView.OnItemSelectedListener {
+class MyItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
     private RecyclerView courseList;
-    private Context context;
 
-    public MyItemSelectedListener(RecyclerView recyclerView, Context context) {
+    MyItemSelectedListener(RecyclerView recyclerView) {
         this.courseList = recyclerView;
-        this.context = context;
     }
 
     @Override

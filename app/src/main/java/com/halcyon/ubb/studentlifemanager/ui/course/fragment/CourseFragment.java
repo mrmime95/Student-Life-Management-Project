@@ -37,7 +37,7 @@ public class CourseFragment extends Fragment {
         courseRecyclerView.setHasFixedSize(true);
         Query query = FirebaseDatabase.getInstance().getReference().child("courseNames").orderByValue();
         mSpinner.courseSpinnerUpdate(query);
-        mSpinner.setMyItemSelectedListener(courseRecyclerView, getActivity());
+        mSpinner.setMyItemSelectedListener(courseRecyclerView);
         return rootView;
     }
 }

@@ -8,28 +8,18 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.MultiSelectListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.halcyon.ubb.studentlifemanager.R;
 import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
-import com.halcyon.ubb.studentlifemanager.database.listener.LocalTimetableListener;
-import com.halcyon.ubb.studentlifemanager.database.listener.OperationCompleteListener;
 import com.halcyon.ubb.studentlifemanager.database.listener.ValueEventSetListener;
 import com.halcyon.ubb.studentlifemanager.model.timetable.Group;
-import com.halcyon.ubb.studentlifemanager.model.timetable.Timetable;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static com.halcyon.ubb.studentlifemanager.database.local.timetable.LocalTimetableDatabase.PREF_DIVIDER;
@@ -186,76 +176,6 @@ public class TimetableSettingsActivity extends AppCompatPreferenceActivity {
                     .removeGroupsValueEventListener(mRemoteGroupsListener);
         }
 
-
-        @Override
-        public void onResume() {
-            super.onResume();
-
-            DatabaseProvider.getInstance().getLocalTimetableDatabase(getActivity())
-                    .readLocalTimetables(getActivity(),
-                            new LocalTimetableListener() {
-                                @Override
-                                public void onLocalTimetablesLoaded(List<Timetable> list) {
-                                    PreferenceCategory localTimetables = (PreferenceCategory)findPreference("local_timetables");
-
-                                    if (list.size()==0) {
-                                        PlaceHolderPreference pref = new PlaceHolderPreference(getActivity());
-                                        pref.setTitle("No local timetable");
-                                        pref.setSummary("Please create a local timetable.");
-                                        pref.setSelectable(false);
-                                        localTimetables.addPreference(pref);
-                                    }
-                                    else{
-                                        for (Timetable table : list) {
-                                            Preference preference=new Preference(getActivity());
-                                            preference.setTitle(table.getName());
-                                            //Intent intent=new Intent(getActivity(),LocalTimetableSettingsActivity.class);
-                                            //intent.putExtra(LocalTimetableSettingsActivity.PARAM_TIMETABLE,table);
-                                            //preference.setIntent(intent);
-                                            localTimetables.addPreference(preference);
-                                        }
-                                    }
-
-                                }
-                            });
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return super.onCreateView(inflater, container, savedInstanceState);
-            //LinearLayout v = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
-
-            /*FloatingActionButton fab=new FloatingActionButton(v.getContext());
-            v.addView(fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    addNewLocalTimetable();
-                }
-            });
-            fab.show();*/
-
-            //return v;
-        }
-
-        private void addNewLocalTimetable() {
-            final Timetable table=new Timetable("Default timetable title");
-            DatabaseProvider.getInstance().getLocalTimetableDatabase(getActivity())
-                    .writeLocalTimetable(getActivity(),table,
-                            new OperationCompleteListener() {
-                                @Override
-                                public void onComplete() {
-                                    //Intent intent=new Intent(getActivity(),LocalTimetableSettingsActivity.class);
-                                    //intent.putExtra(LocalTimetableSettingsActivity.PARAM_TIMETABLE,table);
-
-                                }
-
-                                @Override
-                                public void onFaliure() {
-
-                                }
-                            });
-        }
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
