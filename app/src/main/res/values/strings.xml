@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Student Life Manager</string>
+    <string name="title_activity_timetable_settings">Timteable Settings</string>
+
+    <string name="fragment_offline_message_groups">No data for groups.</string>
+    <string name="fragment_offline_message_events">No data for events.</string>
+    <string name="fragment_message_groups_events">No events here.</string>
+</resources>

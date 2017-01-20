@@ -1,0 +1,9 @@
+http://geekswithblogs.net/dlussier/archive/2009/11/21/136454.aspx
+https://medium.cobeisfresh.com/architecting-android-with-data-binding-and-mvvm-in-mind-8874bbec0b0d#.2khw8gj6x
+https://github.com/konmik/konmik.github.io/wiki/Introduction-to-Model-View-Presenter-on-Android
+https://www.quora.com/What-are-the-best-design-patterns-not-UI-for-Android-like-MVP-or-MVC
+https://labs.ribot.co.uk/approaching-android-with-mvvm-8ceec02d5442#.lt2uuhmum
+http://tech.vg.no/2015/07/17/android-databinding-goodbye-presenter-hello-viewmodel/
+https://github.com/ivacf/archi
+https://barta.me/android-mvvm-pattern/
+

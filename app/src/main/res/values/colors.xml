@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#399999</color>
+    <color name="colorPrimaryLight">#eeffff</color>
+    <color name="colorPrimaryDark">#006666</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorDisabled">#55ffffff</color>
+    <color name="colorControlActivated">@color/colorPrimary</color>
+    <color name="white">#FFFFFF</color>
+    <color name="stepper_line">#f9f9f9</color>
+    <color name="courseBackground">#EEEEEE</color>
+    <color name="attachmentColor">#339999</color>
+    <color name="remainderBackground">@color/white</color>
+    <color name="timetableBackground">@color/white</color>
+</resources>

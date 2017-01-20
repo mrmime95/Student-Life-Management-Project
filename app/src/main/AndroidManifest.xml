@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.halcyon.ubb.studentlifemanager">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:hardwareAccelerated="true"
+        android:name=".StudentLifeManagerApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/placeholder_landing"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/AppTheme.SplashTheme"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".ui.reminder.notification.NotifyReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <activity android:name=".ui.course.selectedcourse.DetailedCourseActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.timetable.usersettings.TimetableSettingsActivity"
+            android:label="@string/title_activity_timetable_settings"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.Base"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.halcyon.ubb.studentlifemanager.ui.MainActivity" />
+        </activity>
+    </application>
+
+</manifest>

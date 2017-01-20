@@ -1,0 +1,32 @@
+<resources>
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/white</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorControlActivated</item>
+
+        <item name="actionDropDownStyle">@style/AppTheme.SpinnerDropDown</item>
+        <item name="android:actionDropDownStyle">@style/AppTheme.SpinnerDropDown</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemAppTheme</item>
+
+        <item name="android:toolbarStyle">@style/AppTheme.ToolbarStyle</item>
+
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+
+        <item name="cardStyle">@style/AppTheme.CardStyle</item>
+        <item name="android:spinnerStyle">@style/AppTheme.SpinnerStyle</item>
+        <item name="spinnerStyle">@style/AppTheme.SpinnerStyle</item>
+
+        <item name="android:popupMenuStyle">@style/AppTheme.PopUpMenuStyle</item>
+
+        <item name="android:textColorSecondary">@color/white</item>
+
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+</resources>

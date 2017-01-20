@@ -1,0 +1,111 @@
+<resources>
+
+    <attr format="reference" name="cardStyle"/>
+
+    <style name="AppTheme.Base" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowBackground">@color/white</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorControlActivated</item>
+
+        <item name="actionDropDownStyle">@style/AppTheme.SpinnerDropDown</item>
+        <item name="android:actionDropDownStyle">@style/AppTheme.SpinnerDropDown</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemAppTheme</item>
+
+        <item name="android:toolbarStyle">@style/AppTheme.ToolbarStyle</item>
+
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+
+        <item name="cardStyle">@style/AppTheme.CardStyle</item>
+        <item name="android:spinnerStyle">@style/AppTheme.SpinnerStyle</item>
+        <item name="spinnerStyle">@style/AppTheme.SpinnerStyle</item>
+
+        <item name="android:popupMenuStyle">@style/AppTheme.PopUpMenuStyle</item>
+
+    </style>
+
+    <style name="AppTheme.SpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:colorControlNormal">@color/white</item>
+    </style>
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert" >
+        <item name="android:colorAccent">@color/colorPrimary</item>
+    </style>
+    <style name="AppTheme.ToolbarStyle" parent="@style/ThemeOverlay.AppCompat">
+        <item name="android:titleTextAppearance">@style/AppTheme.ToolbarStyle.TextAppearance</item>
+
+        <item name="android:titleTextStyle">@style/MyActionBarTitle</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <!-- Support library compatibility -->
+        <item name="background">@color/colorPrimary</item>
+
+        <item name="android:popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="AppTheme.ToolbarStyle.TextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="AppTheme" parent="AppTheme.Base">
+
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme.Base">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.SpinnerDropDown" parent="Widget.AppCompat.Spinner.DropDown">
+        <item name="android:textColor">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:colorControlNormal">@color/white</item>
+    </style>
+
+    <style name="SpinnerDropDownItemAppTheme" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+
+    </style>
+
+    <style name="expandedappbar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">48sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="collapsedappbar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="MyActionBarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AppTheme.SplashTheme" parent="AppTheme.Base">
+        <item name="android:windowBackground">@drawable/splash_layer</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.CourseDetail.CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="AppTheme.PopUpMenuStyle">
+
+    </style>
+
+    <style name="AppTheme.CardStyle" parent="CardView.Light">
+
+    </style>
+</resources>
