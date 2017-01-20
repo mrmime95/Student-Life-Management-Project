@@ -118,9 +118,10 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
                             }
                         };
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ctx, R.style.AlertDialogCustom);
                         builder.setMessage("Deleting your reminder will permanently remove it.").setPositiveButton("Yes", dialogClickListener)
-                                .setNegativeButton("No", dialogClickListener).setTitle("Delete reminder?").show();
+                                .setNegativeButton("No", dialogClickListener)
+                                .setTitle("Delete reminder?").show();
 
                     }
                 }

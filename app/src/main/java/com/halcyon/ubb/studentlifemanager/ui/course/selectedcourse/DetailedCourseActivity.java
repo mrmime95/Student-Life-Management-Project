@@ -49,7 +49,6 @@ public class DetailedCourseActivity extends AppCompatActivity {
             appBarLayout.setExpanded(false);
         else
             Picasso.with(this).load(imgAdress)
-                    //TODO refresh error img
                     .error(android.R.drawable.ic_dialog_alert)
                     .into(imgView);
 
@@ -68,8 +67,8 @@ public class DetailedCourseActivity extends AppCompatActivity {
         courseAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(DetailedCourseActivity.this);
-                dlgAlert.setMessage("Are you want to download the file?");
+                AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(DetailedCourseActivity.this, R.style.AlertDialogCustom);
+                dlgAlert.setMessage("Do you want to download this file?");
                 dlgAlert.setTitle("Downloading...");
                 dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -80,6 +79,7 @@ public class DetailedCourseActivity extends AppCompatActivity {
                 dlgAlert.setNegativeButton("Cancel", null);
                 dlgAlert.setCancelable(true);
                 dlgAlert.create().show();
+
             }
         });
     }
