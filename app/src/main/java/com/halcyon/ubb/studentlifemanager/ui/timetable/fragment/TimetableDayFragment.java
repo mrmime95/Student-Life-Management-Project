@@ -36,6 +36,7 @@ public class TimetableDayFragment extends Fragment {
     private int mDay;
     private TimetableDayEventViewModel mViewModel;
     private RecyclerViewEventBindingAdapter mAdapter;
+    private boolean mInitDay;
     private TimetableDayEventListener mListener = new TimetableDayEventListener() {
         @Override
         public void onSubscriptionFailed() {
@@ -47,11 +48,12 @@ public class TimetableDayFragment extends Fragment {
 
         @Override
         public void onDayChanged() {
-            if (getView() != null) {
+            if (getView() != null && !mInitDay) {
                 Snackbar.make(getView(), "Day " + (mDay + 1) + " has changed.", Snackbar.LENGTH_LONG).show();
             }
-            else
+            else if (!mInitDay)
                 Toast.makeText(getContext(), "Day " + (mDay + 1) + " has changed.", Toast.LENGTH_LONG).show();
+            mInitDay=false;
         }
     };
 
@@ -122,6 +124,7 @@ public class TimetableDayFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mInitDay=true;
         mViewModel.subscribe(mListener);
     }
 
