@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class FirebaseDB implements RemoteDatabase {
     private static final long TIMEOUT_TIME = 2500;
+    private static final String SUBFOLDER_TIMETABLE = "timetable";
     private Map<CoursesEventValueListener, Map<DatabaseReference, com.google.firebase.database.ValueEventListener>> mCoursesEventMap;
     private Map<ValueEventSetListener, com.google.firebase.database.ValueEventListener> mGroupsMap;
     private List<ConnectionListener> mConnectionListeners;
@@ -78,7 +79,7 @@ public class FirebaseDB implements RemoteDatabase {
             mCoursesEventMap.put(listener, listenerMap);
         }
 
-        DatabaseReference baseRef = FirebaseDatabase.getInstance().getReference().child("test1");
+        DatabaseReference baseRef = FirebaseDatabase.getInstance().getReference().child(SUBFOLDER_TIMETABLE);
 
         for (Group group : groups) {
             HashMap<String, Boolean> coursesKeys = group.getCoursesKey();
@@ -109,7 +110,7 @@ public class FirebaseDB implements RemoteDatabase {
                 final AtomicInteger atomCourse = new AtomicInteger(coursesKeys.size());
                 for (String course : coursesKeys.keySet()) {
                     //join events in different courses but one group
-                    ref = baseRef.child("test1").child("group-course-eventsWcourse")
+                    ref = baseRef.child(SUBFOLDER_TIMETABLE).child("group-course-eventsWcourse")
                             .child(group.getKey()).child(course);
                     listenerRef = new com.google.firebase.database.ValueEventListener() {
                         @Override
@@ -176,7 +177,7 @@ public class FirebaseDB implements RemoteDatabase {
                 listener.onCancelled(databaseError.toException());
             }
         };
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("test1").child("groups");
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child(SUBFOLDER_TIMETABLE).child("groups");
         if (once)
             ref.addListenerForSingleValueEvent(l);
         else {
@@ -198,14 +199,14 @@ public class FirebaseDB implements RemoteDatabase {
     @Override
     public void removeGroupsValueEventListener(ValueEventSetListener listener) {
         if (listener == null || mGroupsMap.get(listener) == null) return;
-        FirebaseDatabase.getInstance().getReference().child("test1").child("groups").removeEventListener(mGroupsMap.get(listener));
+        FirebaseDatabase.getInstance().getReference().child(SUBFOLDER_TIMETABLE).child("groups").removeEventListener(mGroupsMap.get(listener));
         mGroupsMap.remove(listener);
     }
 
     @SuppressWarnings("WrongConstant")
     @Override
     public void createTestData() {
-        DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("test1");
+        DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child(SUBFOLDER_TIMETABLE);
         DatabaseReference eventRef = firebaseRef.child("events");
         DatabaseReference courseRef = firebaseRef.child("courses");
         DatabaseReference groupRef = firebaseRef.child("groups");
@@ -346,12 +347,12 @@ public class FirebaseDB implements RemoteDatabase {
 
     @Override
     public void deleteTestData() {
-        FirebaseDatabase.getInstance().getReference().child("test1").removeValue();
+        FirebaseDatabase.getInstance().getReference().child(SUBFOLDER_TIMETABLE).removeValue();
     }
 
     @Override
     public void validateKeysOnGroups(Set<Group> groups, final ValueEventSetListener<Group> validationListener) {
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("test1")
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child(SUBFOLDER_TIMETABLE)
                 .child("groups");
         final Set<Group> validatedGroups=new HashSet<>();
         final AtomicInteger atom=new AtomicInteger(groups.size());

@@ -1,6 +1,7 @@
 package com.halcyon.ubb.studentlifemanager.ui;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.halcyon.ubb.studentlifemanager.R;
+import com.halcyon.ubb.studentlifemanager.database.DatabaseProvider;
 import com.halcyon.ubb.studentlifemanager.ui.course.fragment.CourseFragment;
 import com.halcyon.ubb.studentlifemanager.ui.reminder.fragment.ReminderFragment;
 import com.halcyon.ubb.studentlifemanager.ui.timetable.fragment.TimetableFragment;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         else
             mCurrentPos=0;
 
+        //DatabaseProvider.getInstance().getRemoteDatabase().createTestData();
         mNav.getMenu().getItem(mCurrentPos).setChecked(true);
         onNavigationItemSelected(mNav.getMenu().getItem(mCurrentPos));
     }

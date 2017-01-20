@@ -115,11 +115,21 @@ public class TimetableDayFragment extends Fragment {
         //we tell the viewmodel to make connection with database ==> change mViewModel.events
         //      ==> RecyclerViewBindingAdapter listener ==> notify data changed
         // Notice that viewmodel doesn't need reference to mAdapter
-        mViewModel.subscribe(mListener);
 
         view.setAlpha(1);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mViewModel.subscribe(mListener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mViewModel.unSubscribe(mListener);
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
