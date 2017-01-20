@@ -44,12 +44,6 @@ public class DetailedCourseActivity extends AppCompatActivity {
         courseAttachment.setText(getIntent().getStringExtra("attachmentName"));
         ImageView courseAttachmentIcon = (ImageView) findViewById(R.id.attachmentIcon);
 
-        //TODO CR: This is your decision but I'd argue that fixing such a minor glitch is not worth the effort and the amount of ugly code it introduces (you're trying
-        //TODO CR: to use reflection 60 times each second - imagine how that affects performance on low-end devices...). If you researched the topic you know that the
-        //TODO CR: creators of the Support Library are working on a solution, it shouldn't be your job to fix library bugs. [Peter]
-        //android CollapsingToolbarLayout's fling is broken
-        // custom behaviour for AppBarLayout solves this for now
-        //TODO: Change back to android implementation once it is working.
         AppBarLayout appBarLayout= (AppBarLayout) findViewById(R.id.appBarLayout);
 
         String imgAdress=getIntent().getStringExtra("img_id");
@@ -57,7 +51,6 @@ public class DetailedCourseActivity extends AppCompatActivity {
             appBarLayout.setExpanded(false);
         else
             Picasso.with(this).load(imgAdress)
-                    //TODO refresh error img
                     .error(android.R.drawable.ic_dialog_alert)
                     .into(imgView);
 
@@ -80,8 +73,8 @@ public class DetailedCourseActivity extends AppCompatActivity {
         courseAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(DetailedCourseActivity.this);
-                dlgAlert.setMessage("Are you want to download the file?");
+                AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(DetailedCourseActivity.this, R.style.AlertDialogCustom);
+                dlgAlert.setMessage("Do you want to download this file?");
                 dlgAlert.setTitle("Downloading...");
                 dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -92,6 +85,7 @@ public class DetailedCourseActivity extends AppCompatActivity {
                 dlgAlert.setNegativeButton("Cancel", null);
                 dlgAlert.setCancelable(true);
                 dlgAlert.create().show();
+
             }
         });
     }

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.halcyon.ubb.studentlifemanager.ui.reminder.notification.NotifyReceiver;
 import com.halcyon.ubb.studentlifemanager.R;
@@ -108,7 +109,12 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
         reminderCheckBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (timeChoosed && dateChoosed){
+                long tm = myCalendar.getTimeInMillis();
+                long current = System.currentTimeMillis();
+                if (tm < current){
+                    Toast.makeText(getActivity(),"The choosed time is invalid!", Toast.LENGTH_LONG).show();
+                }
+                else if (timeChoosed && dateChoosed){
                     timeChoosed =  false;
                     dateChoosed = false;
                     Reminder temp = new Reminder(1, reminderName.getText().toString().replace("\n","")
@@ -164,9 +170,11 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
         reminderDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(getActivity(), date, myCalendar
+                   DatePickerDialog datePickerDialog =  new DatePickerDialog(getActivity(), R.style.AlertDialogCustom ,date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                    datePickerDialog.show();
             }
         });
 
@@ -178,7 +186,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
                 int mMinute = c.get(Calendar.MINUTE);
 
                 // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), R.style.AlertDialogCustom,
                         new TimePickerDialog.OnTimeSetListener() {
 
                             @Override

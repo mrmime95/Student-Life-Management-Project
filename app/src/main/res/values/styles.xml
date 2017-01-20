@@ -31,7 +31,9 @@
         <item name="colorControlNormal">@color/white</item>
         <item name="android:colorControlNormal">@color/white</item>
     </style>
-
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert" >
+        <item name="android:colorAccent">@color/colorPrimary</item>
+    </style>
     <style name="AppTheme.ToolbarStyle" parent="@style/ThemeOverlay.AppCompat">
         <item name="android:titleTextAppearance">@style/AppTheme.ToolbarStyle.TextAppearance</item>
 
