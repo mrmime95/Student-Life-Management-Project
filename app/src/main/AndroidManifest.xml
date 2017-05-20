@@ -33,6 +33,8 @@
         </receiver>
         <activity android:name=".ui.course.selectedcourse.DetailedCourseActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.TestActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.timetable.usersettings.TimetableSettingsActivity"
             android:label="@string/title_activity_timetable_settings"

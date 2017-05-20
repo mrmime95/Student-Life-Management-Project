@@ -109,14 +109,13 @@ public class DetailedCourseActivity extends AppCompatActivity {
         downloadManager.enqueue(request);
     }
 
-    private  boolean isStoragePermissionGranted() {
+    public  boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 Log.v("permission","Permission is granted");
                 return true;
             } else {
-
                 Log.v("permission","Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;

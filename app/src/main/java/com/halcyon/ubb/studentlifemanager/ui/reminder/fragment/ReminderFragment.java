@@ -86,7 +86,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
             public void onClick(View view) {
                 setNewReminderIcons(true, false);
                 Calendar c = Calendar.getInstance();
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                 SimpleDateFormat tf = new SimpleDateFormat("h:mm a");
                 String formattedDate = df.format(c.getTime());
                 String formattedTime = tf.format(c.getTime());
@@ -98,7 +98,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
             public void onClick(View view) {
                 setNewReminderIcons(false, false);
                 Calendar c = Calendar.getInstance();
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                 SimpleDateFormat tf = new SimpleDateFormat("h:mm a");
                 String formattedDate = df.format(c.getTime());
                 String formattedTime = tf.format(c.getTime());
@@ -135,7 +135,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
                     Date date = null;
                     Date time = null;
                     try {
-                        date = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).parse(temp.getDate().toLowerCase());
+                        date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(temp.getDate().toLowerCase());
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -153,7 +153,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
 
                     setNewReminderIcons(false, false);
                     Calendar c = Calendar.getInstance();
-                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                     SimpleDateFormat tf = new SimpleDateFormat("h:mm a");
                     String formattedDate = df.format(c.getTime());
                     String formattedTime = tf.format(c.getTime());
@@ -231,7 +231,7 @@ public class ReminderFragment extends android.support.v4.app.Fragment {
     }
 
     public void updateReminderDate(){
-        String myFormat = "dd-MMM-yyyy";
+        String myFormat = "dd-MM-yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String str = sdf.format(myCalendar.getTime());
         reminderDate.setText(str);

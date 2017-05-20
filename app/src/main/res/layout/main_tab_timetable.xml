@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/nav_heigth"
+    android:id="@+id/view_in_fragment_timetable"
     android:background="@color/timetableBackground">
 
     <android.support.design.widget.AppBarLayout
